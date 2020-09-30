@@ -1,0 +1,4 @@
+django
+whitenoise
+requests
+qrcode[pil]
