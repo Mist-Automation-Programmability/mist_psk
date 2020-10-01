@@ -113,8 +113,10 @@ def login(request):
 
             elif "email" in body and "password" in body:    
                 url = "https://%s/api/v1/login" %(body["host"])
+                data = {"email": body["email"],"password":body["password"]}
+                if "two_factor" in body: data["two_factor"] = body["two_factor"]
                 headers = { 'Content-Type': "application/json"}
-                resp = requests.post(url, json={"email": body["email"],"password":body["password"]}, headers={})
+                resp = requests.post(url, json=data, headers={})
 
                 if resp.status_code == 200:
                     cookies = resp.cookies
