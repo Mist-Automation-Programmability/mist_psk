@@ -48,17 +48,36 @@ def createPsk(request):
     if request.method == "POST":
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
-        if "site_id" in body and "name" in body and "password" in body and "ssid" in body:
+        if "site_id" in body and "name" in body and "passphrase" in body and "ssid" in body:
             psk = {
                 "name": body["name"],
-                "passphrase": body["password"],
+                "passphrase": body["passphrase"],
                 "ssid": body["ssid"],
                 "usage": "multi",                
                 }
             if "vlan_id" in body: psk["vlan_id"] = body["vlan_id"]
             extract = _extractAuth(request)          
-            url = "https://{0}/api/v1/orgs/{1}/uisettings".format(body["host"], body["org_id"])
+            url = "https://{0}/api/v1/sites/{1}/psks".format(body["host"], body["site_id"])
             resp = requests.post(url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
+            return JsonResponse({"results": json.loads(resp.content) })
+    else: 
+        return Http404
+
+@csrf_exempt
+def deletePsk(request):
+    if request.method == "POST":
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        if "site_id" in body and "psk_id" in body:
+            try:
+                extract = _extractAuth(request)          
+                url = "https://{0}/api/v1/sites/{1}/psks/{2}".format(body["host"], body["site_id"], body["id"])
+                resp = requests.delete(url, headers=extract["headers"], cookies=extract["cookies"])
+                return JsonResponse({"result": "done"})
+            except:
+                return JsonResponse({"error": "unable to delete the psk"})
+        else:
+            return JsonResponse({"error": "psk_id is missing"})
     else: 
         return Http404
     
