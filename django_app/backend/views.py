@@ -17,6 +17,9 @@ def _extractAuth(request):
     headers = body['headers'] if "headers" in body else None
     host = body["host"] if "host" in body else None
     # result
+    #csrf
+    if "csrftoken" in body["cookies"]:
+        headers["X-CSRFToken"] = body["cookies"]["csrftoken"]
     extract = {"host": host, "headers": headers, "cookies": cookies }
     return extract
 
@@ -87,13 +90,13 @@ def deletePsk(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         if "site_id" in body and "psk_id" in body:
-            #try:
-            extract = _extractAuth(request)          
-            url = "https://{0}/api/v1/sites/{1}/psks/{2}".format(body["host"], body["site_id"], body["psk_id"])
-            resp = requests.delete(url, headers=extract["headers"], cookies=extract["cookies"])
-            return JsonResponse({"result": "done"})
-            #except:
-            #    return JsonResponse({"error": "unable to delete the psk"})
+            try:
+                extract = _extractAuth(request)          
+                url = "https://{0}/api/v1/sites/{1}/psks/{2}".format(body["host"], body["site_id"], body["psk_id"])
+                resp = requests.delete(url, headers=extract["headers"], cookies=extract["cookies"])
+                return JsonResponse({"result": "done"})
+            except:
+                return JsonResponse({"error": "unable to delete the psk"})
                 
         else:
             return JsonResponse({"error": "psk_id is missing"})
