@@ -1,3 +1,5 @@
 django
 whitenoise
 requests
+qrcode
+smtplib
