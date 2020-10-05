@@ -7,6 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .lib.__req import Req
 import json
 import time
+from .mist_smtp.mist_smtp import Mist_SMTP
+
+mist_smtp = Mist_SMTP()
 
 def _extractAuth(request):
     # cookies
@@ -18,7 +21,7 @@ def _extractAuth(request):
     host = body["host"] if "host" in body else None
     # result
     #csrf
-    if "csrftoken" in body["cookies"]:
+    if body["cookies"] and "csrftoken" in body["cookies"]:
         headers["X-CSRFToken"] = body["cookies"]["csrftoken"]
     extract = {"host": host, "headers": headers, "cookies": cookies }
     return extract
@@ -57,9 +60,9 @@ def psks(request):
                     return JsonResponse({"page": resp.headers["X-Page-Page"], "limit": resp.headers["X-Page-limit"], "total": resp.headers["X-Page-Total"], "results": json.loads(resp.content)})
             except Exception as e:
                 print(e)
-                return JsonResponse({"error": "unable to retrieve the PSKs list"})
+                return JsonResponse(status=500, data={"error": "unable to retrieve the PSKs list"})
         else:
-            return JsonResponse({"error": "site_id missing"})
+            return JsonResponse(status=500, data={"error": "site_id missing"})
     else: 
         return Http404
 
@@ -77,10 +80,18 @@ def createPsk(request):
                 }
             if "vlan_id" in body: psk["vlan_id"] = body["vlan_id"]
             if "created_by" in body: psk["created_by"] = body["created_by"]
-            extract = _extractAuth(request)          
-            url = "https://{0}/api/v1/sites/{1}/psks".format(body["host"], body["site_id"])
-            resp = requests.post(url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
-            return JsonResponse({"results": json.loads(resp.content) })
+            if "user_email" in body: psk["user_email"] = body["user_email"]
+            extract = _extractAuth(request)        
+            if "id" in body: 
+                psk["id"]: body["id"]
+                url = "https://{0}/api/v1/sites/{1}/psks/{2}".format(body["host"], body["site_id"], body["id"])
+                resp = requests.put(url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
+                return JsonResponse({"results": json.loads(resp.content) })
+
+            else:  
+                url = "https://{0}/api/v1/sites/{1}/psks".format(body["host"], body["site_id"])
+                resp = requests.post(url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
+                return JsonResponse({"results": json.loads(resp.content) })
     else: 
         return Http404
 
@@ -96,10 +107,10 @@ def deletePsk(request):
                 resp = requests.delete(url, headers=extract["headers"], cookies=extract["cookies"])
                 return JsonResponse({"result": "done"})
             except:
-                return JsonResponse({"error": "unable to delete the psk"})
+                return JsonResponse(status=500, data={"error": "unable to delete the psk"})
                 
         else:
-            return JsonResponse({"error": "psk_id is missing"})
+            return JsonResponse(status=500, data={"error": "psk_id is missing"})
     else: 
         return Http404
     
@@ -111,21 +122,22 @@ def wlans(request):
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)       
         if "site_id" in body :           
-            try: 
-                site_id = body["site_id"]
-                extract = _extractAuth(request)
-                url = "https://{0}/api/v1/sites/{1}/wlans".format(extract["host"], site_id)
-                resp = requests.get(url, headers=extract["headers"], cookies=extract["cookies"])  
-                wlans = []
-                for wlan in json.loads(resp.content):
-                    if wlan['auth']["type"] == "psk":
-                        if wlan["auth"]["multi_psk_only"] == True:
-                            wlans.append({"id": wlan["id"], "ssid": wlan["ssid"]})
-                return JsonResponse({"data": wlans})
-            except:
-                return JsonResponse({"error": "unable to retrieve the WLANs list"})
+            #try: 
+            site_id = body["site_id"]
+            extract = _extractAuth(request)
+            url = "https://{0}/api/v1/sites/{1}/wlans".format(extract["host"], site_id)
+            resp = requests.get(url, headers=extract["headers"], cookies=extract["cookies"])  
+            print(resp.content)
+            wlans = []
+            for wlan in json.loads(resp.content):
+                if wlan['auth']["type"] == "psk":
+                    if wlan["auth"]["multi_psk_only"] == True:
+                        wlans.append({"id": wlan["id"], "ssid": wlan["ssid"]})
+            return JsonResponse({"data": wlans})
+            # except:
+            #     return JsonResponse({"error": "unable to retrieve the WLANs list"})
         else:
-            return JsonResponse({"error": "site_id missing"})
+            return JsonResponse(status=500, data={"error": "site_id missing"})
     else: 
         return Http404
           
@@ -163,17 +175,17 @@ def login(request):
                     cookies = resp.cookies
                     return _get_self(request, body["host"], "username", headers=headers, cookies=cookies)
                 else:
-                    return JsonResponse({"error": "authentication failed"})
+                    return JsonResponse(status=400, data={"error": "authentication failed"})
             elif "email" in body:
-                return JsonResponse({"error": "authentication information are missing"})
+                return JsonResponse(status=401, data={"error": "authentication information are missing"})
             elif "password" in body:
-                return JsonResponse({"error": "authentication information are missing"})
+                return JsonResponse(status=401, data={"error": "authentication information are missing"})
             else:
-                return JsonResponse({"error": "authentication information are missing"})
+                return JsonResponse(status=500, data={"error": "authentication information are missing"})
         else:
-            return JsonResponse({"error": "host missing"})
+            return JsonResponse(status=500, data={"error": "host missing"})
     else:
-        return JsonResponse({"error": "not allowed"})
+        return JsonResponse(status=400, data={"error": "not allowed"})
 
 @csrf_exempt
 def sites(request):
@@ -186,6 +198,18 @@ def sites(request):
             resp = requests.get(url, headers=body["headers"], cookies=body["cookies"])
             return JsonResponse({"data": resp.json()})
         else:
-            return JsonResponse({"error": "information missing"})
+            return JsonResponse(status=500, data={"error": "information missing"})
     else:
-        return JsonResponse({"error": "not allowed"})
+        return JsonResponse(status=401, data={"error": "not allowed"})
+
+@csrf_exempt
+def emailPsk(request):
+    if request.method == 'POST':
+        body_unicode = request.body.decode("utf-8")
+        body = json.loads(body_unicode)
+        if "name" in body and "user_email" in body and "ssid" in body and "psk" in body:
+            resp = mist_smtp.send_psk(body["psk"], body["ssid"], body["name"], body["user_email"])
+            print(resp)
+            return JsonResponse({"result": resp})
+        else: 
+            return JsonResponse(status=500, data={"error": "missing parametesr"})
