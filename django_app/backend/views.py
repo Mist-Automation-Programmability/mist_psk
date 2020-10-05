@@ -58,8 +58,7 @@ def psks(request):
                     if "ssid" in body and body["ssid"]: url += "&ssid={0}".format(body["ssid"])
                     resp = requests.get(url, headers=extract["headers"], cookies=extract["cookies"])  
                     return JsonResponse({"page": resp.headers["X-Page-Page"], "limit": resp.headers["X-Page-limit"], "total": resp.headers["X-Page-Total"], "results": json.loads(resp.content)})
-            except Exception as e:
-                print(e)
+            except:
                 return JsonResponse(status=500, data={"error": "unable to retrieve the PSKs list"})
         else:
             return JsonResponse(status=500, data={"error": "site_id missing"})
@@ -127,7 +126,6 @@ def wlans(request):
             extract = _extractAuth(request)
             url = "https://{0}/api/v1/sites/{1}/wlans".format(extract["host"], site_id)
             resp = requests.get(url, headers=extract["headers"], cookies=extract["cookies"])  
-            print(resp.content)
             wlans = []
             for wlan in json.loads(resp.content):
                 if wlan['auth']["type"] == "psk":
@@ -209,7 +207,6 @@ def emailPsk(request):
         body = json.loads(body_unicode)
         if "name" in body and "user_email" in body and "ssid" in body and "psk" in body:
             resp = mist_smtp.send_psk(body["psk"], body["ssid"], body["name"], body["user_email"])
-            print(resp)
             return JsonResponse({"result": resp})
         else: 
             return JsonResponse(status=500, data={"error": "missing parametesr"})
