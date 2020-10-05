@@ -21,12 +21,12 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o8*1^o%23g_+!4=3n!2hlfaw05byinf!h_r#s_6=yi2$9cz_ls'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default='o8*1^o%23g_+!4=3n!2hlfaw05byinf!h_r#s_6=yi2$9cz_ls')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get("DJANGO_DEBUG", default=0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
 
 # Application definition
@@ -124,7 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+#STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
