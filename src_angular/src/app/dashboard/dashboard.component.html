@@ -13,6 +13,7 @@
             <mat-form-field appearance="outline" class="list">
                 <mat-label>Site</mat-label>
                 <mat-select [(value)]="site_id" (selectionChange)="changeSite()" [disabled]="sitesDisabled">
+                    <mat-option value="org">Org PSKs</mat-option>
                     <mat-option *ngFor="let site of sites " [value]="site.id">
                         {{site.name}}
                     </mat-option>

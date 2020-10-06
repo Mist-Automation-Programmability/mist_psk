@@ -10,6 +10,7 @@ import { QrCodeDialog } from './dashboard-qrcode';
 import { DeleteDialog } from './dashboard-delete';
 import { PskDialog } from './dashboard-psk';
 import { EmailDialog } from './dashboard-email';
+import { ErrorDialog } from './dashboard-error';
 
 
 import { ConnectorService } from '../connector.service';
@@ -117,7 +118,11 @@ export class DashboardComponent implements OnInit {
             this.psks = data["results"];
             this.loading = false;
           },
-          error: error => console.error('There was an error!', error)
+          error: error => {
+            var message: string = "There was an error... "
+            if ("error" in error) { message += error["error"] }
+            this.openError(message)
+          }
         })
       } else {
         this.pskDatabase = new MistHttpDatabase(this.http);
@@ -150,16 +155,13 @@ export class DashboardComponent implements OnInit {
 
 
   parseSites(data) {
-    if (data.data.length > 0) {
-      this.sites = this.sortList(data.data);
-      if (this.sites.length == 1) {
-        this.site_id = this.sites[1]["id"]
-      }
+    if (data.sites.length > 0) {
+      this.sites = this.sortList(data.sites);
     }
   }
   parseWlans(data) {
-    if (data.data.length > 0) {
-      this.wlans = this.sortList(data.data);
+    if (data.wlans.length > 0) {
+      this.wlans = this.sortList(data.wlans);
       this.getPsks()
     }
   }
@@ -168,7 +170,11 @@ export class DashboardComponent implements OnInit {
     this.sitesDisabled = false;
     this.http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
       next: data => this.parseSites(data),
-      error: error => console.error('There was an error!', error)
+      error: error => {
+        var message: string = "There was an error... "
+        if ("error" in error) { message += error["error"] }
+        this.openError(message)
+      }
     })
   }
   changeSite() {
@@ -176,11 +182,50 @@ export class DashboardComponent implements OnInit {
     this.createDisabled = false;
     this.http.post<any>('/api/wlans/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id }).subscribe({
       next: data => this.parseWlans(data),
-      error: error => console.error('There was an error!', error)
+      error: error => {
+        var message: string = "There was an error... "
+        if ("error" in error) { message += error["error"] }
+        this.openError(message)
+      }
     })
   }
   changeWlan() {
     this.getPsks()
+  }
+
+
+  // COMMON
+  sortList(data) {
+    return data.sort(function (a, b) {
+      var nameA = a["name"].toUpperCase(); // ignore upper and lowercase
+      var nameB = b["name"].toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    })
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    if (filterValue == "") { this.psks = this.psks_loaded }
+    else {
+      this.psks = [];
+      this.psks_loaded.forEach(psk => {
+        if (psk.name.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
+        else if (psk.created_by && psk.created_by.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
+      })
+    }
+  }
+
+  // DIALOG BOXES
+  // ERROR
+  openError(message: string): void {
+    const dialogRef = this.dialog.open(ErrorDialog, {
+      data: message
+    });
   }
 
   // QRCODE DIALOG
@@ -210,12 +255,16 @@ export class DashboardComponent implements OnInit {
       if (result) {
         this.http.post<any>('/api/psks/create/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }).subscribe({
           next: data => this.getPsks(),
-          error: error => console.error('There was an error!', error)
+          error: error => {
+            var message: string = "There was an error... "
+            if ("error" in error) { message += error["error"] }
+            this.openError(message)
+          }
         })
-
       }
     })
   }
+  // EDIT PSK
   openEdit(psk: PskElement): void {
     const dialogRef = this.dialog.open(PskDialog, {
       data: { wlans: this.wlans, psk: psk, editing: true }
@@ -224,9 +273,12 @@ export class DashboardComponent implements OnInit {
       if (result) {
         this.http.post<any>('/api/psks/create/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }).subscribe({
           next: data => this.getPsks(),
-          error: error => console.error('There was an error!', error)
+          error: error => {
+            var message: string = "There was an error... "
+            if ("error" in error) { message += error["error"] }
+            this.openError(message)
+          }
         })
-
       }
     })
   }
@@ -240,9 +292,12 @@ export class DashboardComponent implements OnInit {
       if (result) {
         this.http.post<any>('/api/psks/delete/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, psk_id: psk.id }).subscribe({
           next: data => this.getPsks(),
-          error: error => console.error('There was an error!', error)
+          error: error => {
+            var message: string = "There was an error... "
+            if ("error" in error) { message += error["error"] }
+            this.openError(message)
+          }
         })
-
       }
     });
   }
@@ -255,36 +310,14 @@ export class DashboardComponent implements OnInit {
       if (result) {
         this.http.post<any>('/api/psks/email/', { name: result.name, user_email: result.user_email, psk: psk.passphrase, ssid: psk.ssid }).subscribe({
           next: data => console.log("done"),
-          error: error => console.error('There was an error!', error)
+          error: error => {
+            var message: string = "There was an error... "
+            if ("error" in error) { message += error["error"] }
+            this.openError(message)
+          }
         })
-
       }
     });
-  }
-  // COMMON
-  sortList(data) {
-    return data.sort(function (a, b) {
-      var nameA = a["name"].toUpperCase(); // ignore upper and lowercase
-      var nameB = b["name"].toUpperCase(); // ignore upper and lowercase
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    })
-  }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    if (filterValue == "") { this.psks = this.psks_loaded }
-    else {
-      this.psks = [];
-      this.psks_loaded.forEach(psk => {
-        if (psk.name.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
-        else if (psk.created_by && psk.created_by.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
-      })
-    }
   }
 }
 

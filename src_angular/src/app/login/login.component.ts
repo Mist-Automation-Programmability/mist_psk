@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
   authenticated(data): void {
     this.appService.headersSet(data.headers);
     this.appService.cookiesSet(data.cookies);
-    this.appService.hostSet(this.host);
+    this.appService.hostSet(data.host);
     this.appService.selfSet(data.data)
     this.loading = false; this.router.navigate(['/dashboard']);
   }

@@ -35,12 +35,13 @@ import { QrCodeDialog } from './dashboard/dashboard-qrcode';
 import { DeleteDialog } from './dashboard/dashboard-delete';
 import { PskDialog } from './dashboard/dashboard-psk';
 import { EmailDialog } from './dashboard/dashboard-email';
+import { ErrorDialog } from './dashboard/dashboard-error';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent, TwoFactorDialog,
-    DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog
+    DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog, ErrorDialog
   ],
   imports: [
     BrowserModule,
