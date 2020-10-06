@@ -1,9 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ConnectorService } from '../connector.service';
+
+import { TwoFactorDialog } from './login-2FA';
 
 export interface TwoFactorData {
   twoFactor: string;
@@ -31,6 +33,7 @@ export class LoginComponent implements OnInit {
     { value: 'api.gc1.mist.com', viewValue: 'GCP - manage.gc1.mist.com' }
   ];
 
+  // LOGIN FORM
   frmStepLogin = this.formBuilder.group({
     host: [''],
     credentials: this.formBuilder.group({
@@ -43,8 +46,10 @@ export class LoginComponent implements OnInit {
     "username": "",
     "token": ""
   }
+
+
   //// INIT ////
-  ngOnInit() {
+  ngOnInit(): void {
     this.frmStepLogin = this.formBuilder.group({
       host: ['api.mist.com'],
       credentials: this.formBuilder.group({
@@ -56,7 +61,7 @@ export class LoginComponent implements OnInit {
   }
 
   //// COMMON ////
-  check_host() {
+  check_host(): boolean {
     if (this.frmStepLogin.value.host != '') {
       return true;
     } else {
@@ -64,7 +69,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  reset_response() {
+  // RESET AUTHENTICATION FORM
+  reset_response(): void {
     this.host = null;
     this.appService.headersSet({});
     this.appService.cookiesSet({});
@@ -72,14 +78,15 @@ export class LoginComponent implements OnInit {
     this.appService.hostSet(this.host);
     this.reset_error_mess();
   }
-  reset_error_mess(){
+  reset_error_mess(): void{
     this.error_mess = {
       "username": "",
       "token": ""
     }
   }
 
-  parse_response(data) {
+  // PARSE AUTHENTICATION RESPONSE FROM SERVER
+  parse_response(data): void {
     if ("error" in data) {
       this.loading = false;
       this.error_mess["username"] = data.error;
@@ -101,7 +108,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  authenticated(data) {
+  // WHEN AUTHENTICATION IS OK
+  authenticated(data): void {
     this.appService.headersSet(data.headers);
     this.appService.cookiesSet(data.cookies);
     this.appService.hostSet(this.host);
@@ -110,9 +118,8 @@ export class LoginComponent implements OnInit {
   }
 
   //// AUTHENTICATION ////
-  submitCredentials() {
+  submitCredentials(): void {
     this.reset_response();
-    this.host = this.frmStepLogin.value.host;
     if (this.check_host()) {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
@@ -121,9 +128,8 @@ export class LoginComponent implements OnInit {
       })
     }
   }
-  submitToken() {
+  submitToken(): void {
     this.reset_response();
-    this.host = this.frmStepLogin.value.host;
     if (this.check_host()) {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
@@ -133,8 +139,7 @@ export class LoginComponent implements OnInit {
 
     }
   }
-  submit2FA(twoFactor) {
-    this.host = this.frmStepLogin.value.host;
+  submit2FA(twoFactor: number): void {
     if (this.check_host()) {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
@@ -155,20 +160,3 @@ export class LoginComponent implements OnInit {
 
 
 
-//// 2FA /////
-
-@Component({
-  selector: 'login-2fa',
-  templateUrl: 'login-2fa.html',
-})
-export class TwoFactorDialog {
-  public twoFactor: string;
-  constructor(public dialogRef: MatDialogRef<TwoFactorDialog>) { }
-
-  close2FA() {
-    this.dialogRef.close(this.twoFactor);
-  }
-  cancel2FA(): void {
-    this.dialogRef.close();
-  }
-}

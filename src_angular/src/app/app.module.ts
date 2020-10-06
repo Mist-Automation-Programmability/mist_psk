@@ -28,7 +28,8 @@ import { QRCodeModule } from 'angularx-qrcode';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent, TwoFactorDialog } from './login/login.component';
+import { LoginComponent } from './login/login.component';
+import { TwoFactorDialog } from './login/login-2FA';
 import { DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog} from './dashboard/dashboard.component';
 
 @NgModule({
