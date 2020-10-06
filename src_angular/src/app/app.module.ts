@@ -21,8 +21,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialogModule} from '@angular/material/dialog'
-import { MatIconModule} from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog'
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -30,7 +30,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { TwoFactorDialog } from './login/login-2FA';
-import { DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog} from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { QrCodeDialog } from './dashboard/dashboard-qrcode';
+import { DeleteDialog } from './dashboard/dashboard-delete';
+import { PskDialog } from './dashboard/dashboard-psk';
+import { EmailDialog } from './dashboard/dashboard-email';
 
 @NgModule({
   declarations: [
