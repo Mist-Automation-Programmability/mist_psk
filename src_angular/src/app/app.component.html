@@ -1,0 +1,326 @@
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
+<!-- * * * * * * * to get started with your project! * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+<style>
+     :host {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        font-size: 14px;
+        color: #333;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 8px 0;
+    }
+    
+    p {
+        margin: 0;
+    }
+    
+    .spacer {
+        flex: 1;
+    }
+    
+    .toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        background-color: #0e62ad;
+        /*background: #0e62ad: url(/wp-content/uploads/section-bg-flipped.png) no-repeat center bottom;*/
+        color: white;
+        font-weight: 600;
+    }
+    
+    .toolbar img {
+        margin: 0 16px;
+    }
+    
+    .content {
+        display: flex;
+        margin: 82px auto 32px;
+        padding: 0 16px;
+        max-width: 960px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    svg.material-icons {
+        height: 24px;
+        width: auto;
+    }
+    
+    svg.material-icons:not(:last-child) {
+        margin-right: 8px;
+    }
+    
+    .card svg.material-icons path {
+        fill: #888;
+    }
+    
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 16px;
+    }
+    
+    .card {
+        border-radius: 4px;
+        border: 1px solid #eee;
+        background-color: #fafafa;
+        height: 40px;
+        width: 200px;
+        margin: 0 8px 16px;
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease-in-out;
+        line-height: 24px;
+    }
+    
+    .card-container .card:not(:last-child) {
+        margin-right: 0;
+    }
+    
+    .card.card-small {
+        height: 16px;
+        width: 168px;
+    }
+    
+    .card-container .card:not(.highlight-card) {
+        cursor: pointer;
+    }
+    
+    .card-container .card:not(.highlight-card):hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+    }
+    
+    .card-container .card:not(.highlight-card):hover .material-icons path {
+        fill: rgb(105, 103, 103);
+    }
+    
+    .card.highlight-card {
+        background-color: #1976d2;
+        color: white;
+        font-weight: 600;
+        border: none;
+        width: auto;
+        min-width: 30%;
+        position: relative;
+    }
+    
+    .card.card.highlight-card span {
+        margin-left: 60px;
+    }
+    
+    svg#rocket {
+        width: 80px;
+        position: absolute;
+        left: -10px;
+        top: -24px;
+    }
+    
+    svg#rocket-smoke {
+        height: calc(100vh - 95px);
+        position: absolute;
+        top: 10px;
+        right: 180px;
+        z-index: -10;
+    }
+    
+    a,
+    a:visited,
+    a:hover {
+        color: #1976d2;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        color: #125699;
+    }
+    
+    .terminal {
+        position: relative;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 6px;
+        padding-top: 45px;
+        margin-top: 8px;
+        overflow: hidden;
+        background-color: rgb(15, 15, 16);
+    }
+    
+    .terminal::before {
+        content: "\2022 \2022 \2022";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: rgb(58, 58, 58);
+        color: #c2c3c4;
+        width: 100%;
+        font-size: 2rem;
+        line-height: 0;
+        padding: 14px 0;
+        text-indent: 4px;
+    }
+    
+    .terminal pre {
+        font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+        color: white;
+        padding: 0 1rem 1rem;
+        margin: 0;
+    }
+    
+    .circle-link {
+        height: 40px;
+        width: 40px;
+        border-radius: 40px;
+        margin: 8px;
+        background-color: white;
+        border: 1px solid #eeeeee;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        transition: 1s ease-out;
+    }
+    
+    .circle-link:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    footer {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        line-height: 20px;
+    }
+    
+    footer a {
+        display: flex;
+        align-items: center;
+    }
+    
+    .github-star-badge {
+        color: #24292e;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        padding: 3px 10px;
+        border: 1px solid rgba(27, 31, 35, .2);
+        border-radius: 3px;
+        background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
+        margin-left: 4px;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    }
+    
+    .github-star-badge:hover {
+        background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);
+        border-color: rgba(27, 31, 35, .35);
+        background-position: -.5em;
+    }
+    
+    .github-star-badge .material-icons {
+        height: 16px;
+        width: 16px;
+        margin-right: 4px;
+    }
+    
+    svg#clouds {
+        position: fixed;
+        bottom: -160px;
+        left: -230px;
+        z-index: -10;
+        width: 1920px;
+    }
+    /* Responsive Styles */
+    
+    @media screen and (max-width: 767px) {
+        .card-container>*:not(.circle-link),
+        .terminal {
+            width: 100%;
+        }
+        .card:not(.highlight-card) {
+            height: 16px;
+            margin: 8px 0;
+        }
+        .card.highlight-card span {
+            margin-left: 72px;
+        }
+        svg#rocket-smoke {
+            right: 120px;
+            transform: rotate(-5deg);
+        }
+    }
+    
+    @media screen and (max-width: 575px) {
+        svg#rocket-smoke {
+            display: none;
+            visibility: hidden;
+        }
+    }
+    
+    footer {
+        position: absolute;
+        bottom: 0px;
+        right: 0px
+    }
+</style>
+
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+    <img width="40" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyBpZD0iTG9nbyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTUwMCAxNTAwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPk1pc3QgSnVuaXBlciBMb2dvIFdoaXRlIEV4dHJhIExpZ2h0PC90aXRsZT48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yMjUuMTQsMTEwMi44MiwxNDIuMTksNzczLjE1djM1Ny4ycTAsMjkuNjUtMTMuMjMsNDQuNDh0LTM1LjEyLDE0LjgycS0yMS4xOCwwLTM0LjU5LTE0LjY1dC0xMy40Mi00NC42NVY3MjAuOTFxMC0zMy44OCwxNy42NS00NS43MXQ0Ny42NS0xMS44MmgzMi40OHEyOS4yOCwwLDQyLjUzLDUuMjl0MTkuNTksMTkuMDZxNi4zNSwxMy43NywxNC40Nyw0NC44M0wyOTUuMzgsMTAxNmw3NS4xOC0yODMuNDNxOC4xMi0zMS4wNiwxNC40Ny00NC44M3QxOS41OS0xOS4wNnExMy4yNS01LjI5LDQyLjU0LTUuMjloMzIuNDdxMzAsMCw0Ny42NSwxMS44MnQxNy42NSw0NS43MXY0MDkuNDRxMCwyOS42NS0xMy4yNCw0NC40OHQtMzUuNDcsMTQuODJxLTIwLjg0LDAtMzQuMjQtMTQuODJ0LTEzLjQxLTQ0LjQ4Vjc3My4xNWwtODIuOTUsMzI5LjY3cS04LjEyLDMyLjEyLTEzLjIzLDQ3LjEyVDMzMy41LDExNzcuM3EtMTMuNzcsMTIuMzUtMzguMTIsMTIuMzUtMTguMzYsMC0zMS4wNi03Ljk0YTU3LjI5LDU3LjI5LDAsMCwxLTE5Ljc3LTIwLjMsMTE1Ljc0LDExNS43NCwwLDAsMS0xMS4xMi0yNy4zNVEyMjkuMzgsMTExOS4wNiwyMjUuMTQsMTEwMi44MloiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik03NDIuMjMsODUyLjU3djI3OC40OXEwLDI4LjkzLTEzLjc2LDQzLjc3dC0zNC45NCwxNC44MnEtMjEuMTgsMC0zNC40Mi0xNS4xOHQtMTMuMjMtNDMuNDFWODU1LjM5cTAtMjguNTksMTMuMjMtNDMuMDZ0MzQuNDItMTQuNDdxMjEuMTYsMCwzNC45NCwxNC40N1Q3NDIuMjMsODUyLjU3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTExNTIsMTA2My42NHEwLDM5Ljg4LTE5LjQyLDY4LjNUMTA3NS4yNiwxMTc1cS0zOCwxNC42NC05Mi4zLDE0LjY1LTUxLjg4LDAtODktMTUuODh0LTU0LjcxLTM5LjcxcS0xNy42NS0yMy44My0xNy42NS00Ny44M2EzNywzNywwLDAsMSwxMS4zLTI3LjE4cTExLjI4LTExLjI5LDI4LjU5LTExLjI5LDE1LjE2LDAsMjMuMjksNy40MVQ5MDAuMzYsMTA3NnExNC44MywyNS43NiwzNS40OCwzOC40N3Q1Ni4zLDEyLjdxMjguOTIsMCw0Ny40Ny0xMi44OHQxOC41My0yOS40N3EwLTI1LjQxLTE5LjI0LTM3LjA2dC02My4zNi0yMi4yNHEtNDkuNzUtMTIuMzUtODEtMjUuOTR0LTQ5Ljk1LTM1LjgzcS0xOC43MS0yMi4yMy0xOC43LTU0LjcxLDAtMjguOTMsMTcuMjktNTQuNzF0NTEtNDEuMTJxMzMuNjktMTUuMzUsODEuMzUtMTUuMzUsMzcuNDEsMCw2Ny4yNCw3Ljc2dDQ5Ljc3LDIwLjgzcTE5LjkzLDEzLjA2LDMwLjM2LDI4Ljk0dDEwLjQxLDMxLjA2cTAsMTYuNTktMTEuMTIsMjcuMTh0LTMxLjU5LDEwLjU5cS0xNC44MiwwLTI1LjI0LTguNDd0LTIzLjgyLTI1LjQyYTg3LjMxLDg3LjMxLDAsMCwwLTI1Ljc3LTIyLjU5cS0xNC44Mi04LjQ2LTQwLjI0LTguNDctMjYuMTIsMC00My40MSwxMS4xMnQtMTcuMywyNy43MXEwLDE1LjE4LDEyLjcxLDI0Ljg4dDM0LjI0LDE2LjA3cTIxLjUzLDYuMzUsNTkuMywxNS41Myw0NC44MiwxMC45Myw3My4yNCwyNi4xMXQ0My4wNiwzNS44M1ExMTUyLDEwMzcuMTgsMTE1MiwxMDYzLjY0WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTEyMzguODYsODA2LjMzaDEwLjU5Vjc0OC40NHEwLTIzLjMsMS4yMy0zNi41M3Q2Ljg4LTIyLjc3YTQzLjM4LDQzLjM4LDAsMCwxLDE2LjI0LTE2LDQ2LDQ2LDAsMCwxLDIzLjY1LTYuMThxMTguMzUsMCwzMy4xOCwxMy43NmE0MC44Niw0MC44NiwwLDAsMSwxMi41MywyMi40MnEyLjY0LDEzLjIzLDIuNjUsMzcuNTl2NjUuNjVoMzUuMjlxMjAuNDgsMCwzMS4yNCw5Ljd0MTAuNzYsMjQuODlxMCwxOS40MS0xNS4zNSwyNy4xOHQtNDMuOTQsNy43NmgtMTh2MTc3LjE5cTAsMjIuNTksMS41OCwzNC43N3Q4LjQ4LDE5Ljc2cTYuODcsNy42MSwyMi40MSw3LjU5LDguNDgsMCwyMi45NC0zdDIyLjU5LTNxMTEuNjUsMCwyMSw5LjM2YTMxLjQxLDMxLjQxLDAsMCwxLDkuMzYsMjMuMTFxMCwyMy4yOS0yNS40MiwzNS42NnQtNzMuMDYsMTIuMzVxLTQ1LjIsMC02OC40OC0xNS4xOGE3MC40LDcwLjQsMCwwLDEtMzAuNTMtNDJxLTcuMjMtMjYuODItNy4yMy03MS42NXYtMTg1aC0xMi43MXEtMjAuODQsMC0zMS43Ny05Ljg4VDExOTQsODQwLjkyQTMxLjE2LDMxLjE2LDAsMCwxLDEyMDUuNSw4MTZRMTIxNyw4MDYuMzQsMTIzOC44Niw4MDYuMzNaIi8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSIxMjQzLjMyIiB5PSI2NC4wMSIgd2lkdGg9IjEyMS41NSIgaGVpZ2h0PSIxMjEuNTUiIHJ4PSIxMi44NSIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iMTI0My4zMiIgeT0iMjQ0Ljk5IiB3aWR0aD0iMTIxLjU1IiBoZWlnaHQ9IjEyMS41NSIgcng9IjEyLjg1Ii8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSIxMjQzLjMyIiB5PSI0MjUuOTgiIHdpZHRoPSIxMjEuNTUiIGhlaWdodD0iMTIxLjU1IiByeD0iMTIuODUiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjEwNDAuOTIiIHk9IjI0NC45OSIgd2lkdGg9IjEyMS41NSIgaGVpZ2h0PSIxMjEuNTUiIHJ4PSIxMi44NSIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iMTA0MC45MiIgeT0iNDI1Ljk4IiB3aWR0aD0iMTIxLjU1IiBoZWlnaHQ9IjEyMS41NSIgcng9IjEyLjg1Ii8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI4MzguNTEiIHk9IjQyNS45OCIgd2lkdGg9IjEyMS41NSIgaGVpZ2h0PSIxMjEuNTUiIHJ4PSIxMi44NSIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iMTA0MC45MiIgeT0iNjA2Ljk2IiB3aWR0aD0iMTIxLjU1IiBoZWlnaHQ9IjEyMS41NSIgcng9IjEyLjg1Ii8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI4MzguNTEiIHk9IjYwNi45NiIgd2lkdGg9IjEyMS41NSIgaGVpZ2h0PSIxMjEuNTUiIHJ4PSIxMi44NSIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNjM2LjExIiB5PSI2MDYuOTYiIHdpZHRoPSIxMjEuNTUiIGhlaWdodD0iMTIxLjU1IiByeD0iMTIuODUiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik05OC4wOCwxMjk5LjMzaDcuNzVMMTUxLDE0MTEuMTJoLThMMTMxLjUyLDEzODNINzIuMDhsLTExLjI1LDI4LjE3SDUyLjkyWm0zMC43MSw3Ni40Mi0yNi45MS02Ni42OC0yNy4wNiw2Ni42OFoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTcuMiwxNDExLjEydi03LjJoOS4xM2MxNi44NywwLDIzLjEtNy4xOSwyMy4xLTIzLjA3di04MC43N2g3LjkxVjEzODFjMCwyMS05LjQzLDMwLjI3LTMwLjQxLDMwLjI3QzIwMywxNDExLjI3LDIwMS4xNiwxNDExLjI3LDE5Ny4yLDE0MTEuMTJaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjYyLjEyLDEzNzkuMDV2LTQ5LjloNy43NnY1MGMwLDE0LjM5LS4xNiwyNi41MiwyNi42LDI2LjUyLDI2LjYxLDAsMjYtMTIuMTMsMjYtMjcuMjd2LTQ5LjNoNy42djQ5LjNjMCwyMC4wOC0xLjM3LDM0LjMyLTMzLjYsMzQuMzJDMjY0LjEsMTQxMi43NywyNjIuMTIsMTM5OC41MywyNjIuMTIsMTM3OS4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNTQuMSwxMzI5LjQ1bDYuMDgtLjMuOTIsMTEuNTRjMy4zNC03LjIsMTEuMjUtMTMuNDksMzEtMTMuNDksMjcuNTIsMCwzMC4xLDEzLjQ5LDMwLjEsMzMuNzJ2NTAuMmgtNy43NXYtNDkuM2MwLTE2LjE5LTEuMzctMjcuMjgtMjQtMjcuMjgtMjQsMC0yOC41OCwxMi43NC0yOC41OCwyOS44MnY0Ni43NkgzNTQuMVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik00NDYuODQsMTMwMi42Mmg3Ljc2djE0LjU0aC03Ljc2Wm0wLDI2LjUzaDcuNzZ2ODJoLTcuNzZaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNDc5LjgzLDEzMjkuNDVsNi4wOS0uMy45MSwxMy4zM2M0LjU2LTEwLjQ5LDE0LjI5LTE1LjI4LDMzLjktMTUuMjgsMjcuMzcsMCwzNS40MiwxNi4xOCwzNS40Miw0Mi43MSwwLDI2LjM3LTgsNDIuNTYtMzUuNzIsNDIuNTYtMTksMC0yOC4yOC00LjM1LTMyLjg0LTE0LjY5djM4LjA2aC03Ljc2Wm02OC41Nyw0MC42MWMwLTIyLjQ4LTYuMzktMzUuNjctMjguODktMzUuNjdzLTMxLjkyLDguMjQtMzEuOTIsMzUuNjdjMCwyNy4yNyw5LjI3LDM1LjM2LDMxLjkyLDM1LjM2QzU0MS44NiwxNDA1LjQyLDU0OC40LDEzOTIuNTQsNTQ4LjQsMTM3MC4wNloiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik01NzIuNTgsMTM2OS45MWMwLTI0LjEzLDctNDIuNzEsMzguMzEtNDIuNzEsMzIuMzgsMCwzMy40NCwyMS41OCwzMy4yOSw0NC4yMUg1ODBjLjE2LDE5LjkzLDUuMzMsMzQuNjEsMzEuNDcsMzQuNjEsMTQsMCwyMC4zOC0zLjc0LDI3LjIyLTguNjlsNC4yNSw1LjU1Yy03LjYsNS41NC0xNi41Nyw5Ljg5LTMxLjQ3LDkuODlDNTc4LjY2LDE0MTIuNzcsNTcyLjU4LDEzOTQsNTcyLjU4LDEzNjkuOTFabTcuNi01LjU1aDU2LjU1Yy0uNzYtMTYuMzMtMS44Mi0zMC4yNy0yNi0zMC4yN0M1ODcuNDcsMTMzNC4wOSw1ODEuMDksMTM0Ni41Myw1ODAuMTgsMTM2NC4zNloiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik02NjUuNjIsMTMyOS40NWw2LjA4LS4zLjkxLDE0LjA4YzMtOC4wOSwxMy4zOC0xNS4xMywyOS41LTE1LjEzdjcuNDljLTIwLjY4LDAtMjguNzQsMTIuNzQtMjguNzQsMzB2NDUuNTZoLTcuNzVaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNzQ5LjU0LDEzNTUuNTJjMC0zOC41MSwxOS45Mi01Ny4yNCw1NS01Ny4yNCwxNC41OSwwLDI4LjI3LDQuMzQsMzgsMTMuMThsLTUuNDcsNS41NWMtOC41MS03LjQ5LTIwLjIyLTExLjM5LTMyLjUzLTExLjM5LTMwLjcxLDAtNDcsMTYuNjMtNDcsNDkuOXMxNS42Niw0OS45LDQ3LDQ5LjljMTcuNjMsMCwyNi42LTUuNTQsMzMuMjktMTEuNjlsNS40Nyw1LjRjLTcuNDQsNy0xOC4yNCwxMy42NC0zOS4wNywxMy42NEM3NjcuNzksMTQxMi43Nyw3NDkuNTQsMTM5My40NCw3NDkuNTQsMTM1NS41MloiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik04NTUuNTEsMTM2OS45MWMwLTI4LjMzLDExLTQyLjcxLDM4LjkyLTQyLjcxczM5LjIzLDE0LjM4LDM5LjIzLDQyLjcxLTExLjI1LDQyLjg2LTM5LjIzLDQyLjg2Uzg1NS41MSwxMzk4LjM4LDg1NS41MSwxMzY5LjkxWm03MC4zOS4xNWMwLTIzLjUzLTguODItMzUuNjctMzEuNDctMzUuNjctMjIuNSwwLTMxLjE2LDEyLjE0LTMxLjE2LDM1LjY3czguNjYsMzUuNjYsMzEuMTYsMzUuNjZDOTE3LjA4LDE0MDUuNzIsOTI1LjksMTM5My41OSw5MjUuOSwxMzcwLjA2WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTk1NC4xOCwxMzI5LjQ1bDYuMDgtLjMuOTIsMTEuNTRjMy03LjIsMTAuNzktMTMuNDksMzAuMjUtMTMuNDlzMjQuOTMsNS44NCwyNi45MSwxNC4zOGMzLjY1LTguMjQsMTIuMzEtMTQuMzgsMzEuOTItMTQuMzgsMjcuNTIsMCwyOS4zNSwxMy40OSwyOS4zNSwzMy43MnY1MC4yaC03Ljc2di00OS4zYzAtMTYuMTktLjYxLTI3LjI4LTIzLjI2LTI3LjI4LTI0LDAtMjcuODIsMTIuNzQtMjcuODIsMjkuODJ2NDYuNzZIMTAxM3YtNDkuM2MwLTE2LjE5LS42MS0yNy4yOC0yMy4yNi0yNy4yOC0yNCwwLTI3LjgzLDEyLjc0LTI3LjgzLDI5LjgydjQ2Ljc2aC03Ljc1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTExMDMuNjMsMTMyOS40NWw2LjA4LS4zLjkyLDEzLjMzYzQuNTYtMTAuNDksMTQuMjktMTUuMjgsMzMuOS0xNS4yOCwyNy4zNiwwLDM1LjQyLDE2LjE4LDM1LjQyLDQyLjcxLDAsMjYuMzctOC4wNiw0Mi41Ni0zNS43Myw0Mi41Ni0xOSwwLTI4LjI3LTQuMzUtMzIuODMtMTQuNjl2MzguMDZoLTcuNzZabTY4LjU3LDQwLjYxYzAtMjIuNDgtNi4zOS0zNS42Ny0yOC44OS0zNS42N3MtMzEuOTIsOC4yNC0zMS45MiwzNS42N2MwLDI3LjI3LDkuMjcsMzUuMzYsMzEuOTIsMzUuMzZDMTE2NS42NiwxNDA1LjQyLDExNzIuMiwxMzkyLjU0LDExNzIuMiwxMzcwLjA2WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTExOTUuMTYsMTM4OC42NGMwLTIzLjM4LDE1LTI5LjY3LDU2LjEtMjkuNjdoNS40N2MtLjE1LTE3LjM5LTMuMTktMjQuNzMtMjQuMzMtMjQuNzNhNDcsNDcsMCwwLDAtMjUuMjMsNy4zNGwtNC4xMS02YzUuMzItMy42LDE3LTguMzksMjkuOC04LjM5LDI3LjM3LDAsMzEuNDcsOS43NCwzMS40NywzMy4yN3YzM2MwLDkuNTkuNjEsMTAuNzgsOS4xMiwxMC43OFYxNDExYTguMTQsOC4xNCwwLDAsMS0zLC4zYy0xMCwwLTEyLjkyLTQuNS0xMi45Mi0xMy43OS01LjMyLDEwLjE5LTE0LjE0LDE1LjI5LTMzLjc1LDE1LjI5QzEyMDEuMDksMTQxMi43NywxMTk1LjE2LDE0MDIuNDMsMTE5NS4xNiwxMzg4LjY0Wm02MS41Ny0xNS41OXYtN2gtNS4xN2MtMzguMzEsMC00OC44LDQuNS00OC44LDIyLjE4LDAsMTEuMjQsNSwxNy44MywyMS44OSwxNy44M0MxMjQ3LjQ2LDE0MDYsMTI1Ni43MywxMzk1LjgzLDEyNTYuNzMsMTM3My4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xMjkzLjA3LDEzMjkuNDVsNi4wOC0uMy45MSwxMS41NGMzLjM0LTcuMiwxMS4yNS0xMy40OSwzMS0xMy40OSwyNy41MSwwLDMwLjEsMTMuNDksMzAuMSwzMy43MnY1MC4yaC03Ljc2di00OS4zYzAtMTYuMTktMS4zNy0yNy4yOC0yNC0yNy4yOC0yNCwwLTI4LjU4LDEyLjc0LTI4LjU4LDI5LjgydjQ2Ljc2aC03Ljc1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTEzODMuMzcsMTQzNnYtNi40NGg2LjU0YzcuMTUsMCwxMC40OS0yLjcsMTMuMDgtOS41OWwzLjQ5LTktMzIuNjgtODEuODJoOGwyOC43NCw3Mi42OCwyOC43My03Mi42OGg3Ljc2bC0zNi42NCw5MS43MWMtNC4xMSwxMC40OS05LjQzLDE1LjEzLTIwLjA3LDE1LjEzWiIvPjwvc3ZnPg=="
+    />
+    <span>Mist PSK Generator!</span>
+
+</div>
+
+<div class="content" role="main">
+
+
+
+
+</div>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+
+<router-outlet>
+    <!-- Highlight Card -->
+</router-outlet>
+
+
+
+<footer>
+    <span>{{ title }} app is running!</span>
+</footer>
