@@ -1,11 +1,16 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { merge, Observable, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+
+import { QrCodeDialog } from './dashboard-qrcode';
+import { DeleteDialog } from './dashboard-delete';
+import { PskDialog } from './dashboard-psk';
+import { EmailDialog } from './dashboard-email';
+
 
 import { ConnectorService } from '../connector.service';
 
@@ -21,12 +26,14 @@ export interface PskElement {
   passphrase: string;
   user_email: string;
 }
+
 export interface MistPsks {
   results: PskElement[];
   total: number;
   limiit: number;
   page: number;
 }
+
 export class MistHttpDatabase {
   constructor(private _httpClient: HttpClient) { }
 
@@ -35,10 +42,6 @@ export class MistHttpDatabase {
   }
 }
 
-export interface QrcodeData {
-  ssid: string;
-  passphrase: string
-}
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -285,104 +288,3 @@ export class DashboardComponent implements OnInit {
   }
 }
 
-
-
-// QRCODE
-@Component({
-  selector: 'dashboard-qrcode',
-  templateUrl: 'dashboard-qrcode.html',
-})
-export class QrCodeDialog {
-  public qrcode: string = null;
-
-  constructor(
-    public dialogRef: MatDialogRef<QrCodeDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: QrcodeData) {
-    this.qrcode = "WIFI:S:" + data.ssid + ";T:WPA;P:" + data.passphrase + ";;";
-  }
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-// Delete
-@Component({
-  selector: 'dashboard-psk',
-  templateUrl: 'dashboard-psk.html',
-})
-
-export class PskDialog {
-  frmPsk = this.formBuilder.group({
-    id: [this.data.psk.id],
-    name: [this.data.psk.name],// Validators.required],
-    psk: [this.data.psk.passphrase],// Validators.required, Validators.minLength(8), Validators.maxLength(63)],
-    ssid: [this.data.psk.ssid],// Validators.required],
-    vlan_id: [this.data.psk.vlan_id],// Validators.min(1), Validators.max(4095)]
-    user_email: [this.data.psk.user_email]
-  });
-  editing = this.data.editing;
-  constructor(public dialogRef: MatDialogRef<PskDialog>, @Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
-
-  confirm() {
-    this.dialogRef.close(this.frmPsk.value)
-  }
-  cancel(): void {
-    this.dialogRef.close();
-  }
-
-  generatePsk() {
-    let possible = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let text = "";
-    for (let i = 0; i < 12; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    this.frmPsk.controls["psk"].setValue(text);
-  }
-
-}
-
-// Delete
-@Component({
-  selector: 'dashboard-delete',
-  templateUrl: 'dashboard-delete.html',
-})
-export class DeleteDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<DeleteDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: PskElement
-  ) { }
-
-  confirm(psk_id) {
-    this.dialogRef.close(psk_id)
-  }
-  cancel(): void {
-    this.dialogRef.close();
-  }
-
-}
-// Email
-@Component({
-  selector: 'dashboard-email',
-  templateUrl: 'dashboard-email.html',
-})
-export class EmailDialog {
-  frmEmail = this.formBuilder.group({
-    name: [this.data.name || ""],// Validators.required],
-    user_email: [this.data.user_email || ""]
-  });
-
-  constructor(
-    public dialogRef: MatDialogRef<EmailDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: PskElement, private formBuilder: FormBuilder
-  ) { }
-
-
-  confirm() {
-    this.dialogRef.close({ user_email: this.frmEmail.value.user_email, name: this.frmEmail.value.name})
-  }
-  cancel(): void {
-    this.dialogRef.close();
-  }
-
-}
