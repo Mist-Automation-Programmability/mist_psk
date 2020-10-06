@@ -1,0 +1,52 @@
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    /* Firefox */
+    
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+<h1 mat-dialog-title>Create New PSK</h1>
+<form [formGroup]="frmPsk" class="create-form">
+    <div mat-dialog-content fxLayout="column">
+
+        <mat-form-field appearance="outline">
+            <mat-label>NAME</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>EMAIL</mat-label>
+            <input matInput formControlName="user_email" />
+        </mat-form-field>
+        <div fxLayout="row">
+            <mat-form-field appearance="outline">
+                <mat-label>PSK</mat-label>
+                <input matInput formControlName="psk" />
+            </mat-form-field>
+            <button mat-button (click)="generatePsk()" style="height: 55px;">Generate PSK</button>
+        </div>
+        <mat-form-field appearance="outline">
+            <mat-label>SSID</mat-label>
+            <mat-select formControlName="ssid">
+                <mat-option *ngFor="let wlan of data.wlans " [value]="wlan.ssid">
+                    {{wlan.ssid}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>VLAN</mat-label>
+            <input matInput type="number" formControlName="vlan_id" />
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==true">Update</button>
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==false">Create</button>
+    </div>
+</form>

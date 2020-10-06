@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Email PSK</h1>
+<div mat-dialog-content fxLayout="column">
+
+    <form [formGroup]="frmEmail" class="create-form" fxLayout="column">
+        <mat-form-field appearance="outline">
+            <mat-label>NAME</mat-label>
+            <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>EMAIL</mat-label>
+            <input matInput formControlName="user_email" (keydown.enter)="confirm()" />
+        </mat-form-field>
+    </form>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()">Send Email</button>
+</div>
