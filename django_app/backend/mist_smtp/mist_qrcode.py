@@ -15,8 +15,8 @@ def get_qrcode(ssid, psk):
 def get_qrcode_as_html(ssid, psk):
     qr = get_qrcode(ssid, psk)
     qr_html = ""
-    fg_color = "#eee"
-    bg_color = "black"
+    fg_color = "#ffffff"
+    bg_color = "#000000"
     for i in qr:
         qr_html+="<tr>"
         for j in i:
