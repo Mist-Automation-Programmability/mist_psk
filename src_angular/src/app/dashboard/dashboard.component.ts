@@ -38,8 +38,8 @@ export interface MistPsks {
 export class MistHttpDatabase {
   constructor(private _httpClient: HttpClient) { }
 
-  getPsks(host: string, cookies: {}, headers: {}, site_id: string, ssid: string, page: number, limit: number): Observable<MistPsks> {
-    return this._httpClient.post<MistPsks>('/api/psks/', { host: host, cookies: cookies, headers: headers, site_id: site_id, ssid: ssid, page: page, limit: limit });
+  getPsks(body:{}): Observable<MistPsks> {
+    return this._httpClient.post<MistPsks>('/api/psks/', body);
   }
 }
 
@@ -108,11 +108,18 @@ export class DashboardComponent implements OnInit {
 
 
   getPsks() {
-    if (this.site_id) {
+    var body = {}
+
+    if (this.site_id == "org") {
+      body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, ssid: this.ssid, full: this.filters_enabled }
+    } else if (this.site_id) {
+      body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, ssid: this.ssid, full: this.filters_enabled }
+    }
+    if (body) {
       this.psks = []
       if (this.filters_enabled) {
         this.loading = true;
-        this.http.post<PskElement[]>('/api/psks/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, ssid: this.ssid, full: this.filters_enabled }).subscribe({
+        this.http.post<PskElement[]>('/api/psks/', { body }).subscribe({
           next: data => {
             this.psks_loaded = data["results"];
             this.psks = data["results"];
@@ -120,7 +127,7 @@ export class DashboardComponent implements OnInit {
           },
           error: error => {
             var message: string = "There was an error... "
-            if ("error" in error) { message += error["error"] }
+            if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })
@@ -132,8 +139,7 @@ export class DashboardComponent implements OnInit {
             startWith({}),
             switchMap(() => {
               this.loading = true;
-              return this.pskDatabase!.getPsks(
-                this.host, this.cookies, this.headers, this.site_id, this.ssid, this.paginator.pageIndex, this.paginator.pageSize);
+              return this.pskDatabase!.getPsks(body);
             }),
             map(data => {
               // Flip flag to show that loading has finished.
@@ -172,22 +178,30 @@ export class DashboardComponent implements OnInit {
       next: data => this.parseSites(data),
       error: error => {
         var message: string = "There was an error... "
-        if ("error" in error) { message += error["error"] }
+        if ("error" in error) { message += error["error"]["message"] }
         this.openError(message)
       }
     })
   }
   changeSite() {
+    var body = {}
     this.wlansDisabled = false;
     this.createDisabled = false;
-    this.http.post<any>('/api/wlans/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id }).subscribe({
-      next: data => this.parseWlans(data),
-      error: error => {
-        var message: string = "There was an error... "
-        if ("error" in error) { message += error["error"] }
-        this.openError(message)
-      }
-    })
+    if (this.site_id == "org") {
+      body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }
+    } else if (this.site_id) {
+      body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id }
+    }
+    if (body) {
+      this.http.post<any>('/api/wlans/', body).subscribe({
+        next: data => this.parseWlans(data),
+        error: error => {
+          var message: string = "There was an error... "
+          if ("error" in error) { message += error["error"]["message"] }
+          this.openError(message)
+        }
+      })
+    }
   }
   changeWlan() {
     this.getPsks()
@@ -222,7 +236,7 @@ export class DashboardComponent implements OnInit {
 
   // DIALOG BOXES
   // ERROR
-  openError(message: string): void {
+  openError(message): void {
     const dialogRef = this.dialog.open(ErrorDialog, {
       data: message
     });
@@ -253,11 +267,17 @@ export class DashboardComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.http.post<any>('/api/psks/create/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }).subscribe({
+        var body = {};
+        if (this.site_id=="org"){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+        } else if (this.site_id){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+        }
+        this.http.post<any>('/api/psks/create/', body).subscribe({
           next: data => this.getPsks(),
           error: error => {
             var message: string = "There was an error... "
-            if ("error" in error) { message += error["error"] }
+            if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })
@@ -271,11 +291,17 @@ export class DashboardComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.http.post<any>('/api/psks/create/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }).subscribe({
+        var body = {};
+        if (this.site_id=="org"){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+        } else if (this.site_id){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+        }
+        this.http.post<any>('/api/psks/create/', body).subscribe({
           next: data => this.getPsks(),
           error: error => {
             var message: string = "There was an error... "
-            if ("error" in error) { message += error["error"] }
+            if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })
@@ -290,11 +316,17 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.http.post<any>('/api/psks/delete/', { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, psk_id: psk.id }).subscribe({
+        var body = {};
+        if (this.site_id=="org"){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, psk_id: psk.id }
+        } else if (this.site_id){
+          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, psk_id: psk.id }
+        }
+        this.http.post<any>('/api/psks/delete/', body).subscribe({
           next: data => this.getPsks(),
           error: error => {
             var message: string = "There was an error... "
-            if ("error" in error) { message += error["error"] }
+            if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })
@@ -312,7 +344,7 @@ export class DashboardComponent implements OnInit {
           next: data => console.log("done"),
           error: error => {
             var message: string = "There was an error... "
-            if ("error" in error) { message += error["error"] }
+            if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })

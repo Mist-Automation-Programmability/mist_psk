@@ -13,6 +13,6 @@ class Sites(Common):
                 resp = requests.get(url, headers=body["headers"], cookies=body["cookies"])                
                 return {"status": 200, "data": {"sites": resp.json()}}
             except:
-                return {"status": 500, "data": {"error": "unable to retrieve the Sites list"}}
+                return {"status": 500, "data": {"message": "unable to retrieve the Sites list"}}
         else:
-            return {"status":500, "data":{"error": "Information missing"}}
+            return {"status":500, "data":{"message": "Information missing"}}
