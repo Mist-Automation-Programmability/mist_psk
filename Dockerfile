@@ -6,7 +6,7 @@ LABEL one.stag.mpswi.release-date="2020-04-08"
 
 
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir django whitenoise requests qrcode
+RUN pip install --no-cache-dir django whitenoise requests qrcode bcrypt
 
 COPY ./django_app/ /app/
 WORKDIR /app

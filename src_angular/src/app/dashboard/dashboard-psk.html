@@ -17,23 +17,31 @@
     <div mat-dialog-content fxLayout="column">
 
         <mat-form-field appearance="outline">
-            <mat-label>NAME*</mat-label>
-            <input matInput formControlName="name" />
+            <mat-label>NAME</mat-label>
+            <input matInput required formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>EMAIL</mat-label>
             <input matInput formControlName="user_email" />
         </mat-form-field>
         <div fxLayout="row">
-            <mat-form-field appearance="outline">
-                <mat-label>PSK*</mat-label>
-                <input matInput formControlName="psk" />
+            <mat-checkbox formControlName="renewable" (ngModelChange)="changeRenewable()">
+                Enable Renewable PSK
+                <span class="material-icons tooltip" matTooltip="Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same">
+                    help
+                </span>
+            </mat-checkbox>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field appearance="outline" [hideRequiredMarker]="frmPsk.value.renewable">
+                <mat-label>PSK</mat-label>
+                <input matInput required formControlName="psk" [attr.disabled]="renewable" />
             </mat-form-field>
-            <button mat-button (click)="generatePsk()" style="height: 55px;">Generate PSK</button>
+            <button mat-button (click)="generatePsk()" style="height: 55px;" [disabled]="renewable">Generate PSK</button>
         </div>
         <mat-form-field appearance="outline">
-            <mat-label>SSID*</mat-label>
-            <mat-select formControlName="ssid">
+            <mat-label>SSID</mat-label>
+            <mat-select formControlName="ssid" required>
                 <mat-option *ngFor="let wlan of data.wlans " [value]="wlan.ssid">
                     {{wlan.ssid}}
                 </mat-option>

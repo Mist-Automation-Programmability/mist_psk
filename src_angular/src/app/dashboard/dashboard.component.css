@@ -39,6 +39,14 @@
     justify-content: space-between;
 }
 
+.tooltip {
+    color: gray;
+}
+
+.tooltip:hover {
+    color: black;
+}
+
 
 /* Structure */
 
