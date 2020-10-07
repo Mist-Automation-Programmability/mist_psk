@@ -98,17 +98,17 @@ def login(request):
                     cookies = resp.cookies
                     return _get_self(request, body["host"], "username", headers=headers, cookies=cookies)
                 else:
-                    return JsonResponse(status=400, data={"error": "authentication failed"})
+                    return JsonResponse(status=400, data={"message": "authentication failed"})
             elif "email" in body:
-                return JsonResponse(status=401, data={"error": "authentication information are missing"})
+                return JsonResponse(status=401, data={"message": "authentication information are missing"})
             elif "password" in body:
-                return JsonResponse(status=401, data={"error": "authentication information are missing"})
+                return JsonResponse(status=401, data={"message": "authentication information are missing"})
             else:
-                return JsonResponse(status=500, data={"error": "authentication information are missing"})
+                return JsonResponse(status=500, data={"message": "authentication information are missing"})
         else:
-            return JsonResponse(status=500, data={"error": "host missing"})
+            return JsonResponse(status=500, data={"message": "host missing"})
     else:
-        return JsonResponse(status=400, data={"error": "not allowed"})
+        return JsonResponse(status=400, data={"message": "not allowed"})
 
 ##########
 # EMAIL
@@ -121,4 +121,4 @@ def emailPsk(request):
             resp = mist_smtp.send_psk(body["psk"], body["ssid"], body["name"], body["user_email"])
             return JsonResponse({"result": resp})
         else: 
-            return JsonResponse(status=500, data={"error": "missing parametesr"})
+            return JsonResponse(status=500, data={"message": "missing parametesr"})
