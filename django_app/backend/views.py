@@ -39,7 +39,7 @@ try:
 except:
     psk_config = {
         "salt": os.environ.get("MIST_PSK_SALT", default="$2b$12$SIGWr574/7OggDO4BBJ1D."),
-        "length": os.environ.get("MIST_PSK_LENGTH", default=12)
+        "length": int(os.environ.get("MIST_PSK_LENGTH", default=12))
     }
 psk_config["salt"] = str.encode(psk_config["salt"])
     
