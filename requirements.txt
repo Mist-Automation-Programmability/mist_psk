@@ -2,3 +2,4 @@ django
 whitenoise
 requests
 qrcode
+bcrypt

@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
   psks: PskElement[] = []
 
   filters_enabled: boolean = false
-  resultsLength = 50;
+  resultsLength = 0;
   displayedColumns: string[] = ['name', 'user_email', 'ssid', 'vlan_id', 'created_by', 'created_time', 'modified_time', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit {
       body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, ssid: this.ssid, full: this.filters_enabled }
     }
     if (body) {
-      
+
       if (this.filters_enabled) {
         this.loading = true;
         this.http.post<PskElement[]>('/api/psks/', body).subscribe({
@@ -204,14 +204,26 @@ export class DashboardComponent implements OnInit {
     this.createDisabled = false;
     this.sitegroups_ids = [];
     if (this.site_id == "org") {
-      body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }
+      body = { 
+        host: this.host, 
+        cookies: this.cookies, 
+        headers: this.headers, 
+        org_id: this.org_id 
+      }
     } else if (this.site_id) {
       this.sites.forEach(site => {
         if (site.id == this.site_id) {
           this.sitegroups_ids = site.sitegroups_ids;
         }
       })
-      body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, sitegroups_ids: this.sitegroups_ids, org_id: this.org_id }
+      body = { 
+        host: this.host, 
+        cookies: this.cookies, 
+        headers: this.headers, 
+        site_id: this.site_id, 
+        sitegroups_ids: this.sitegroups_ids, 
+        org_id: this.org_id 
+      }
     }
     if (body) {
       this.http.post<any>('/api/wlans/', body).subscribe({
@@ -289,9 +301,33 @@ export class DashboardComponent implements OnInit {
       if (result) {
         var body = null;
         if (this.site_id == "org") {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            org_id: this.org_id,
+            user_email: result.user_email,
+            name: result.name,
+            passphrase: result.psk,
+            ssid: result.ssid,
+            vlan_id: result.vlan_id,
+            created_by: this.me,
+            renewable: result.renewable
+          }
         } else if (this.site_id) {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            site_id: this.site_id,
+            user_email: result.user_email,
+            name: result.name,
+            passphrase: result.psk,
+            ssid: result.ssid,
+            vlan_id: result.vlan_id,
+            created_by: this.me,
+            renewable: result.renewable
+          }
         }
         this.http.post<any>('/api/psks/create/', body).subscribe({
           next: data => this.getPsks(),
@@ -313,9 +349,35 @@ export class DashboardComponent implements OnInit {
       if (result) {
         var body = null;
         if (this.site_id == "org") {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            org_id: this.org_id,
+            id: result.id,
+            user_email: result.user_email,
+            name: result.name,
+            passphrase: result.psk,
+            ssid: result.ssid,
+            vlan_id: result.vlan_id,
+            created_by: this.me,
+            renewable: result.renewable
+          }
         } else if (this.site_id) {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            site_id: this.site_id,
+            id: result.id,
+            user_email: result.user_email,
+            name: result.name,
+            passphrase: result.psk,
+            ssid: result.ssid,
+            vlan_id: result.vlan_id,
+            created_by: this.me,
+            renewable: result.renewable
+          }
         }
         this.http.post<any>('/api/psks/create/', body).subscribe({
           next: data => this.getPsks(),
@@ -338,9 +400,21 @@ export class DashboardComponent implements OnInit {
       if (result) {
         var body = null;
         if (this.site_id == "org") {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, psk_id: psk.id }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            org_id: this.org_id,
+            psk_id: psk.id
+          }
         } else if (this.site_id) {
-          body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, psk_id: psk.id }
+          body = {
+            host: this.host,
+            cookies: this.cookies,
+            headers: this.headers,
+            site_id: this.site_id,
+            psk_id: psk.id
+          }
         }
         this.http.post<any>('/api/psks/delete/', body).subscribe({
           next: data => this.getPsks(),

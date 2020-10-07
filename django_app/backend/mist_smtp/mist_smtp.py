@@ -5,10 +5,6 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from datetime import datetime
 from .mist_qrcode import get_qrcode_as_html
-try:
-    from .config import smtp_config
-except:
-    smtp_config = None
 
 def _load_conf(conf_obj, conf_val, conf_type):
     if conf_val in conf_obj: return conf_obj[conf_val]
@@ -18,7 +14,7 @@ def _load_conf(conf_obj, conf_val, conf_type):
         exit(1)
 
 class Mist_SMTP():
-    def __init__(self):
+    def __init__(self, smtp_config):
         print("Loading SMTP settings ".ljust(79, "."), end="", flush=True)
         if smtp_config:
             self.host = _load_conf(smtp_config, "host", "SMTP")

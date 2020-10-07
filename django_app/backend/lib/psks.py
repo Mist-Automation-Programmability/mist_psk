@@ -1,6 +1,7 @@
 
 import requests
 import json
+import bcrypt
 from .common import Common
 
 
@@ -60,16 +61,30 @@ class Psk(Common):
 # Create or Edit PSK
 #############
 
-    def push(self, body):
+    def push(self, body, psk_config):
         body = self.get_body(body)
         if "site_id" in body:
-            return self._push_psk(body, "sites", "site_id")
+            return self._push_psk(body, "sites", "site_id", psk_config)
         elif "org_id" in body:
-            return self._push_psk(body, "orgs", "org_id")
+            return self._push_psk(body, "orgs", "org_id", psk_config)
         else:
             return {"status": 500, "data": {"message": "site_id or org_id missing"}}
 
-    def _push_psk(self, body, scope_name, scope_id_param):
+    def _gen_renewable_psk(self, username, scope_id, psk_config):
+        salt = psk_config["salt"]
+        psk_length = psk_config["length"]
+        passwd = "{0}_{1}".format(scope_id, username)
+        passwd = str(passwd).encode()
+        # generate the hash in bytes
+        psk = bcrypt.hashpw(passwd, salt)
+        # convert bytes to utf-8
+        psk = psk.decode("utf-8")
+        # get a substr of the psk to match the length
+        if psk_length > len(psk): psk_length = len(psk)
+        psk = psk[len(psk)-psk_length:]
+        return psk
+
+    def _push_psk(self, body, scope_name, scope_id_param, psk_config):
         if scope_id_param in body and "name" in body and "passphrase" in body and "ssid" in body:
             psk = {
                 "name": body["name"],
@@ -77,6 +92,8 @@ class Psk(Common):
                 "ssid": body["ssid"],
                 "usage": "multi",
             }
+            if "renewable" in body and body["renewable"]:
+                psk["passphrase"] = self._gen_renewable_psk(body["name"], body[scope_id_param], psk_config)
             if "vlan_id" in body:
                 psk["vlan_id"] = body["vlan_id"]
             if "created_by" in body:
