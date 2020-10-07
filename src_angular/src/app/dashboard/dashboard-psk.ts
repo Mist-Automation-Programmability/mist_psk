@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -11,11 +11,11 @@ import { FormBuilder } from '@angular/forms';
 export class PskDialog {
     frmPsk = this.formBuilder.group({
         id: [this.data.psk.id],
-        name: [this.data.psk.name],// Validators.required],
-        psk: [this.data.psk.passphrase],// Validators.required, Validators.minLength(8), Validators.maxLength(63)],
-        ssid: [this.data.psk.ssid],// Validators.required],
-        vlan_id: [this.data.psk.vlan_id],// Validators.min(1), Validators.max(4095)]
-        user_email: [this.data.psk.user_email]
+        name: [this.data.psk.name, Validators.required],
+        psk: [this.data.psk.passphrase, [Validators.required, Validators.minLength(8), Validators.maxLength(63)]],
+        ssid: [this.data.psk.ssid, Validators.required],
+        vlan_id: [this.data.psk.vlan_id, [Validators.min(1), Validators.max(4095)]],
+        user_email: [this.data.psk.user_email, Validators.email]
     });
     editing = this.data.editing;
     constructor(public dialogRef: MatDialogRef<PskDialog>, @Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
