@@ -97,16 +97,16 @@
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element" fxLayout="row">
                             <div class="button-container">
-                                <button mat-mini-fab class="edit" (click)="openEdit(element)">
+                                <button mat-mini-fab class="edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="edit" (click)="openEmail(element)">
+                                <button mat-mini-fab class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)">
+                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="delete" (click)="openDelete(element)">
+                                <button mat-mini-fab class="delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
                                 </button>
                             </div>
@@ -161,16 +161,16 @@
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element" fxLayout="row">
                             <div class="button-container">
-                                <button mat-mini-fab class="edit" (click)="openEdit(element)">
+                                <button mat-mini-fab class="edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="edit" (click)="openEmail(element)">
+                                <button mat-mini-fab class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)">
+                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="delete" (click)="openDelete(element)">
+                                <button mat-mini-fab class="delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
                                 </button>
                             </div>
