@@ -17,7 +17,7 @@
     <div mat-dialog-content fxLayout="column">
 
         <mat-form-field appearance="outline">
-            <mat-label>NAME</mat-label>
+            <mat-label>NAME*</mat-label>
             <input matInput formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -26,13 +26,13 @@
         </mat-form-field>
         <div fxLayout="row">
             <mat-form-field appearance="outline">
-                <mat-label>PSK</mat-label>
+                <mat-label>PSK*</mat-label>
                 <input matInput formControlName="psk" />
             </mat-form-field>
             <button mat-button (click)="generatePsk()" style="height: 55px;">Generate PSK</button>
         </div>
         <mat-form-field appearance="outline">
-            <mat-label>SSID</mat-label>
+            <mat-label>SSID*</mat-label>
             <mat-select formControlName="ssid">
                 <mat-option *ngFor="let wlan of data.wlans " [value]="wlan.ssid">
                     {{wlan.ssid}}
@@ -46,7 +46,7 @@
     </div>
     <div mat-dialog-actions>
         <button mat-button (click)="cancel()">Cancel</button>
-        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==true">Update</button>
-        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==false">Create</button>
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
+        <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>
     </div>
 </form>
