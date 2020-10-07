@@ -14,6 +14,7 @@ import { ErrorDialog } from './dashboard-error';
 
 
 import { ConnectorService } from '../connector.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 export interface PskElement {
@@ -38,7 +39,9 @@ export interface MistPsks {
 export class MistHttpDatabase {
   constructor(private _httpClient: HttpClient) { }
 
-  getPsks(body:{}): Observable<MistPsks> {
+  loadPsks(body: {}, pageIndex: number, pageSize: number): Observable<MistPsks> {
+    body["page"] = pageIndex;
+    body["limit"] = pageSize;
     return this._httpClient.post<MistPsks>('/api/psks/', body);
   }
 }
@@ -63,20 +66,26 @@ export class DashboardComponent implements OnInit {
   wlans = [];
   org_id: string = "";
   site_id: string = "";
+  sitegroups_ids: string[] = [];
   ssid: string = "";
+  me: string = "";
+
   sitesDisabled: boolean = true;
   wlansDisabled: boolean = true;
   createDisabled: boolean = true;
-  me: string = "";
-  filters_enabled: boolean = false
-  resultsLength = 50;
+
+  topBarLoading = false;
   loading = false;
+
   isRateLimitReached = false;
   pskDatabase: MistHttpDatabase | null;
+  filteredPskDatase: MatTableDataSource<PskElement> | null;
+  psks: PskElement[] = []
 
+  filters_enabled: boolean = false
+  resultsLength = 50;
   displayedColumns: string[] = ['name', 'user_email', 'ssid', 'vlan_id', 'created_by', 'created_time', 'modified_time', 'action'];
-  psks: PskElement[] = [];
-  psks_loaded: PskElement[] = [];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private http: HttpClient, private appService: ConnectorService, public dialog: MatDialog) { }
@@ -99,7 +108,7 @@ export class DashboardComponent implements OnInit {
           }
         }
       });
-      this.orgs = this.sortList(this.orgs);
+      this.orgs = this.sortList(this.orgs, "name");
       if (this.orgs.length == 1) {
         this.org_id = this.orgs[1]["id"]
       }
@@ -108,21 +117,20 @@ export class DashboardComponent implements OnInit {
 
 
   getPsks() {
-    var body = {}
-
+    var body = null
     if (this.site_id == "org") {
       body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, ssid: this.ssid, full: this.filters_enabled }
     } else if (this.site_id) {
       body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, ssid: this.ssid, full: this.filters_enabled }
     }
     if (body) {
-      this.psks = []
+      
       if (this.filters_enabled) {
         this.loading = true;
-        this.http.post<PskElement[]>('/api/psks/', { body }).subscribe({
+        this.http.post<PskElement[]>('/api/psks/', body).subscribe({
           next: data => {
-            this.psks_loaded = data["results"];
-            this.psks = data["results"];
+            this.filteredPskDatase = new MatTableDataSource(data["results"]);
+            this.filteredPskDatase.paginator = this.paginator;
             this.loading = false;
           },
           error: error => {
@@ -131,22 +139,21 @@ export class DashboardComponent implements OnInit {
             this.openError(message)
           }
         })
+
       } else {
         this.pskDatabase = new MistHttpDatabase(this.http);
-
         merge(this.paginator.page, this.paginator.pageSize)
           .pipe(
             startWith({}),
             switchMap(() => {
               this.loading = true;
-              return this.pskDatabase!.getPsks(body);
+              return this.pskDatabase!.loadPsks(body, this.paginator.pageIndex, this.paginator.pageSize);
             }),
             map(data => {
               // Flip flag to show that loading has finished.
               this.loading = false;
               this.isRateLimitReached = false;
               this.resultsLength = data.total;
-
               return data.results;
             }),
             catchError(() => {
@@ -162,35 +169,49 @@ export class DashboardComponent implements OnInit {
 
   parseSites(data) {
     if (data.sites.length > 0) {
-      this.sites = this.sortList(data.sites);
+      this.sites = this.sortList(data.sites, "name");
     }
+    this.sitesDisabled = false;
+    this.topBarLoading = false;
   }
   parseWlans(data) {
+    this.wlans = []
     if (data.wlans.length > 0) {
-      this.wlans = this.sortList(data.wlans);
+      this.wlans = this.sortList(data.wlans, "ssid");
       this.getPsks()
     }
+    this.wlansDisabled = false;
+    this.topBarLoading = false;
   }
 
   changeOrg() {
-    this.sitesDisabled = false;
+    this.topBarLoading = true;
     this.http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
       next: data => this.parseSites(data),
       error: error => {
         var message: string = "There was an error... "
-        if ("error" in error) { message += error["error"]["message"] }
+        if ("error" in error) {
+          message += error["error"]["message"]
+        }
+        this.topBarLoading = false;
         this.openError(message)
       }
     })
   }
   changeSite() {
-    var body = {}
-    this.wlansDisabled = false;
+    this.topBarLoading = true;
+    var body = null
     this.createDisabled = false;
+    this.sitegroups_ids = [];
     if (this.site_id == "org") {
       body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }
     } else if (this.site_id) {
-      body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id }
+      this.sites.forEach(site => {
+        if (site.id == this.site_id) {
+          this.sitegroups_ids = site.sitegroups_ids;
+        }
+      })
+      body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, sitegroups_ids: this.sitegroups_ids, org_id: this.org_id }
     }
     if (body) {
       this.http.post<any>('/api/wlans/', body).subscribe({
@@ -198,6 +219,7 @@ export class DashboardComponent implements OnInit {
         error: error => {
           var message: string = "There was an error... "
           if ("error" in error) { message += error["error"]["message"] }
+          this.topBarLoading = false;
           this.openError(message)
         }
       })
@@ -209,10 +231,10 @@ export class DashboardComponent implements OnInit {
 
 
   // COMMON
-  sortList(data) {
+  sortList(data, attribute) {
     return data.sort(function (a, b) {
-      var nameA = a["name"].toUpperCase(); // ignore upper and lowercase
-      var nameB = b["name"].toUpperCase(); // ignore upper and lowercase
+      var nameA = a[attribute].toUpperCase(); // ignore upper and lowercase
+      var nameB = b[attribute].toUpperCase(); // ignore upper and lowercase
       if (nameA < nameB) {
         return -1;
       }
@@ -224,15 +246,13 @@ export class DashboardComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    if (filterValue == "") { this.psks = this.psks_loaded }
-    else {
-      this.psks = [];
-      this.psks_loaded.forEach(psk => {
-        if (psk.name.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
-        else if (psk.created_by && psk.created_by.toLowerCase().indexOf(filterValue) >= 0) { this.psks.push(psk) }
-      })
+    this.filteredPskDatase.filter = filterValue.trim().toLowerCase();
+
+    if (this.filteredPskDatase.paginator) {
+      this.filteredPskDatase.paginator.firstPage();
     }
   }
+
 
   // DIALOG BOXES
   // ERROR
@@ -267,10 +287,10 @@ export class DashboardComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var body = {};
-        if (this.site_id=="org"){
+        var body = null;
+        if (this.site_id == "org") {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
-        } else if (this.site_id){
+        } else if (this.site_id) {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
         }
         this.http.post<any>('/api/psks/create/', body).subscribe({
@@ -291,10 +311,10 @@ export class DashboardComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var body = {};
-        if (this.site_id=="org"){
+        var body = null;
+        if (this.site_id == "org") {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
-        } else if (this.site_id){
+        } else if (this.site_id) {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, id: result.id, user_email: result.user_email, name: result.name, passphrase: result.psk, ssid: result.ssid, vlan_id: result.vlan_id, created_by: this.me }
         }
         this.http.post<any>('/api/psks/create/', body).subscribe({
@@ -316,10 +336,10 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var body = {};
-        if (this.site_id=="org"){
+        var body = null;
+        if (this.site_id == "org") {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, psk_id: psk.id }
-        } else if (this.site_id){
+        } else if (this.site_id) {
           body = { host: this.host, cookies: this.cookies, headers: this.headers, site_id: this.site_id, psk_id: psk.id }
         }
         this.http.post<any>('/api/psks/delete/', body).subscribe({

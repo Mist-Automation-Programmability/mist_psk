@@ -23,7 +23,7 @@ class Psk(Common):
             scope_id = body[scope_id_param]
             try:
                 extract = self.extractAuth(body)
-                if "full" in body:
+                if "full" in body and body["full"]:
                     limit = 1000
                     page = 1
                     results = []
