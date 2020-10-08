@@ -305,7 +305,8 @@ export class DashboardComponent implements OnInit {
 
   openWarningVlan(message: string, vlan_check: VlanCheckElement[], bigWarning: boolean): void {
     const dialogRef = this._dialog.open(WarningDialog, {
-      data: { text: message, vlan_check: vlan_check, bigWarning: bigWarning }
+      data: { text: message, vlan_check: vlan_check, bigWarning: bigWarning },
+      height : 'auto',
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
