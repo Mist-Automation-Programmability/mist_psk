@@ -1,4 +1,4 @@
-# mist_report_generator
+# Mist Psk Web UI
  
 This application provides a single page app to manage, create, edit and delete Personal PSKs from Mist Cloud. It is required to have a Mist account to get access to this app.
 
