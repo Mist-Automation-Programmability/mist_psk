@@ -52,7 +52,7 @@
             <input matInput type="number" formControlName="vlan_id" />
         </mat-form-field>
     </div>
-    <div mat-dialog-actions>
+    <div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
         <button mat-button (click)="cancel()">Cancel</button>
         <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
         <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>
