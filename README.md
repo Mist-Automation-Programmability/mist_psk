@@ -37,14 +37,14 @@ A configuration example with explanation is avaiable in the `django/backend/conf
 ### Environment Variables
 | Variable Name | Type | Default Value | Comment |
 | ------------- | ---- | ------------- | ------- |
-MIST_SMTP_ENABLED | Boolean | False | |
-MIST_SMTP_HOST | String |	None | |
-MIST_SMTP_PORT | Number | 587 | |
-MIST_SMTP_SSL | Boolean | True | |
-MIST_SMTP_USER | String | None | |
-MIST_SMTP_PASSWORD | String | None | |
-MIST_SMTP_FROM_NAME | String | Wi-Fi Access | |
-MIST_SMTP_FROM_EMAIL | String | None | |
+MIST_SMTP_ENABLED | Boolean | False | Whether or not to allow to send PSK by email |
+MIST_SMTP_HOST | String |	None | SMTP Server IP or hostname |
+MIST_SMTP_PORT | Number | 587 | SMTP Server Port  |
+MIST_SMTP_SSL | Boolean | True | Whether or not to use SSL to talk with the SMTP Server |
+MIST_SMTP_USER | String | None | If SMTP server requires authentication, the username to use |
+MIST_SMTP_PASSWORD | String | None | If SMTP server requires authentication, the password to use |
+MIST_SMTP_FROM_NAME | String | Wi-Fi Access | Email sender name |
+MIST_SMTP_FROM_EMAIL | String | None | Sender email address  |
 MIST_SMTP_LOGO_URL | String | https://cdn.mist.com/wp-content/uploads/logo.png | Logo displayed in the email header |
 MIST_SMTP_QRCODE | Boolean | True | Whether or not add an autoconfiguration QRCode for smartphones to the email |
 MIST_PSK_SALT | String | $2b$12$SIGWr574/7OggDO4BBJ1D. | Salt for "renewable" PSK generation |
