@@ -511,7 +511,7 @@ export class DashboardComponent implements OnInit {
             this.openSnackBar("Email sent to" + psk.user_email, "Done")
           },
           error: error => {
-            var message: string = "Unable to send the email to " + psk.user_email + "... "
+            var message: string = "Unable to send the email to " + result.user_email + "... "
             if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
