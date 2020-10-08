@@ -3,7 +3,7 @@ import requests
 import json
 import bcrypt
 from .common import Common
-
+from .wlans import Wlan
 
 class Psk(Common):
 
@@ -84,8 +84,10 @@ class Psk(Common):
         psk = psk[len(psk)-psk_length:]
         return psk
 
+
     def _push_psk(self, body, scope_name, scope_id_param, psk_config):
         if scope_id_param in body and "name" in body and "passphrase" in body and "ssid" in body:
+            extract = self.extractAuth(body)
             psk = {
                 "name": body["name"],
                 "passphrase": body["passphrase"],
@@ -100,13 +102,18 @@ class Psk(Common):
                 psk["created_by"] = body["created_by"]
             if "user_email" in body:
                 psk["user_email"] = body["user_email"]
-            if "id" in body:
-                return self._updatePsk(body, body["id"], psk, scope_name, scope_id_param)
-            else:
-                return self._createPsk(body, psk, scope_name, scope_id_param)
 
-    def _createPsk(self, body, psk, scope_name, scope_id_param):
-        extract = self.extractAuth(body)
+            result = {"status": None}
+            if "id" in body:
+                result =  self._updatePsk(body, extract, body["id"], psk, scope_name, scope_id_param)
+            else:
+                result =  self._createPsk(body, extract, psk, scope_name, scope_id_param)
+            if "vlan_id" in body and result["status"] == 200:
+                vlan_check = Wlan().check_vlan(extract, body["ssid"], body["vlan_id"], scope_name, body[scope_id_param])            
+                result["data"]["vlan_check"] = vlan_check
+            return result
+
+    def _createPsk(self, body, extract, psk, scope_name, scope_id_param):
         try:
             url = "https://{0}/api/v1/{1}/{2}/psks".format(
                 body["host"], scope_name, body[scope_id_param])
@@ -116,8 +123,7 @@ class Psk(Common):
         except:
             return {"status": 500, "data": {"message": "Unable to update the Psk"}}
 
-    def _updatePsk(self, body, psk_id, psk, scope_name, scope_id_param):
-        extract = self.extractAuth(body)
+    def _updatePsk(self, body, extract, psk_id, psk, scope_name, scope_id_param):
         try:
             url = "https://{0}/api/v1/{1}/{2}/psks/{3}".format(
                 body["host"], scope_name, body[scope_id_param], body["id"])

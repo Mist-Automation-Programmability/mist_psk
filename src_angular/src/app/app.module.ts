@@ -23,6 +23,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatIconModule } from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -36,12 +37,13 @@ import { DeleteDialog } from './dashboard/dashboard-delete';
 import { PskDialog } from './dashboard/dashboard-psk';
 import { EmailDialog } from './dashboard/dashboard-email';
 import { ErrorDialog } from './dashboard/dashboard-error';
+import { WarningDialog } from './dashboard/dashboard-warning';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent, TwoFactorDialog,
-    DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog, ErrorDialog
+    DashboardComponent, QrCodeDialog, DeleteDialog, PskDialog, EmailDialog, ErrorDialog, WarningDialog
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,8 @@ import { ErrorDialog } from './dashboard/dashboard-error';
     QRCodeModule,
     MatDialogModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [{
     provide: MatRadioModule,
