@@ -27,3 +27,27 @@ This is a demo application using the Mist APIs.
 You can run it as a strandalone Python application, or deploy it as a Docker container.
 
 **Note**: The application is not providing secured HTTPS connections. It is highly recommended to deploy it behind a reverse proxy providing HTTPS encryption.
+
+
+## Configuration
+You can configure the settings through a configuration file or through Environment Variables.
+### Configuration File
+A configuration example with explanation is avaiable in the `django/backend/config_example.py`. This file must be edited and renamed `config.py`.
+
+### Environment Variables
+| Variable Name | Type | Default Value | Comment |
+| ------------- | ---- | ------------- | ------- |
+MIST_SMTP_ENABLED | Boolean | False | |
+MIST_SMTP_HOST | String |	None | |
+MIST_SMTP_PORT | Number | 587 | |
+MIST_SMTP_SSL | Boolean | True | |
+MIST_SMTP_USER | String | None | |
+MIST_SMTP_PASSWORD | String | None | |
+MIST_SMTP_FROM_NAME | String | Wi-Fi Access | |
+MIST_SMTP_FROM_EMAIL | String | None | |
+MIST_SMTP_LOGO_URL | String | https://cdn.mist.com/wp-content/uploads/logo.png | Logo displayed in the email header |
+MIST_SMTP_QRCODE | Boolean | True | Whether or not add an autoconfiguration QRCode for smartphones to the email |
+MIST_PSK_SALT | String | $2b$12$SIGWr574/7OggDO4BBJ1D. | Salt for "renewable" PSK generation |
+MIST_PSK_LENGTH | Number | 12 | Size for "renewable" PSK length (must be between 8 and 63 |
+DJANGO_DEBUG | Number | 0 | Whether or not Django starts in Debug Mode (0=Production, 1=Debug) |
+DJANGO_ALLOWED_HOSTS | String |  | FQDN on which Django is listening. Only used in Production Mode |
