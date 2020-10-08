@@ -99,6 +99,15 @@ def wlans(request):
         return Http404
 
 ##########
+# VLAN
+@csrf_exempt
+def vlans(request):
+    if request.method == "POST":
+        response = Wlan().change_vlan(request.body)
+        return JsonResponse(status=response["status"], data=response["data"])
+    else:
+        return Http404
+##########
 # LOGIN
 
 

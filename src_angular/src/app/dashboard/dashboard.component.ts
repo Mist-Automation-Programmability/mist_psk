@@ -15,7 +15,8 @@ import { ErrorDialog } from './dashboard-error';
 
 import { ConnectorService } from '../connector.service';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { WarningDialog } from './dashboard-warning';
 
 export interface PskElement {
   id: string;
@@ -27,6 +28,15 @@ export interface PskElement {
   modified_time: number;
   passphrase: string;
   user_email: string;
+}
+
+export interface VlanCheckElement {
+  wlan_id: string,
+  reason: string,
+  vlan_id: number,
+  scope_name: string,
+  scope_id: string,
+  code: string
 }
 
 export interface MistPsks {
@@ -88,13 +98,13 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private http: HttpClient, private appService: ConnectorService, public dialog: MatDialog) { }
+  constructor(private _http: HttpClient, private _appService: ConnectorService, public _dialog: MatDialog, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.appService.headers.subscribe(headers => this.headers = headers)
-    this.appService.cookies.subscribe(cookies => this.cookies = cookies)
-    this.appService.host.subscribe(host => this.host = host)
-    this.appService.self.subscribe(self => this.self = self || {})
+    this._appService.headers.subscribe(headers => this.headers = headers)
+    this._appService.cookies.subscribe(cookies => this.cookies = cookies)
+    this._appService.host.subscribe(host => this.host = host)
+    this._appService.self.subscribe(self => this.self = self || {})
     this.me = this.self["email"] || null
     if (this.self != {} && this.self["privileges"]) {
       this.self["privileges"].forEach(element => {
@@ -127,7 +137,7 @@ export class DashboardComponent implements OnInit {
 
       if (this.filters_enabled) {
         this.loading = true;
-        this.http.post<PskElement[]>('/api/psks/', body).subscribe({
+        this._http.post<PskElement[]>('/api/psks/', body).subscribe({
           next: data => {
             this.filteredPskDatase = new MatTableDataSource(data["results"]);
             this.filteredPskDatase.paginator = this.paginator;
@@ -141,7 +151,7 @@ export class DashboardComponent implements OnInit {
         })
 
       } else {
-        this.pskDatabase = new MistHttpDatabase(this.http);
+        this.pskDatabase = new MistHttpDatabase(this._http);
         merge(this.paginator.page, this.paginator.pageSize)
           .pipe(
             startWith({}),
@@ -186,7 +196,7 @@ export class DashboardComponent implements OnInit {
 
   changeOrg() {
     this.topBarLoading = true;
-    this.http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
+    this._http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
       next: data => this.parseSites(data),
       error: error => {
         var message: string = "There was an error... "
@@ -204,11 +214,11 @@ export class DashboardComponent implements OnInit {
     this.createDisabled = false;
     this.sitegroups_ids = [];
     if (this.site_id == "org") {
-      body = { 
-        host: this.host, 
-        cookies: this.cookies, 
-        headers: this.headers, 
-        org_id: this.org_id 
+      body = {
+        host: this.host,
+        cookies: this.cookies,
+        headers: this.headers,
+        org_id: this.org_id
       }
     } else if (this.site_id) {
       this.sites.forEach(site => {
@@ -216,17 +226,17 @@ export class DashboardComponent implements OnInit {
           this.sitegroups_ids = site.sitegroups_ids;
         }
       })
-      body = { 
-        host: this.host, 
-        cookies: this.cookies, 
-        headers: this.headers, 
-        site_id: this.site_id, 
-        sitegroups_ids: this.sitegroups_ids, 
-        org_id: this.org_id 
+      body = {
+        host: this.host,
+        cookies: this.cookies,
+        headers: this.headers,
+        site_id: this.site_id,
+        sitegroups_ids: this.sitegroups_ids,
+        org_id: this.org_id
       }
     }
     if (body) {
-      this.http.post<any>('/api/wlans/', body).subscribe({
+      this._http.post<any>('/api/wlans/', body).subscribe({
         next: data => this.parseWlans(data),
         error: error => {
           var message: string = "There was an error... "
@@ -268,18 +278,67 @@ export class DashboardComponent implements OnInit {
 
   // DIALOG BOXES
   // ERROR
-  openError(message): void {
-    const dialogRef = this.dialog.open(ErrorDialog, {
+  openError(message: string): void {
+    const dialogRef = this._dialog.open(ErrorDialog, {
       data: message
     });
+  }
+  // Warning VLAN
+  checkVlan(data): void {
+    if ("vlan_check" in data && data["vlan_check"].length > 0) {
+      var bigWarning: boolean = false
+      if (data["vlan_check"].length == 1) {
+        var message = "VLAN misconfiguration has been detected for this SSID. This may prevent the user to connect."
+      } else {
+        var message = "VLAN misconfiguration has been detected in " + data["vlan_check"].length + " templates. This may prevent the user to connect."
+      }
+      data["vlan_check"].forEach(element => {
+        console.log(element["code"])
+        if (["untagged", "vlan_pooling_disabled", "static_vlan"].indexOf(element["code"]) >= 0) {
+          bigWarning = true
+          console.log(bigWarning)
+        }
+      })
+      this.openWarningVlan(message, data["vlan_check"], bigWarning)
+    }
+  }
+
+  openWarningVlan(message: string, vlan_check: VlanCheckElement[], bigWarning: boolean): void {
+    const dialogRef = this._dialog.open(WarningDialog, {
+      data: { text: message, vlan_check: vlan_check, bigWarning: bigWarning }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._http.post<any>('/api/vlans/', { host: this.host, cookies: this.cookies, headers: this.headers, vlan_check: vlan_check }).subscribe({
+          next: data => {
+            if (data["error"].length == 0) {
+              this.openSnackBar("VLAN configuration successfully updated", "Done")
+            } else {
+
+            }
+
+          },
+          error: error => {
+            var message: string = "Unable to update VLAN configuration... "
+            if ("error" in error) {
+              message += error["error"]["message"]
+            }
+            this.openError(message)
+          }
+        })
+      }
+    })
   }
 
   // QRCODE DIALOG
   openQrcode(psk: PskElement): void {
-    const dialogRef = this.dialog.open(QrCodeDialog, {
+    const dialogRef = this._dialog.open(QrCodeDialog, {
       data: { ssid: psk.ssid, passphrase: psk.passphrase }
     });
   }
+
+
+
 
   // CREATE DIALOG
   openCreate(): void {
@@ -294,7 +353,7 @@ export class DashboardComponent implements OnInit {
       modified_time: null,
       user_email: null
     };
-    const dialogRef = this.dialog.open(PskDialog, {
+    const dialogRef = this._dialog.open(PskDialog, {
       data: { wlans: this.wlans, psk: newPsk, editing: false }
     })
     dialogRef.afterClosed().subscribe(result => {
@@ -329,10 +388,14 @@ export class DashboardComponent implements OnInit {
             renewable: result.renewable
           }
         }
-        this.http.post<any>('/api/psks/create/', body).subscribe({
-          next: data => this.getPsks(),
+        this._http.post<any>('/api/psks/create/', body).subscribe({
+          next: data => {
+            this.getPsks()
+            this.openSnackBar("PSK " + result.name + " successfully created", "Done")
+            this.checkVlan(data)
+          },
           error: error => {
-            var message: string = "There was an error... "
+            var message: string = "Unable to create PSK " + result.name + "... "
             if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
@@ -342,7 +405,7 @@ export class DashboardComponent implements OnInit {
   }
   // EDIT PSK
   openEdit(psk: PskElement): void {
-    const dialogRef = this.dialog.open(PskDialog, {
+    const dialogRef = this._dialog.open(PskDialog, {
       data: { wlans: this.wlans, psk: psk, editing: true }
     })
     dialogRef.afterClosed().subscribe(result => {
@@ -379,10 +442,14 @@ export class DashboardComponent implements OnInit {
             renewable: result.renewable
           }
         }
-        this.http.post<any>('/api/psks/create/', body).subscribe({
-          next: data => this.getPsks(),
+        this._http.post<any>('/api/psks/create/', body).subscribe({
+          next: data => {
+            this.getPsks()
+            this.openSnackBar("PSK " + result.name + " successfully updated", "Done")
+            this.checkVlan(data)
+          },
           error: error => {
-            var message: string = "There was an error... "
+            var message: string = "Unable to save changes to PSK " + psk.name + "... "
             if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
@@ -393,7 +460,7 @@ export class DashboardComponent implements OnInit {
 
   // DELETE DIALOG
   openDelete(psk: PskElement): void {
-    const dialogRef = this.dialog.open(DeleteDialog, {
+    const dialogRef = this._dialog.open(DeleteDialog, {
       data: psk
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -416,10 +483,13 @@ export class DashboardComponent implements OnInit {
             psk_id: psk.id
           }
         }
-        this.http.post<any>('/api/psks/delete/', body).subscribe({
-          next: data => this.getPsks(),
+        this._http.post<any>('/api/psks/delete/', body).subscribe({
+          next: data => {
+            this.getPsks()
+            this.openSnackBar("PSK " + psk.name + " successfully deleted", "Done")
+          },
           error: error => {
-            var message: string = "There was an error... "
+            var message: string = "Unable to delete the PSK" + psk.name + "... "
             if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
@@ -429,20 +499,32 @@ export class DashboardComponent implements OnInit {
   }
   // EMAIL DIALOG
   openEmail(psk: PskElement): void {
-    const dialogRef = this.dialog.open(EmailDialog, {
+    const dialogRef = this._dialog.open(EmailDialog, {
       data: psk
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.http.post<any>('/api/psks/email/', { name: result.name, user_email: result.user_email, psk: psk.passphrase, ssid: psk.ssid }).subscribe({
-          next: data => console.log("done"),
+        this._http.post<any>('/api/psks/email/', { name: result.name, user_email: result.user_email, psk: psk.passphrase, ssid: psk.ssid }).subscribe({
+          next: data => {
+            this.getPsks()
+            this.openSnackBar("Email sent to" + psk.user_email, "Done")
+          },
           error: error => {
-            var message: string = "There was an error... "
+            var message: string = "Unable to send the email to " + psk.user_email + "... "
             if ("error" in error) { message += error["error"]["message"] }
             this.openError(message)
           }
         })
       }
+    });
+  }
+
+  // SNACK BAR
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 5000,
+      horizontalPosition: "center",
+      verticalPosition: "top",
     });
   }
 }
