@@ -275,7 +275,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "div", 11);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, " change may have impact on existing users, especially for users using PSK without VLAN.");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "Changes may have impact on existing users, especially for users using PSK without VLAN. ");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -315,7 +315,7 @@
         selectors: [["dashboard-warning"]],
         decls: 16,
         vars: 3,
-        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], [2, "margin", "2em 0em 0", "font-weight", "bold"], [2, "list-style", "none", "padding", "0"], [4, "ngFor", "ngForOf"], ["fxLayout", "column", "style", "color: red;justify-content: center;margin: 2em 0 0;", 4, "ngIf"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", 3, "click"], ["mat-button", "", "color", "accent", 3, "click"], ["fxLayout", "column", 2, "color", "red", "justify-content", "center", "margin", "2em 0 0"], [2, "font-weight", "bold", "justify-content", "center"], [2, "justify-content", "center"]],
+        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], [2, "margin", "2em 0em 0", "font-weight", "bold"], [2, "list-style", "none", "padding", "0"], [4, "ngFor", "ngForOf"], ["fxLayout", "column", "style", "color: red;justify-content: center;margin: 2em 0 0;", 4, "ngIf"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", 3, "click"], ["mat-button", "", "color", "accent", 3, "click"], ["fxLayout", "column", 2, "color", "red", "justify-content", "center", "margin", "2em 0 0"], [2, "font-weight", "bold", "margin", "auto"], [2, "margin", "auto"]],
         template: function WarningDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
@@ -350,6 +350,8 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](10, WarningDialog_div_10_Template, 5, 0, "div", 5);
 
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "button", 7);
@@ -369,8 +371,6 @@
             });
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "Fix It");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -533,7 +533,7 @@
         selectors: [["dashboard-delete"]],
         decls: 10,
         vars: 1,
-        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", "color", "primary", 3, "click"], ["mat-button", "", 3, "click"]],
+        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", 3, "click"], ["mat-button", "", 2, "color", "red !important", 3, "click"]],
         template: function DeleteDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
@@ -682,7 +682,7 @@
         selectors: [["dashboard-error"]],
         decls: 8,
         vars: 1,
-        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", "color", "primary", 3, "click"]],
+        consts: [["mat-dialog-title", ""], ["mat-dialog-content", ""], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", "color", "accent", 3, "click"]],
         template: function ErrorDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
@@ -2260,7 +2260,8 @@
                 text: message,
                 vlan_check: vlan_check,
                 bigWarning: bigWarning
-              }
+              },
+              height: 'auto'
             });
 
             dialogRef.afterClosed().subscribe(function (result) {
@@ -3309,7 +3310,7 @@
         selectors: [["dashboard-email"]],
         decls: 17,
         vars: 1,
-        consts: [["mat-dialog-title", ""], ["mat-dialog-content", "", "fxLayout", "column"], ["fxLayout", "column", 1, "create-form", 3, "formGroup"], ["appearance", "outline"], ["matInput", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email", 3, "keydown.enter"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "primary", "cdkFocusInitial", "", 3, "click"]],
+        consts: [["mat-dialog-title", ""], ["mat-dialog-content", "", "fxLayout", "column"], ["fxLayout", "column", 1, "create-form", 3, "formGroup"], ["appearance", "outline"], ["matInput", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email", 3, "keydown.enter"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "click"]],
         template: function EmailDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
@@ -3648,7 +3649,7 @@
         selectors: [["dashboard-psk"]],
         decls: 38,
         vars: 7,
-        consts: [["mat-dialog-title", ""], [1, "create-form", 3, "formGroup"], ["mat-dialog-content", "", "fxLayout", "column"], ["appearance", "outline"], ["matInput", "", "required", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email"], ["fxLayout", "row"], ["formControlName", "renewable", 3, "ngModelChange"], ["matTooltip", "Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same", 1, "material-icons", "tooltip"], ["appearance", "outline", 3, "hideRequiredMarker"], ["matInput", "", "required", "", "formControlName", "psk"], ["mat-button", "", 2, "height", "55px", 3, "disabled", "click"], ["formControlName", "ssid", "required", ""], [3, "value", 4, "ngFor", "ngForOf"], ["matInput", "", "type", "number", "formControlName", "vlan_id"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "primary", "cdkFocusInitial", "", 3, "disabled", "click", 4, "ngIf"], [3, "value"], ["mat-raised-button", "", "color", "primary", "cdkFocusInitial", "", 3, "disabled", "click"]],
+        consts: [["mat-dialog-title", ""], [1, "create-form", 3, "formGroup"], ["mat-dialog-content", "", "fxLayout", "column"], ["appearance", "outline"], ["matInput", "", "required", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email"], ["fxLayout", "row"], ["formControlName", "renewable", 3, "ngModelChange"], ["matTooltip", "Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same", 1, "material-icons", "tooltip"], ["appearance", "outline", 3, "hideRequiredMarker"], ["matInput", "", "required", "", "formControlName", "psk"], ["mat-button", "", 2, "height", "55px", 3, "disabled", "click"], ["formControlName", "ssid", "required", ""], [3, "value", 4, "ngFor", "ngForOf"], ["matInput", "", "type", "number", "formControlName", "vlan_id"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click", 4, "ngIf"], [3, "value"], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click"]],
         template: function PskDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
@@ -4017,7 +4018,7 @@
         selectors: [["dashboard-qrcode"]],
         decls: 5,
         vars: 3,
-        consts: [["mat-dialog-content", ""], [3, "qrdata", "width", "errorCorrectionLevel"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"]],
+        consts: [["mat-dialog-content", ""], [3, "qrdata", "width", "errorCorrectionLevel"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-raised-button", "", "color", "accent", 3, "click"]],
         template: function QrCodeDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
