@@ -320,7 +320,7 @@
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1", 0);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1, "Be carreful");
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1, "Be careful");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -2528,7 +2528,7 @@
                     _this9.openSnackBar("Email sent to" + psk.user_email, "Done");
                   },
                   error: function error(_error8) {
-                    var message = "Unable to send the email to " + psk.user_email + "... ";
+                    var message = "Unable to send the email to " + result.user_email + "... ";
 
                     if ("error" in _error8) {
                       message += _error8["error"]["message"];
