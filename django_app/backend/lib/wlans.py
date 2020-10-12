@@ -124,38 +124,39 @@ class Wlan(Common):
         return resp.json()
 
     def check_vlan(self, extract, ssid, new_vlan_id, scope_name, scope_id):
-        wlan_confs = self._find_wlans(extract, ssid, scope_name, scope_id)
-        '''
-        "vlan_enabled": true,
-        "vlan_id": null,
-        "dynamic_vlan": null,
-        "vlan_pooling": true,
-        "vlan_ids": [10,20]
-        '''
         result = []
-        if wlan_confs:
-            for wlan_conf in wlan_confs:
+        if new_vlan_id:
+            wlan_confs = self._find_wlans(extract, ssid, scope_name, scope_id)
+            '''
+            "vlan_enabled": true,
+            "vlan_id": null,
+            "dynamic_vlan": null,
+            "vlan_pooling": true,
+            "vlan_ids": [10,20]
+            '''
+            if wlan_confs:
+                for wlan_conf in wlan_confs:
 
-                vlan_enabled = wlan_conf["vlan_enabled"]
-                vlan_id = wlan_conf["vlan_id"]
-                vlan_ids = wlan_conf["vlan_ids"]
-                vlan_pooling = wlan_conf["vlan_pooling"]
-                dynamic_vlan = wlan_conf["dynamic_vlan"]
-                if not vlan_enabled:
-                    result.append(
-                        {"wlan_id": wlan_conf["id"], "reason": "VLAN tagging not enabled", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "untagged"})
-                elif vlan_id and vlan_id != new_vlan_id:
-                    result.append(
-                        {"wlan_id": wlan_conf["id"], "reason": "WLAN configured with another VLAN ID", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "static_vlan"})
-                elif dynamic_vlan and dynamic_vlan["enabled"] and not new_vlan_id in dynamic_vlan["vlans"]:
-                    result.append(
-                        {"wlan_id": wlan_conf["id"], "reason": "VLAN ID missing in dynamic VLAN list", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "missing_in_dynamic"})
-                elif not vlan_pooling:
-                    result.append(
-                        {"wlan_id": wlan_conf["id"], "reason": "VLAN Pooling not enabled", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "vlan_pool_disabled"})
-                elif not new_vlan_id in vlan_ids:
-                    result.append(
-                        {"wlan_id": wlan_conf["id"], "reason": "VLAN ID missing in VLAN pool list", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "missing_in_pool"})
+                    vlan_enabled = wlan_conf["vlan_enabled"]
+                    vlan_id = wlan_conf["vlan_id"]
+                    vlan_ids = wlan_conf["vlan_ids"]
+                    vlan_pooling = wlan_conf["vlan_pooling"]
+                    dynamic_vlan = wlan_conf["dynamic_vlan"]
+                    if not vlan_enabled:
+                        result.append(
+                            {"wlan_id": wlan_conf["id"], "reason": "VLAN tagging not enabled", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "untagged"})
+                    elif vlan_id and vlan_id != new_vlan_id:
+                        result.append(
+                            {"wlan_id": wlan_conf["id"], "reason": "WLAN configured with another VLAN ID", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "static_vlan"})
+                    elif dynamic_vlan and dynamic_vlan["enabled"] and not new_vlan_id in dynamic_vlan["vlans"]:
+                        result.append(
+                            {"wlan_id": wlan_conf["id"], "reason": "VLAN ID missing in dynamic VLAN list", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "missing_in_dynamic"})
+                    elif not vlan_pooling:
+                        result.append(
+                            {"wlan_id": wlan_conf["id"], "reason": "VLAN Pooling not enabled", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "vlan_pool_disabled"})
+                    elif not new_vlan_id in vlan_ids:
+                        result.append(
+                            {"wlan_id": wlan_conf["id"], "reason": "VLAN ID missing in VLAN pool list", "vlan_id": new_vlan_id, "scope_name": scope_name, "scope_id": scope_id, "code": "missing_in_pool"})
         return result
 
     def change_vlan(self, body):
