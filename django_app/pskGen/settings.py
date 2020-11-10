@@ -24,9 +24,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default='o8*1^o%23g_+!4=3n!2hlfaw05byinf!h_r#s_6=yi2$9cz_ls')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DJANGO_DEBUG", default=0))
+DEBUG = int(os.environ.get("DJANGO_DEBUG", default=1))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 
 
 # Application definition
@@ -123,10 +123,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-# STATICFILES_DIRS = (
-#     os.path.join(PROJECT_ROOT, 'static'),
-# )
+if DEBUG:
+    STATICFILES_DIRS = (
+        os.path.join(PROJECT_ROOT, 'static'),
+    )
+else:
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
