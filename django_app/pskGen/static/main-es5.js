@@ -4467,9 +4467,13 @@
                   return _this10.parse_response(data);
                 },
                 error: function error(_error9) {
-                  return _this10.openError(_error9.message);
-                } //console.error('There was an error!', error)
+                  console.log(_error9);
 
+                  _this10.openError(_error9.error.message); //console.error('There was an error!', error)
+
+
+                  _this10.loading = false;
+                }
               });
             }
           }
@@ -4490,9 +4494,11 @@
                   return _this11.parse_response(data);
                 },
                 error: function error(_error10) {
-                  return _this11.openError(_error10.message);
-                } //console.error('There was an error!', error)
+                  _this11.openError(_error10.error.message); //console.error('There was an error!', error)
 
+
+                  _this11.loading = false;
+                }
               });
             }
           }
@@ -4513,9 +4519,11 @@
                   return _this12.parse_response(data);
                 },
                 error: function error(_error11) {
-                  return _this12.openError(_error11.message);
-                } //console.error('There was an error!', error)
+                  _this12.openError(_error11.error.message); //console.error('There was an error!', error)
 
+
+                  _this12.loading = false;
+                }
               });
             }
           } //// DIALOG BOX ////
