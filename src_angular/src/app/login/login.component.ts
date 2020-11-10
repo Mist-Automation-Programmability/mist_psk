@@ -125,7 +125,11 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
         next: data => this.parse_response(data),
-        error: error => this.openError(error.message)//console.error('There was an error!', error)
+        error: error => {
+          console.log(error)
+          this.openError(error.error.message)//console.error('There was an error!', error)
+          this.loading = false;
+        }
       })
     }
   }
@@ -135,7 +139,10 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
         next: data => this.parse_response(data),
-        error: error => this.openError(error.message)//console.error('There was an error!', error)
+        error: error => {
+          this.openError(error.error.message)//console.error('There was an error!', error)
+          this.loading = false;
+        }
       })
 
     }
@@ -145,7 +152,10 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
         next: data => this.parse_response(data),
-        error: error => this.openError(error.message)//console.error('There was an error!', error)
+        error: error => {
+          this.openError(error.error.message)//console.error('There was an error!', error)
+          this.loading = false;
+        }
       })
     }
   }
