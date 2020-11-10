@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ConnectorService } from '../connector.service';
 
+import { ErrorDialog } from './../dashboard/dashboard-error';
 import { TwoFactorDialog } from './login-2FA';
 
 export interface TwoFactorData {
@@ -20,7 +21,7 @@ export interface TwoFactorData {
 
 export class LoginComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private appService: ConnectorService, public dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private appService: ConnectorService, public _dialog: MatDialog) { }
 
   host = null;
   headers = {};
@@ -124,7 +125,7 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
         next: data => this.parse_response(data),
-        error: error => console.error('There was an error!', error)
+        error: error => this.openError(error.message)//console.error('There was an error!', error)
       })
     }
   }
@@ -134,7 +135,7 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
         next: data => this.parse_response(data),
-        error: error => console.error('There was an error!', error)
+        error: error => this.openError(error.message)//console.error('There was an error!', error)
       })
 
     }
@@ -144,16 +145,22 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
         next: data => this.parse_response(data),
-        error: error => console.error('There was an error!', error)
+        error: error => this.openError(error.message)//console.error('There was an error!', error)
       })
     }
   }
 
   //// DIALOG BOX ////
   open2FA(): void {
-    const dialogRef = this.dialog.open(TwoFactorDialog, {});
+    const dialogRef = this._dialog.open(TwoFactorDialog, {});
     dialogRef.afterClosed().subscribe(result => {
       this.submit2FA(result)
+    });
+  }
+
+  openError(message: string): void {
+    const dialogRef = this._dialog.open(ErrorDialog, {
+      data: message
     });
   }
 }
