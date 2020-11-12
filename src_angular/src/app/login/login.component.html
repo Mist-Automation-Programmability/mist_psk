@@ -34,8 +34,8 @@
                             <mat-label>Password</mat-label>
                             <input matInput type="password" formControlName="password" (keydown.enter)="submitCredentials()" />
                         </mat-form-field>
-                        <div>
-                            <span style="color:red">{{error_mess.username}}</span>
+                        <div style="margin-bottom: 1em; min-height: 20px;">
+                            <span style="color:red; font-weight: normal; ">{{error_mess.credentials}}</span>
                         </div>
                         <div></div>
                         <button mat-raised-button color="primary" (click)="submitCredentials()">Continue with
@@ -55,7 +55,7 @@
                             <input type="text" matInput formControlName="token" (keydown.enter)="submitToken()" />
                         </mat-form-field>
                         <div>
-                            <span style="color:red">{{error_mess.token}}</span>
+                            <span style="color:red; font-weight: normal;">{{error_mess.token}}</span>
                         </div>
                         <div></div>
                         <button mat-raised-button color="primary" (click)="submitToken()">Continue with API
