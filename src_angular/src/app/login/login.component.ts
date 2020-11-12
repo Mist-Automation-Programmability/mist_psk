@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ConnectorService } from '../connector.service';
-
+import {PlatformLocation} from '@angular/common';
 import { TwoFactorDialog } from './login-2FA';
 
 export interface TwoFactorData {
@@ -20,12 +20,15 @@ export interface TwoFactorData {
 
 export class LoginComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private appService: ConnectorService, public _dialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private appService: ConnectorService, public _dialog: MatDialog, private _platformLocation: PlatformLocation
+    ) { }
 
   host = null;
   headers = {};
   cookies = {};
   self = {};
+  show_github_fork_me : boolean = false;
+  hostnames_to_show_github_fork_me = ["localhost", "127.0.0.1", "psk.mist-lab.fr"]
   loading: boolean;
   hosts = [
     { value: 'api.mist.com', viewValue: 'US - manage.mist.com' },
@@ -50,6 +53,9 @@ export class LoginComponent implements OnInit {
 
   //// INIT ////
   ngOnInit(): void {
+    if (this.hostnames_to_show_github_fork_me.indexOf(this._platformLocation.hostname) >= 0){      
+      this.show_github_fork_me = true;
+    }
     this.frmStepLogin = this.formBuilder.group({
       host: ['api.mist.com'],
       credentials: this.formBuilder.group({
