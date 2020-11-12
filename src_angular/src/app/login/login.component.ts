@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ConnectorService } from '../connector.service';
 
-import { ErrorDialog } from './../dashboard/dashboard-error';
 import { TwoFactorDialog } from './login-2FA';
 
 export interface TwoFactorData {
@@ -44,7 +43,7 @@ export class LoginComponent implements OnInit {
     token: [''],
   });
   error_mess = {
-    "username": "",
+    "credentials": "",
     "token": ""
   }
 
@@ -81,7 +80,7 @@ export class LoginComponent implements OnInit {
   }
   reset_error_mess(): void{
     this.error_mess = {
-      "username": "",
+      "credentials": "",
       "token": ""
     }
   }
@@ -93,8 +92,7 @@ export class LoginComponent implements OnInit {
       this.error_mess["username"] = data.error;
     } else if ("data" in data) {
       if ("detail" in data.data) {
-        this.loading = false;
-        this.error_mess[data["method"]] = data.data.detail;
+        this.error_message(data["method"], data.data.detail);
       } else if ("two_factor_required" in data.data && "two_factor_passed" in data.data) {
         if (data.data["two_factor_required"] == false) {
           this.authenticated(data)
@@ -108,6 +106,13 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+
+  // WHEN AUTHENTICATION IS NOT OK
+  error_message(method, message): void {
+    this.loading = false;
+    this.error_mess[method] = message;
+  }
+
 
   // WHEN AUTHENTICATION IS OK
   authenticated(data): void {
@@ -125,11 +130,7 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
         next: data => this.parse_response(data),
-        error: error => {
-          console.log(error)
-          this.openError(error.error.message)//console.error('There was an error!', error)
-          this.loading = false;
-        }
+        error: error => this.error_message("credentials", error.error.message)      
       })
     }
   }
@@ -139,12 +140,8 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
         next: data => this.parse_response(data),
-        error: error => {
-          this.openError(error.error.message)//console.error('There was an error!', error)
-          this.loading = false;
-        }
+        error: error => this.error_message("credentials", error.error.message)
       })
-
     }
   }
   submit2FA(twoFactor: number): void {
@@ -152,10 +149,7 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
         next: data => this.parse_response(data),
-        error: error => {
-          this.openError(error.error.message)//console.error('There was an error!', error)
-          this.loading = false;
-        }
+        error: error => this.error_message("credentials", error.error.message)      
       })
     }
   }
@@ -167,13 +161,4 @@ export class LoginComponent implements OnInit {
       this.submit2FA(result)
     });
   }
-
-  openError(message: string): void {
-    const dialogRef = this._dialog.open(ErrorDialog, {
-      data: message
-    });
-  }
 }
-
-
-
