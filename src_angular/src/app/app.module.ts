@@ -24,6 +24,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatIconModule } from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatToolbarModule} from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 
@@ -63,6 +64,7 @@ import { WarningDialog } from './dashboard/dashboard-warning';
     MatTableModule,
     MatCheckboxModule,
     MatProgressBarModule,
+    MatToolbarModule,
     MatTooltipModule,
     MatPaginatorModule,
     QRCodeModule,
