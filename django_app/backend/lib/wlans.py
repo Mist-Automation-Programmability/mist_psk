@@ -73,8 +73,8 @@ class Wlan(Common):
     def _find_site_templates(self, body, extract):
         template_ids = []
         site_id = body["site_id"]
-        sitegroup_ids = body["sitegroup_ids"] if "sitegroup_ids" in body else [
-        ]
+        org_id = body["org_id"]
+        sitegroup_ids = body["sitegroup_ids"] if "sitegroup_ids" in body else []
 
         url = "https://{0}/api/v1/orgs/{1}/templates".format(
             extract["host"], body["org_id"])
@@ -84,13 +84,12 @@ class Wlan(Common):
         template_list = resp.json()
         logging.debug("REQ: OK")
 
-        for template in template_list:
+        for template in template_list:        
             if "applies" in template:
-                site_ids = template["applies"]["site_ids"] if "site_ids" in template["applies"] else [
-                ]
-                sitegroup_ids = template["applies"]["sitegroup_ids"] if "sitegroup_ids" in template["applies"] else [
-                ]
-                if site_id in site_ids or self._test_sitegroups_ids(sitegroup_ids, sitegroup_ids):
+                template_site_ids = template["applies"]["site_ids"] if "site_ids" in template["applies"] else []
+                template_sitegroup_ids = template["applies"]["sitegroup_ids"] if "sitegroup_ids" in template["applies"] else []
+                template_org_id = template["applies"]["org_id"] if "org_id" in template["applies"] else ""
+                if site_id in template_site_ids or self._test_sitegroups_ids(sitegroup_ids, template_sitegroup_ids) or template_org_id == org_id:
                     template_ids.append(template["id"])
         return template_ids
 
