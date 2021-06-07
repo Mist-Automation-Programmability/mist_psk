@@ -52,6 +52,7 @@ class Wlan(Common):
         try:
             url = "https://{0}/api/v1/orgs/{1}/wlans".format(
                 extract["host"], body["org_id"])
+
             logging.debug("REQ: {0}".format(url))
             resp = requests.get(
                 url, headers=extract["headers"], cookies=extract["cookies"])
@@ -61,9 +62,10 @@ class Wlan(Common):
             template_ids = self._find_site_templates(body, extract)
 
             for wlan in wlan_list:
-                if wlan['auth']["type"] == "psk":
-                    if wlan["auth"]["multi_psk_only"] == True:
+                if 'auth' in wlan and 'type' in wlan['auth'] and wlan['auth']["type"] == "psk":
+                    if 'multi_psk_only' in wlan['auth'] and wlan["auth"]["multi_psk_only"] == True:
                         if wlan["template_id"] in template_ids:
+                            print(3)
                             wlans.append(
                                 {"id": wlan["id"], "ssid": wlan["ssid"]})
             return wlans

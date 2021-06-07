@@ -1,3 +1,4 @@
 django_app/backend/config.py
 src_angular/node_modules
 src_angular/dist
+*.pyc
