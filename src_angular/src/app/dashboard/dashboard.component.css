@@ -99,14 +99,38 @@ table {
     width: 300px !important;
 }
 
-.edit {
-    background-color: #0d60aa !important;
+.mat-stroked-button {
+    border: 1px solid;
+    margin: 5px;
+    line-height: 25px;
 }
 
+.edit,
 .qrcode {
-    background-color: #0d60aa !important;
+    color: #0d60aa;
+    transition: all 0.2s ease-in-out;
+}
+
+.edit:hover,
+.qrcode:hover {
+    color: white;
+    background-color: #0d60aa;
+    border: 1px solid #0d60aa;
+    ;
 }
 
 .delete {
-    background-color: #f44336 !important;
+    color: #f44336;
+    transition: all 0.2s ease-in-out;
+}
+
+.delete:hover {
+    background-color: #f44336;
+    border: 1px solid #f44336;
+    ;
+    color: white;
+}
+
+button:disabled {
+    color: rgba(0, 0, 0, 0.26);
 }

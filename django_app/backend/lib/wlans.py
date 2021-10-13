@@ -21,86 +21,38 @@ class Wlan(Common):
 
     def _get_wlans(self, body, scope_name, scope_id_param):
         if scope_id_param in body:
-            scope_id = body[scope_id_param]
             extract = self.extractAuth(body)
-            try:
-                url = "https://{0}/api/v1/{1}/{2}/wlans".format(
-                    extract["host"], scope_name, scope_id)
-                logging.debug("REQ: {0}".format(url))
-                resp = requests.get(
-                    url, headers=extract["headers"], cookies=extract["cookies"])
-                logging.debug("REQ: OK")
-                wlans = []
-                for wlan in resp.json():
-                    if wlan['auth']["type"] == "psk":
-                        if wlan["auth"]["multi_psk_only"] == True:
-                            wlans.append(
-                                {"id": wlan["id"], "ssid": wlan["ssid"]})
-                if scope_id_param == "site_id":
-                    wlans.extend(self._get_wlans_from_templates(body, extract))
-                return {"status": 200, "data": {"wlans": wlans}}
-            except:
-                logging.error("REQ: _get_wlans NOK")
-                return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
+            if scope_name == "sites":
+                url = "https://{0}/api/v1/sites/{1}/wlans/derived".format(
+                    extract["host"], body[scope_id_param])
+            elif scope_name == "orgs":
+                url = "https://{0}/api/v1/orgs/{1}/wlans".format(
+                    extract["host"], extract[scope_id_param])
+            if url:
+                try:
+                    logging.debug("REQ: {0}".format(url))
+                    resp = requests.get(
+                        url, headers=extract["headers"], cookies=extract["cookies"])
+                    logging.debug("REQ: OK")
+                    wlans = []
+                    for wlan in resp.json():
+                        if wlan['auth']["type"] == "psk":
+                            if "multi_psk_only" in wlan["auth"] and wlan["auth"]["multi_psk_only"] == True:
+                                wlans.append(
+                                    {"id": wlan["id"], "ssid": wlan["ssid"], "vlans": wlan["vlan_ids"]})
+                    return {"status": 200, "data": {"wlans": wlans}}
+                except:
+                    logging.error("REQ: _get_wlans NOK")
+                    return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
+            else:
+                logging.warn(
+                    "wrong or missing scope_name parameters in the request")
+                return {"status": 500, "data": {"message": "missing {0} parameters in the request".format(scope_id_param)}}
         else:
             logging.warn(
                 "missing {0} parameters in the request".format(scope_id_param))
-            return {"status": 500, "data": {"message": "missing {0} parameters in the request".format(scope_id_param)}}
+            return {"status": 500, "data": {"message": "missing {0} parameters in the request".format(scope_id_param)}}   
 
-    def _get_wlans_from_templates(self, body, extract):
-        wlans = []
-        try:
-            url = "https://{0}/api/v1/orgs/{1}/wlans".format(
-                extract["host"], body["org_id"])
-
-            logging.debug("REQ: {0}".format(url))
-            resp = requests.get(
-                url, headers=extract["headers"], cookies=extract["cookies"])
-            wlan_list = resp.json()
-            logging.debug("REQ: OK")
-
-            template_ids = self._find_site_templates(body, extract)
-
-            for wlan in wlan_list:
-                if 'auth' in wlan and 'type' in wlan['auth'] and wlan['auth']["type"] == "psk":
-                    if 'multi_psk_only' in wlan['auth'] and wlan["auth"]["multi_psk_only"] == True:
-                        if wlan["template_id"] in template_ids:
-                            print(3)
-                            wlans.append(
-                                {"id": wlan["id"], "ssid": wlan["ssid"]})
-            return wlans
-        except:
-            return None
-
-    def _find_site_templates(self, body, extract):
-        template_ids = []
-        site_id = body["site_id"]
-        org_id = body["org_id"]
-        sitegroup_ids = body["sitegroup_ids"] if "sitegroup_ids" in body else []
-
-        url = "https://{0}/api/v1/orgs/{1}/templates".format(
-            extract["host"], body["org_id"])
-        logging.debug("REQ: {0}".format(url))
-        resp = requests.get(
-            url, headers=extract["headers"], cookies=extract["cookies"])
-        template_list = resp.json()
-        logging.debug("REQ: OK")
-
-        for template in template_list:        
-            if "applies" in template:
-                template_site_ids = template["applies"]["site_ids"] if "site_ids" in template["applies"] else []
-                template_sitegroup_ids = template["applies"]["sitegroup_ids"] if "sitegroup_ids" in template["applies"] else []
-                template_org_id = template["applies"]["org_id"] if "org_id" in template["applies"] else ""
-                if site_id in template_site_ids or self._test_sitegroups_ids(sitegroup_ids, template_sitegroup_ids) or template_org_id == org_id:
-                    template_ids.append(template["id"])
-        return template_ids
-
-    def _test_sitegroups_ids(self, groups_from_site, groups_from_template):
-        if groups_from_site and groups_from_template:
-            for sitegroup_id in groups_from_site:
-                if sitegroup_id in groups_from_template:
-                    return True
-        return False
 
     def _find_wlans(self, extract, ssid, scope_name, scope_id):
         url = "https://{0}/api/v1/{1}/{2}/wlans".format(

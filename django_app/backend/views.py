@@ -15,7 +15,32 @@ from .lib.wlans import Wlan
 from .lib.sites import Sites
 
 try:
+    from .config import disclaimer_config
+    disclaimer_config = {
+        "disclaimer": disclaimer_config.get("disclaimer", None),
+        "github_url": disclaimer_config.get("github_url", None),
+        "docker_url": disclaimer_config.get("docker_url", None)
+    }
+except:
+    import os
+    disclaimer_config = {
+        "disclaimer": os.environ.get("APP_DISCLAIMER", None),
+        "github_url": os.environ.get("APP_GITHUB_URL", None),
+        "docker_url": os.environ.get("APP_DOCKER_URL", None)
+    }
+
+try:
     from .config import smtp_config
+    smtp_config["host"] = smtp_config.get("host", None)
+    smtp_config["port"] = smtp_config.get("port", 587)
+    smtp_config["use_ssl"] = smtp_config.get("use_ssl", True)
+    smtp_config["username"] = smtp_config.get("username", None)
+    smtp_config["password"] = smtp_config.get("password", None)
+    smtp_config["from_name"] = smtp_config.get("from_name", "Wi-Fi Access")
+    smtp_config["from_email"] = smtp_config.get("from_email", None)
+    smtp_config["logo_url"] = smtp_config.get(
+        "logo_url", "https://cdn.mist.com/wp-content/uploads/logo.png")
+    smtp_config["enable_qrcode"] = smtp_config.get("enable_qrcode", True)
 except:
     import os
     smtp_enabled = os.environ.get("MIST_SMTP_ENABLED", default=False)
@@ -31,23 +56,63 @@ except:
             "logo_url": os.environ.get("MIST_SMTP_LOGO_URL", default="https://cdn.mist.com/wp-content/uploads/logo.png"),
             "enable_qrcode": os.environ.get("MIST_SMTP_QRCODE", default=True)
         }
-    else: 
+    else:
         smtp_config = None
+finally:
+    mist_smtp = Mist_SMTP(smtp_config)
+    print("".ljust(80, "-"))
+    print(" SMTP CONFIG ".center(80))
+    print("")
+    print("host          : {0}".format(smtp_config["host"]))
+    print("port          : {0}".format(smtp_config["port"]))
+    print("use_ssl       : {0}".format(smtp_config["use_ssl"]))
+    print("username      : {0}".format(smtp_config["username"]))
+    print("from_name     : {0}".format(smtp_config["from_name"]))
+    print("from_email    : {0}".format(smtp_config["from_email"]))
+    print("logo_url      : {0}".format(smtp_config["logo_url"]))
+    print("enable_qrcode : {0}".format(smtp_config["enable_qrcode"]))
+    print("")
 
 try:
     from .config import psk_config
+    psk_config["salt"] = psk_config.get(
+        "salt", "$2b$12$SIGWr574/7OggDO4BBJ1D.")
+    psk_config["length"] = psk_config.get("length", 12)
+    psk_config["default_expire_time"] = psk_config.get(
+        "default_expire_time", 24)
 except:
     psk_config = {
+        "default_expire_time": int(os.environ.get("MIST_PSK_DEFAULT_EXPIRE_TIME", default=24)),
         "salt": os.environ.get("MIST_PSK_SALT", default="$2b$12$SIGWr574/7OggDO4BBJ1D."),
         "length": int(os.environ.get("MIST_PSK_LENGTH", default=12))
     }
-psk_config["salt"] = str.encode(psk_config["salt"])
-    
-mist_smtp = Mist_SMTP(smtp_config)
+finally:
+    print("".ljust(80, "-"))
+    print(" PSK CONFIG ".center(80))
+    print("")
+    print("default expire time: {0}".format(psk_config["default_expire_time"]))
+    print("length             : {0}".format(psk_config["length"]))
+    print("")
+    psk_config["salt"] = str.encode(psk_config["salt"])
 
 
 ##########
+# PSK CONFIG
+@csrf_exempt
+def pskConfig(request):
+    if request.method == "GET":
+        response = {
+            "psk_length": psk_config["length"],
+            "default_expire_time": psk_config["default_expire_time"]
+        }
+        return JsonResponse(status=200, data=response)
+    else:
+        return Http404
+
+##########
 # PSK
+
+
 @csrf_exempt
 def psks(request):
     if request.method == "POST":
@@ -100,6 +165,8 @@ def wlans(request):
 
 ##########
 # VLAN
+
+
 @csrf_exempt
 def vlans(request):
     if request.method == "POST":
@@ -173,3 +240,11 @@ def emailPsk(request):
             return JsonResponse({"result": resp})
         else:
             return JsonResponse(status=500, data={"message": "missing parametesr"})
+
+
+@csrf_exempt
+def disclaimer(request):
+    if request.method == "GET":
+        return JsonResponse(disclaimer_config)
+    else:
+        return JsonResponse(status=500, data={"message": "missing parametesr"})

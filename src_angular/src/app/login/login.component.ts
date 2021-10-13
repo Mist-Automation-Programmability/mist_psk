@@ -20,8 +20,12 @@ export interface TwoFactorData {
 
 export class LoginComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router, private appService: ConnectorService, public _dialog: MatDialog, private _platformLocation: PlatformLocation
+  constructor(private formBuilder: FormBuilder, private _http: HttpClient, private _router: Router, private _appService: ConnectorService, public _dialog: MatDialog, private _platformLocation: PlatformLocation
     ) { }
+
+  github_url: string;
+  docker_url: string;
+  disclaimer: string;
 
   host = null;
   headers = {};
@@ -64,6 +68,13 @@ export class LoginComponent implements OnInit {
       }),
       token: [""],
     });
+    this._http.get<any>("/api/disclaimer").subscribe({
+      next: data => {
+        if (data.disclaimer) this.disclaimer = data.disclaimer;
+        if (data.github_url) this.github_url = data.github_url;
+        if (data.docker_url) this.docker_url = data.docker_url;
+      }
+    })
   }
 
   //// COMMON ////
@@ -78,10 +89,10 @@ export class LoginComponent implements OnInit {
   // RESET AUTHENTICATION FORM
   reset_response(): void {
     this.host = null;
-    this.appService.headersSet({});
-    this.appService.cookiesSet({});
-    this.appService.selfSet({});
-    this.appService.hostSet(this.host);
+    this._appService.headersSet({});
+    this._appService.cookiesSet({});
+    this._appService.selfSet({});
+    this._appService.hostSet(this.host);
     this.reset_error_mess();
   }
   reset_error_mess(): void{
@@ -122,11 +133,11 @@ export class LoginComponent implements OnInit {
 
   // WHEN AUTHENTICATION IS OK
   authenticated(data): void {
-    this.appService.headersSet(data.headers);
-    this.appService.cookiesSet(data.cookies);
-    this.appService.hostSet(data.host);
-    this.appService.selfSet(data.data)
-    this.loading = false; this.router.navigate(['/dashboard']);
+    this._appService.headersSet(data.headers);
+    this._appService.cookiesSet(data.cookies);
+    this._appService.hostSet(data.host);
+    this._appService.selfSet(data.data)
+    this.loading = false; this._router.navigate(['/dashboard']);
   }
 
   //// AUTHENTICATION ////
@@ -134,7 +145,7 @@ export class LoginComponent implements OnInit {
     this.reset_response();
     if (this.check_host()) {
       this.loading = true;
-      this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
+      this._http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password }).subscribe({
         next: data => this.parse_response(data),
         error: error => this.error_message("credentials", error.error.message)      
       })
@@ -144,7 +155,7 @@ export class LoginComponent implements OnInit {
     this.reset_response();
     if (this.check_host()) {
       this.loading = true;
-      this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
+      this._http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, token: this.frmStepLogin.value.token }).subscribe({
         next: data => this.parse_response(data),
         error: error => this.error_message("credentials", error.error.message)
       })
@@ -153,7 +164,7 @@ export class LoginComponent implements OnInit {
   submit2FA(twoFactor: number): void {
     if (this.check_host()) {
       this.loading = true;
-      this.http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
+      this._http.post<any>('/api/login/', { host: this.frmStepLogin.value.host, email: this.frmStepLogin.value.credentials.email, password: this.frmStepLogin.value.credentials.password, two_factor: twoFactor }).subscribe({
         next: data => this.parse_response(data),
         error: error => this.error_message("credentials", error.error.message)      
       })

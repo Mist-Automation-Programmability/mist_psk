@@ -70,9 +70,13 @@
             </div>
         </div>
     </form>
-
 </mat-card>
-
-<div *ngIf="show_github_fork_me" class="github-fork-me">
-    <a target="_blank" href='https://github.com/tmunzer/mist_psk_stateless_web_ui' style='position:fixed;padding:5px 45px;width:128px;top:50px;right:-50px;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg);box-shadow:0 0 0 3px #ffffff, 0 0 20px -3px rgba(0, 0, 0, 0.5);text-shadow:0 0 0 #555555, 0 0 5px rgba(0, 0, 0, 0.3);background-color:#ffffff;color:#555555;font-size:13px;font-family:sans-serif;text-decoration:none;font-weight:bold;border:2px dotted #555555;-webkit-backface-visibility:hidden;letter-spacing:.5px;'>Fork me on GitHub</a>
+<div class="disclaimer">
+    <div>
+        {{disclaimer}}
+    </div>
+</div>
+<div class="source">
+    <a *ngIf="github_url" href={{github_url}} target="_blank"><img src="static/images/github.png"></a>
+    <a *ngIf="docker_url" href={{docker_url}} target="_blank"><img src="static/images/docker.png"></a>
 </div>

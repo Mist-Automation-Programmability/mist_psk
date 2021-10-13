@@ -1,5 +1,6 @@
 <div mat-dialog-content>
-    <qrcode [qrdata]="qrcode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    <qr-code [value]="qrcode" [size]="256" [errorCorrectionLevel]="'M'"></qr-code>
+
 </div>
 <div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
     <button mat-raised-button color="accent" (click)="onNoClick()">Close</button>
