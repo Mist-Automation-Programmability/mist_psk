@@ -5,8 +5,8 @@
             <div fxLayout="row" class="top-bar  mat-elevation-z8">
                 <mat-form-field appearance="outline" class="list" *ngIf="!orgsHidden">
                     <mat-label>Organization</mat-label>
-                    <mat-select [(value)]="org_id" (selectionChange)="changeOrg()">
-                        <mat-option *ngFor="let org of orgs " [value]="org.id">
+                    <mat-select [(value)]="current_org" (selectionChange)="changeOrg()">
+                        <mat-option *ngFor="let org of orgs " [value]="org">
                             {{org.name}}
                         </mat-option>
                     </mat-select>
@@ -14,7 +14,7 @@
                 <mat-form-field appearance="outline" class="list">
                     <mat-label>Site</mat-label>
                     <mat-select [(value)]="site_id" (selectionChange)="changeSite()" [disabled]="sitesDisabled">
-                        <mat-option value="org">Org PSKs</mat-option>
+                        <mat-option *ngIf="scope=='org'" value="org">Org PSKs</mat-option>
                         <mat-option *ngFor="let site of sites " [value]="site.id">
                             {{site.name}}
                         </mat-option>
@@ -34,8 +34,8 @@
                     <mat-checkbox [(ngModel)]="filters_enabled" (ngModelChange)=getPsks()>
                         <span>Enable Filters</span>
                     </mat-checkbox>
-                    <span class="material-icons tooltip" matTooltip="This option will load localy all the PSKs, and allow you to search specific PSK based on filters. Depending on the number of PSKs, it can take some time...">
-                    help
+                    <span class="material-icons tooltip" matTooltip="This option will load localy all the PSKs, and allow you to search specific PSK based on filters. Depending on the number of PSKs, it can take some time..." style="font-size: 1.5em; margin: 5px">
+                    help_outline
                 </span>
                 </div>
 
@@ -53,7 +53,7 @@
         </div>
 
         <div fxLayout="row" class="top-bar  mat-elevation-z8">
-            <mat-form-field *ngIf="filters_enabled" style="margin: 0 1em; width: 100%;">
+            <mat-form-field *ngIf="filters_enabled" style="margin: 0.5em 1em 0; width: 100%;">
                 <mat-label>Filter</mat-label>
                 <input matInput [disabled]="filters_enabled == false" (keyup)="applyFilter($event)" placeholder="Ex. psk name" #input>
             </mat-form-field>
