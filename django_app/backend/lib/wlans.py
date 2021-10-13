@@ -27,9 +27,9 @@ class Wlan(Common):
                     extract["host"], body[scope_id_param])
             elif scope_name == "orgs":
                 url = "https://{0}/api/v1/orgs/{1}/wlans".format(
-                    extract["host"], extract[scope_id_param])
+                    extract["host"], body[scope_id_param])
             if url:
-                try:
+                #try:
                     logging.debug("REQ: {0}".format(url))
                     resp = requests.get(
                         url, headers=extract["headers"], cookies=extract["cookies"])
@@ -39,11 +39,11 @@ class Wlan(Common):
                         if wlan['auth']["type"] == "psk":
                             if "multi_psk_only" in wlan["auth"] and wlan["auth"]["multi_psk_only"] == True:
                                 wlans.append(
-                                    {"id": wlan["id"], "ssid": wlan["ssid"], "vlans": wlan["vlan_ids"]})
+                                    {"id": wlan["id"], "ssid": wlan["ssid"], "vlans": wlan.get("vlan_ids", [])})
                     return {"status": 200, "data": {"wlans": wlans}}
-                except:
-                    logging.error("REQ: _get_wlans NOK")
-                    return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
+                # except:
+                #     logging.error("REQ: _get_wlans NOK")
+                #     return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
             else:
                 logging.warn(
                     "wrong or missing scope_name parameters in the request")

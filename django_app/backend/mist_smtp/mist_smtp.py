@@ -3,7 +3,7 @@ import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-from datetime import datetime
+from datetime import datetime, timezone
 from .mist_qrcode import get_qrcode_as_html
 
 def _load_conf(conf_obj, conf_val, conf_type):
@@ -55,7 +55,7 @@ class Mist_SMTP():
         #     return False
 
 
-    def send_psk(self, psk, ssid, user_name, user_email):    
+    def send_psk(self, psk, ssid, user_name, user_email, expire_time):    
         msg = MIMEMultipart('alternative')
         msg["Subject"] = "Your Personal Wi-Fi access code"
         msg["From"] = "{0} <{1}>".format(self.from_name, self.from_email)
@@ -64,9 +64,15 @@ class Mist_SMTP():
         qr_info = "You can also scan the QRCode below to configure your device:"
         qr_html = get_qrcode_as_html(ssid, psk)                
         
+        if not expire_time:
+            expire_time = "No Expiration"
+        else:
+            d = datetime.fromtimestamp(expire_time, timezone.utc)
+            expire_time = "{0} (UTC)".format(d.ctime())
+
         with open("./backend/mist_smtp/template.html", "r") as template:
             html = template.read()
-        html = html.format(self.logo_url, user_name, ssid, psk, qr_info, qr_html)
+        html = html.format(self.logo_url, user_name, ssid, psk, expire_time, qr_info, qr_html)
         msg_body = MIMEText(html, "html")
         msg.attach(msg_body)
 

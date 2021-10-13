@@ -236,7 +236,7 @@ def emailPsk(request):
         body = json.loads(body_unicode)
         if "name" in body and "user_email" in body and "ssid" in body and "psk" in body:
             resp = mist_smtp.send_psk(
-                body["psk"], body["ssid"], body["name"], body["user_email"])
+                body["psk"], body["ssid"], body["name"], body["user_email"], body.get("expire_time", None))
             return JsonResponse({"result": resp})
         else:
             return JsonResponse(status=500, data={"message": "missing parametesr"})

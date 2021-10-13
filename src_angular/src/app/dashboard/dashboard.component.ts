@@ -73,8 +73,10 @@ export class DashboardComponent implements OnInit {
   host = '';
   self = {};
   search = "";
+  current_org;
   orgs = [];
   sites = [];
+  scope: string;
   wlans = [];
   org_id: string = "";
   site_id: string = "";
@@ -109,31 +111,39 @@ export class DashboardComponent implements OnInit {
   constructor(private _http: HttpClient, private _appService: ConnectorService, public _dialog: MatDialog, private _snackBar: MatSnackBar, private _router: Router) { }
 
   ngOnInit() {
+
     this._appService.headers.subscribe(headers => this.headers = headers)
     this._appService.cookies.subscribe(cookies => this.cookies = cookies)
     this._appService.host.subscribe(host => this.host = host)
     this._appService.self.subscribe(self => this.self = self || {})
 
+
     this.me = this.self["email"] || null
     this.getConfig()
     if (!this.me) this._router.navigateByUrl("/")
     if (this.self != {} && this.self["privileges"]) {
+      var tmp_orgs: string[] = []
       this.self["privileges"].forEach(element => {
         if (element["scope"] == "org") {
-          if (this.orgs.indexOf({ id: element["org_id"], name: element["name"] }) < 0) {
-            this.orgs.push({ id: element["org_id"], name: element["name"] })
+          if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+            this.orgs.push({ id: element["org_id"], name: element["name"], scope: "org" })
+            tmp_orgs.push(element["org_id"])
           }
         } else if (element["scope"] == "site") {
-          if (this.orgs.indexOf({ id: element["org_id"], name: element["org_name"] }) < 0) {
-            this.orgs.push({ id: element["org_id"], name: element["org_name"] })
+          if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+            this.orgs.push({ id: element["org_id"], name: element["org_name"], scope: "site" })
+            tmp_orgs.push(element["org_id"])
           }
         }
       });
-      this.orgs = this.sortList(this.orgs, "name");
+      console.log(this.orgs)
       if (this.orgs.length == 1) {
-        this.org_id = this.orgs[0]["id"]
+        this.current_org = this.orgs[0]
         this.orgsHidden = true;
         this.changeOrg();
+      } else {
+        this.orgs = this.sortList(this.orgs, "name");
+        this.orgsHidden = false;
       }
     }
   }
@@ -177,6 +187,14 @@ export class DashboardComponent implements OnInit {
         this._http.post<PskElement[]>('/api/psks/', body).subscribe({
           next: data => {
             this.filteredPskDatase = new MatTableDataSource(data["results"]);
+            this.filteredPskDatase.filterPredicate = (psk: PskElement, filter: string) => {
+              if (psk.name.toLowerCase().includes(filter.toLowerCase())) { return true; }
+              if (psk.created_by && psk.created_by.toLowerCase().includes(filter.toLowerCase())) { return true; }
+              if (psk.user_email && psk.user_email.toLowerCase().includes(filter.toLowerCase())) { return true; }
+              if (psk.ssid.toLowerCase().includes(filter.toLowerCase())) { return true; }
+              //if (psk.role.toLowerCase() == filter.toLowerCase()) {return true;}
+              return false;
+            };
             this.filteredPskDatase.paginator = this.paginator;
             this.loading = false;
           },
@@ -285,6 +303,13 @@ export class DashboardComponent implements OnInit {
     }
     this.sitesDisabled = false;
     this.topBarLoading = false;
+    if (this.sites.length == 1) {
+      this.site_id = this.sites[0].id;
+    }
+    if (this.scope != "org" && this.sites.length == 1) {
+      this.sitesDisabled = true
+      this.changeSite();
+    }
   }
 
 
@@ -293,17 +318,34 @@ export class DashboardComponent implements OnInit {
 
   changeOrg() {
     this.topBarLoading = true;
-    this._http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
-      next: data => this.parseSites(data),
-      error: error => {
-        var message: string = "There was an error... "
-        if ("error" in error) {
-          message += error["error"]["message"]
+    this.sitesDisabled = true;
+    this.sites = [];
+    this.wlansDisabled = true;
+    this.wlans = [];
+    this.org_id = this.current_org["id"]
+    this.scope = this.current_org["scope"]
+
+    if (this.scope == "org") {
+      this._http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
+        next: data => this.parseSites(data),
+        error: error => {
+          var message: string = "There was an error... "
+          if ("error" in error) {
+            message += error["error"]["message"]
+          }
+          this.topBarLoading = false;
+          this.openError(message)
         }
-        this.topBarLoading = false;
-        this.openError(message)
-      }
-    })
+      })
+    } else {
+      let data = {sites: []}
+      this.self["privileges"].forEach(privilege=>{
+        if (privilege["org_id"] == this.org_id) {
+          data.sites.push({name: privilege["name"], id: privilege["site_id"]})
+        }
+      })
+      this.parseSites(data)
+    }
   }
 
 
@@ -325,7 +367,8 @@ export class DashboardComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filteredPskDatase.filter = filterValue.trim().toLowerCase();
+    //this.filteredPskDatase.filter = filterValue.trim().toLowerCase();
+    this.filteredPskDatase.filter = filterValue;
 
     if (this.filteredPskDatase.paginator) {
       this.filteredPskDatase.paginator.firstPage();
@@ -363,7 +406,7 @@ export class DashboardComponent implements OnInit {
   openWarningVlan(message: string, vlan_check: VlanCheckElement[], bigWarning: boolean): void {
     const dialogRef = this._dialog.open(WarningDialog, {
       data: { text: message, vlan_check: vlan_check, bigWarning: bigWarning },
-      height : 'auto',
+      height: 'auto',
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -571,9 +614,8 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this._http.post<any>('/api/psks/email/', { name: result.name, user_email: result.user_email, psk: psk.passphrase, ssid: psk.ssid }).subscribe({
+        this._http.post<any>('/api/psks/email/', { name: result.name, user_email: result.user_email, psk: psk.passphrase, ssid: psk.ssid, expire_time: psk.expire_time }).subscribe({
           next: data => {
-            this.getPsks()
             this.openSnackBar("Email sent to" + psk.user_email, "Done")
           },
           error: error => {
