@@ -11,19 +11,37 @@
     input[type=number] {
         -moz-appearance: textfield;
     }
+    
+    button:disabled {
+        color: rgba(0, 0, 0, 0.7) !important;
+        opacity: 0.5 !important;
+    }
 </style>
 <h1 mat-dialog-title>Create New PSK</h1>
 <form [formGroup]="frmPsk" class="create-form">
     <div mat-dialog-content fxLayout="column">
+        <!-- SSID configuration  -->
+        <mat-form-field appearance="outline ">
+            <mat-label>SSID</mat-label>
+            <mat-select formControlName="ssid" required>
+                <mat-option *ngFor="let wlan of data.wlans" [value]="wlan.ssid">
+                    {{wlan.ssid}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
+        <!-- Name configuration  -->
         <mat-form-field appearance="outline">
             <mat-label>NAME</mat-label>
             <input matInput required formControlName="name" />
         </mat-form-field>
+        <!-- EMAIL configuration  -->
         <mat-form-field appearance="outline">
             <mat-label>EMAIL</mat-label>
             <input matInput formControlName="user_email" />
         </mat-form-field>
+
+        <!-- PSK configuration  -->
         <div fxLayout="row">
             <mat-checkbox formControlName="renewable" (ngModelChange)="changeRenewable()">
                 Enable Renewable PSK
@@ -33,28 +51,66 @@
             </mat-checkbox>
         </div>
         <div fxLayout="row">
-            <mat-form-field appearance="outline" [hideRequiredMarker]="frmPsk.value.renewable">
+            <mat-form-field appearance="outline" style="width: 400px;">
                 <mat-label>PSK</mat-label>
-                <input matInput required formControlName="psk" [attr.disabled]="renewable" />
+                <input matInput required [type]="passwordFieldType" formControlName="psk" />
+
+                <button *ngIf="passwordFieldType=='password'" matSuffix mat-icon-button aria-label="show password" (click)="toggleShowPassword()" [disabled]="renewable">
+                    <mat-icon style="color: rgba(0,0,0,.6);">visibility</mat-icon>
+                </button>
+                <button *ngIf="passwordFieldType=='text'" matSuffix mat-icon-button aria-label="show password" (click)="toggleShowPassword()" [disabled]="renewable">
+                    <mat-icon style="color: rgba(0,0,0,.6);">visibility_off</mat-icon>
+                </button>
             </mat-form-field>
-            <button mat-button (click)="generatePsk()" style="height: 55px;" [disabled]="renewable">Generate PSK</button>
+            <button mat-stroked-button (click)="generatePsk()" style="height: 50px;margin: 5px;color: #0d60aa;border: 1px solid;" [disabled]="renewable">Generate PSK</button>
         </div>
-        <mat-form-field appearance="outline">
-            <mat-label>SSID</mat-label>
-            <mat-select formControlName="ssid" required>
-                <mat-option *ngFor="let wlan of data.wlans " [value]="wlan.ssid">
-                    {{wlan.ssid}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+
+        <!-- VLAN configuration  -->
         <mat-form-field appearance="outline">
             <mat-label>VLAN</mat-label>
             <input matInput type="number" formControlName="vlan_id" />
         </mat-form-field>
     </div>
-    <div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
-        <button mat-button (click)="cancel()">Cancel</button>
-        <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
-        <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>
-    </div>
 </form>
+<!-- Duration configuration  -->
+
+<div style="border: 1px solid rgba(0,0,0,.12);border-radius: 5px;padding: 1em;">
+    <div style="display: flex;flex-direction: column;font: inherit;">
+        <label style="margin-bottom: 1em;color: rgba(0,0,0,.6);">EXPIRE TIME</label>
+        <mat-radio-group aria-label="Select an option" [(ngModel)]="expire_method" style="margin: 5px;display: flex;flex-direction: row;justify-content: space-evenly;">
+            <mat-radio-button value="none">None</mat-radio-button>
+            <mat-radio-button value="duration">Duration</mat-radio-button>
+            <mat-radio-button value="date">Date / Time</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div fxLayout="row" *ngIf="expire_method=='duration'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+        <mat-form-field appearance="outline">
+            <mat-label>Expire In </mat-label>
+            <input matInput [(ngModel)]="duration" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-select [(ngModel)]="duration_period">
+                <mat-option value="hours">Hours</mat-option>
+                <mat-option value="days">Days</mat-option>
+                <mat-option value="days">Weeks</mat-option>
+                <mat-option value="months">Months</mat-option>
+                <mat-option value="years">Years</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div fxLayout="row" *ngIf="expire_method=='date'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+        <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker" [min]="min_date" placeholder="Choose a date" [formControl]="dateControl">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker color="accent">
+            </ngx-mat-datetime-picker>
+        </mat-form-field>
+    </div>
+
+</div>
+<div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>
+</div>

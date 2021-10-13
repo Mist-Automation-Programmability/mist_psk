@@ -3,7 +3,7 @@
     <div fxLayout="column">
         <div fxLayout="column" class="top-bar-container">
             <div fxLayout="row" class="top-bar  mat-elevation-z8">
-                <mat-form-field appearance="outline" class="list">
+                <mat-form-field appearance="outline" class="list" *ngIf="!orgsHidden">
                     <mat-label>Organization</mat-label>
                     <mat-select [(value)]="org_id" (selectionChange)="changeOrg()">
                         <mat-option *ngFor="let org of orgs " [value]="org.id">
@@ -63,56 +63,77 @@
             <div fxLayout="column" class="psk-table-container" *ngIf="filters_enabled == false">
 
                 <table mat-table [dataSource]="psks">
-                    <!-- Position Column -->
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element" fxLayout="row">
+                            <span class="material-icons" *ngIf="element.expire_time > 0 && element.expire_time <= now" style="font-size: 1.2em;margin: 1em 0;color: gray;">
+                            highlight_off
+                        </span>
+                            <span class="material-icons" *ngIf="!element.expire_time || element.expire_time > now" style="font-size: 1.2em;margin: 1em 0;">
+                            check_circle
+                        </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> NAME </th>
                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                     </ng-container>
+
+                    <!-- Email Column -->
                     <ng-container matColumnDef="user_email">
                         <th mat-header-cell *matHeaderCellDef> EMAIL </th>
                         <td mat-cell *matCellDef="let element"> {{element.user_email}} </td>
                     </ng-container>
 
-                    <!-- Name Column -->
+                    <!-- SSID Column -->
                     <ng-container matColumnDef="ssid">
                         <th mat-header-cell *matHeaderCellDef> SSID </th>
                         <td mat-cell *matCellDef="let element"> {{element.ssid}} </td>
                     </ng-container>
 
-                    <!-- Weight Column -->
+                    <!-- VLAN Column -->
                     <ng-container matColumnDef="vlan_id">
                         <th mat-header-cell *matHeaderCellDef> VLAN ID </th>
                         <td mat-cell *matCellDef="let element"> {{element.vlan_id}} </td>
                     </ng-container>
 
-                    <!-- Symbol Column -->
+                    <!-- CREATOR Column -->
                     <ng-container matColumnDef="created_by">
                         <th mat-header-cell *matHeaderCellDef> CREATED BY </th>
                         <td mat-cell *matCellDef="let element"> {{element.created_by}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="created_time">
-                        <th mat-header-cell *matHeaderCellDef> CREATED TIME </th>
-                        <td mat-cell *matCellDef="let element"> {{element.created_time * 1000 | date}} </td>
+
+                    <!-- Expiraation Column -->
+                    <ng-container matColumnDef="expire_time">
+                        <th mat-header-cell *matHeaderCellDef> EXPIRE TIME </th>
+                        <td mat-cell *matCellDef="let element" [style.color]="element.expire_time > 0 && element.expire_time <= now  ? 'gray' : null">
+                            <span *ngIf="element.expire_time > 0"> {{element.expire_time * 1000 | date:'short'}}
+                            </span>
+                        </td>
                     </ng-container>
-                    <ng-container matColumnDef="modified_time">
-                        <th mat-header-cell *matHeaderCellDef> MODIFIED TIME </th>
-                        <td mat-cell *matCellDef="let element"> {{element.modified_time * 1000 | date}} </td>
-                    </ng-container>
+
+                    <!-- Action Column -->
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element" fxLayout="row">
                             <div class="button-container">
-                                <button mat-mini-fab class="edit" (click)="openEdit(element)" matTooltip="Edit">
+                                <button mat-stroked-button class="edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
+                                <button mat-stroked-button class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
+
                                 </button>
-                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
+                                <button mat-stroked-button class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
+
                                 </button>
-                                <button mat-mini-fab class="delete" (click)="openDelete(element)" matTooltip="Delete">
+                                <button mat-stroked-button class="delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
+
                                 </button>
                             </div>
                         </td>
@@ -127,56 +148,77 @@
 
             <div fxLayout="column" class="psk-table-container" *ngIf="filters_enabled == true">
                 <table mat-table [dataSource]="filteredPskDatase">
-                    <!-- Position Column -->
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element" fxLayout="row">
+                            <span class="material-icons" *ngIf="element.expire_time > 0 && element.expire_time <= now" style="font-size: 1.2em;margin: 1em 0;color: gray;">
+                            highlight_off
+                        </span>
+                            <span class="material-icons" *ngIf="!element.expire_time || element.expire_time > now" style="font-size: 1.2em;margin: 1em 0;">
+                            check_circle
+                        </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> NAME </th>
                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                     </ng-container>
+
+                    <!-- Email Column -->
                     <ng-container matColumnDef="user_email">
                         <th mat-header-cell *matHeaderCellDef> EMAIL </th>
                         <td mat-cell *matCellDef="let element"> {{element.user_email}} </td>
                     </ng-container>
 
-                    <!-- Name Column -->
+                    <!-- SSID Column -->
                     <ng-container matColumnDef="ssid">
                         <th mat-header-cell *matHeaderCellDef> SSID </th>
                         <td mat-cell *matCellDef="let element"> {{element.ssid}} </td>
                     </ng-container>
 
-                    <!-- Weight Column -->
+                    <!-- VLAN Column -->
                     <ng-container matColumnDef="vlan_id">
                         <th mat-header-cell *matHeaderCellDef> VLAN ID </th>
                         <td mat-cell *matCellDef="let element"> {{element.vlan_id}} </td>
                     </ng-container>
 
-                    <!-- Symbol Column -->
+                    <!-- CREATOR Column -->
                     <ng-container matColumnDef="created_by">
                         <th mat-header-cell *matHeaderCellDef> CREATED BY </th>
                         <td mat-cell *matCellDef="let element"> {{element.created_by}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="created_time">
-                        <th mat-header-cell *matHeaderCellDef> CREATED TIME </th>
-                        <td mat-cell *matCellDef="let element"> {{element.created_time * 1000 | date}} </td>
+
+                    <!-- Expiraation Column -->
+                    <ng-container matColumnDef="expire_time">
+                        <th mat-header-cell *matHeaderCellDef> EXPIRE TIME </th>
+                        <td mat-cell *matCellDef="let element" [style.color]="element.expire_time > 0 && element.expire_time <= now  ? 'gray' : null">
+                            <span *ngIf="element.expire_time > 0"> {{element.expire_time * 1000 | date:'short'}}
+                            </span>
+                        </td>
                     </ng-container>
-                    <ng-container matColumnDef="modified_time">
-                        <th mat-header-cell *matHeaderCellDef> MODIFIED TIME </th>
-                        <td mat-cell *matCellDef="let element"> {{element.modified_time * 1000 | date}} </td>
-                    </ng-container>
+
+                    <!-- Action Column -->
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element" fxLayout="row">
                             <div class="button-container">
-                                <button mat-mini-fab class="edit" (click)="openEdit(element)" matTooltip="Edit">
+                                <button mat-stroked-button class="edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-mini-fab class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
+                                <button mat-stroked-button class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
+
                                 </button>
-                                <button mat-mini-fab class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
+                                <button mat-stroked-button class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
+
                                 </button>
-                                <button mat-mini-fab class="delete" (click)="openDelete(element)" matTooltip="Delete">
+                                <button mat-stroked-button class="delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
+
                                 </button>
                             </div>
                         </td>

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
+import { Router } from "@angular/router";
 
 import { MatPaginator } from '@angular/material/paginator';
 import { merge, Observable, of as observableOf } from 'rxjs';
@@ -28,6 +29,7 @@ export interface PskElement {
   modified_time: number;
   passphrase: string;
   user_email: string;
+  expire_time: number;
 }
 
 export interface VlanCheckElement {
@@ -77,10 +79,16 @@ export class DashboardComponent implements OnInit {
   org_id: string = "";
   site_id: string = "";
   sitegroups_ids: string[] = [];
+  default_expire_time: number = null;
+  psk_length: number = 12;
   ssid: string = "";
   me: string = "";
+  now: number;
 
+  orgsHidden: boolean = true;
+  sitesHidden: boolean = true;
   sitesDisabled: boolean = true;
+
   wlansDisabled: boolean = true;
   createDisabled: boolean = true;
 
@@ -94,18 +102,21 @@ export class DashboardComponent implements OnInit {
 
   filters_enabled: boolean = false
   resultsLength = 0;
-  displayedColumns: string[] = ['name', 'user_email', 'ssid', 'vlan_id', 'created_by', 'created_time', 'modified_time', 'action'];
+  displayedColumns: string[] = ['status', 'name', 'user_email', 'ssid', 'vlan_id', 'created_by', 'expire_time', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private _http: HttpClient, private _appService: ConnectorService, public _dialog: MatDialog, private _snackBar: MatSnackBar) { }
+  constructor(private _http: HttpClient, private _appService: ConnectorService, public _dialog: MatDialog, private _snackBar: MatSnackBar, private _router: Router) { }
 
   ngOnInit() {
     this._appService.headers.subscribe(headers => this.headers = headers)
     this._appService.cookies.subscribe(cookies => this.cookies = cookies)
     this._appService.host.subscribe(host => this.host = host)
     this._appService.self.subscribe(self => this.self = self || {})
+
     this.me = this.self["email"] || null
+    this.getConfig()
+    if (!this.me) this._router.navigateByUrl("/")
     if (this.self != {} && this.self["privileges"]) {
       this.self["privileges"].forEach(element => {
         if (element["scope"] == "org") {
@@ -120,13 +131,39 @@ export class DashboardComponent implements OnInit {
       });
       this.orgs = this.sortList(this.orgs, "name");
       if (this.orgs.length == 1) {
-        this.org_id = this.orgs[1]["id"]
+        this.org_id = this.orgs[0]["id"]
+        this.orgsHidden = true;
+        this.changeOrg();
       }
     }
   }
 
+  //////////////////////////////////////////////////
+  // CONFIG
+  parsePskConfig(data): void {
+    if (data.psk_length) {
+      this.psk_length = data.psk_length
+    }
+    if (data.default_expire_time) {
+      this.default_expire_time = data.default_expire_time
+    }
+  }
 
+  getConfig() {
+    this._http.get<PskElement[]>('/api/psks/config').subscribe({
+      next: data => this.parsePskConfig(data),
+      error: error => {
+        var message: string = "There was an error... "
+        if ("error" in error) { message += error["error"]["message"] }
+        this.openError(message)
+      }
+    })
+  }
+
+  //////////////////////////////////////////////////
+  // PSK
   getPsks() {
+    this.now = Math.trunc(Date.now() / 1000);
     var body = null
     if (this.site_id == "org") {
       body = { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id, ssid: this.ssid, full: this.filters_enabled }
@@ -176,17 +213,21 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  //////////////////////////////////////////////////
+  // WLANS
 
-  parseSites(data) {
-    if (data.sites.length > 0) {
-      this.sites = this.sortList(data.sites, "name");
-    }
-    this.sitesDisabled = false;
-    this.topBarLoading = false;
+  changeWlan() {
+    this.getPsks()
   }
+
   parseWlans(data) {
     this.wlans = []
-    if (data.wlans.length > 0) {
+    if (data.wlans.length == 1) {
+      this.wlans = data.wlans;
+      this.ssid = this.wlans[0].ssid;
+      this.getPsks();
+    }
+    else if (data.wlans.length > 0) {
       this.wlans = this.sortList(data.wlans, "ssid");
       this.getPsks()
     }
@@ -194,20 +235,10 @@ export class DashboardComponent implements OnInit {
     this.topBarLoading = false;
   }
 
-  changeOrg() {
-    this.topBarLoading = true;
-    this._http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
-      next: data => this.parseSites(data),
-      error: error => {
-        var message: string = "There was an error... "
-        if ("error" in error) {
-          message += error["error"]["message"]
-        }
-        this.topBarLoading = false;
-        this.openError(message)
-      }
-    })
-  }
+
+  //////////////////////////////////////////////////
+  // SITES
+
   changeSite() {
     this.topBarLoading = true;
     var body = null
@@ -247,11 +278,37 @@ export class DashboardComponent implements OnInit {
       })
     }
   }
-  changeWlan() {
-    this.getPsks()
+
+  parseSites(data) {
+    if (data.sites.length > 0) {
+      this.sites = this.sortList(data.sites, "name");
+    }
+    this.sitesDisabled = false;
+    this.topBarLoading = false;
   }
 
 
+  //////////////////////////////////////////////////
+  // ORGS
+
+  changeOrg() {
+    this.topBarLoading = true;
+    this._http.post<any>('/api/sites/', { host: this.host, cookies: this.cookies, headers: this.headers, org_id: this.org_id }).subscribe({
+      next: data => this.parseSites(data),
+      error: error => {
+        var message: string = "There was an error... "
+        if ("error" in error) {
+          message += error["error"]["message"]
+        }
+        this.topBarLoading = false;
+        this.openError(message)
+      }
+    })
+  }
+
+
+
+  //////////////////////////////////////////////////
   // COMMON
   sortList(data, attribute) {
     return data.sort(function (a, b) {
@@ -343,19 +400,24 @@ export class DashboardComponent implements OnInit {
 
   // CREATE DIALOG
   openCreate(): void {
+    let expire_time = null;
+    if (this.default_expire_time) {
+      expire_time = Date.now() + this.default_expire_time * 3600000;
+    }
     var newPsk: PskElement = {
       id: null,
       name: "",
       vlan_id: null,
       ssid: this.ssid,
       passphrase: "",
+      expire_time: expire_time,
       created_by: this.me,
       created_time: null,
       modified_time: null,
       user_email: null
     };
     const dialogRef = this._dialog.open(PskDialog, {
-      data: { wlans: this.wlans, psk: newPsk, editing: false }
+      data: { wlans: this.wlans, psk: newPsk, editing: false, default_expire_time: this.default_expire_time, psk_length: this.psk_length }
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -369,6 +431,7 @@ export class DashboardComponent implements OnInit {
             user_email: result.user_email,
             name: result.name,
             passphrase: result.psk,
+            expire_time: result.expire_time,
             ssid: result.ssid,
             vlan_id: result.vlan_id,
             created_by: this.me,
@@ -383,6 +446,7 @@ export class DashboardComponent implements OnInit {
             user_email: result.user_email,
             name: result.name,
             passphrase: result.psk,
+            expire_time: result.expire_time,
             ssid: result.ssid,
             vlan_id: result.vlan_id,
             created_by: this.me,
@@ -407,7 +471,7 @@ export class DashboardComponent implements OnInit {
   // EDIT PSK
   openEdit(psk: PskElement): void {
     const dialogRef = this._dialog.open(PskDialog, {
-      data: { wlans: this.wlans, psk: psk, editing: true }
+      data: { wlans: this.wlans, psk: psk, editing: true, default_expire_time: this.default_expire_time, psk_length: this.psk_length }
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -422,6 +486,7 @@ export class DashboardComponent implements OnInit {
             user_email: result.user_email,
             name: result.name,
             passphrase: result.psk,
+            expire_time: result.expire_time,
             ssid: result.ssid,
             vlan_id: result.vlan_id,
             created_by: this.me,
@@ -437,6 +502,7 @@ export class DashboardComponent implements OnInit {
             user_email: result.user_email,
             name: result.name,
             passphrase: result.psk,
+            expire_time: result.expire_time,
             ssid: result.ssid,
             vlan_id: result.vlan_id,
             created_by: this.me,

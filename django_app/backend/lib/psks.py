@@ -92,6 +92,7 @@ class Psk(Common):
                 "name": body["name"],
                 "passphrase": body["passphrase"],
                 "ssid": body["ssid"],
+                "expire_time": body["expire_time"],
                 "usage": "multi",
             }
             if "renewable" in body and body["renewable"]:
