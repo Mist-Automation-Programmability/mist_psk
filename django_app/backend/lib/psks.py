@@ -86,11 +86,14 @@ class Psk(Common):
 
 
     def _push_psk(self, body, scope_name, scope_id_param, psk_config):
-        if scope_id_param in body and "name" in body and "passphrase" in body and "ssid" in body:
+        if not scope_id_param in body: return {"status": 500, "data": {"message": "scope_id_param missing"}}
+        elif not "name" in body: return {"status": 500, "data": {"message": "name missing"}}
+        elif not "ssid" in body: return {"status": 500, "data": {"message": "ssid missing"}}
+        else:
             extract = self.extractAuth(body)
             psk = {
                 "name": body["name"],
-                "passphrase": body["passphrase"],
+                "passphrase": body.get("passphrase"),
                 "ssid": body["ssid"],
                 "expire_time": body["expire_time"],
                 "usage": "multi",
@@ -122,7 +125,7 @@ class Psk(Common):
                 url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
             return {"status": 200, "data": {"results": resp.json()}}
         except:
-            return {"status": 500, "data": {"message": "Unable to update the Psk"}}
+            return {"status": 500, "data": {"message": "Unable to create the Psk"}}
 
     def _updatePsk(self, body, extract, psk_id, psk, scope_name, scope_id_param):
         try:
@@ -132,7 +135,7 @@ class Psk(Common):
                 url, headers=extract["headers"], cookies=extract["cookies"], json=psk)
             return {"status": 200, "data": {"results": resp.json()}}
         except:
-            return {"status": 500, "data": {"message": "Unable to create the Psk"}}
+            return {"status": 500, "data": {"message": "Unable to update the Psk"}}
 
 #############
 # delete PSKs

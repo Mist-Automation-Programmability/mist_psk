@@ -23,7 +23,7 @@
         <!-- SSID configuration  -->
         <mat-form-field appearance="outline ">
             <mat-label>SSID</mat-label>
-            <mat-select formControlName="ssid" required>
+            <mat-select formControlName="ssid" required (selectionChange)="changeWlan()">
                 <mat-option *ngFor="let wlan of data.wlans" [value]="wlan.ssid">
                     {{wlan.ssid}}
                 </mat-option>
@@ -66,10 +66,20 @@
         </div>
 
         <!-- VLAN configuration  -->
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" *ngIf="vlan_ids.length > 0">
             <mat-label>VLAN</mat-label>
             <input matInput type="number" formControlName="vlan_id" />
+            <mat-select formControlName="vlan_id">
+                <mat-option value="0">--</mat-option>
+                <mat-option *ngFor="let vlan_id of vlan_ids" [value]="vlan_id">
+                    {{vlan_id}}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
+        <div style="border-radius: 7px;padding: 0 0.5em;height: 67px;display: flex;flex-direction: column;margin: 0 0 1em 0;color: rgba(0, 0, 0, 0.38);justify-content: space-around;border: 1px solid rgba(0,0,0,.12);" *ngIf="vlan_ids.length == 0">
+            <mat-label>VLAN</mat-label>
+            <div>This SSID is not configured to support VLANs</div>
+        </div>
     </div>
 </form>
 <!-- Duration configuration  -->
