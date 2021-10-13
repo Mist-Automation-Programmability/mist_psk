@@ -20,7 +20,7 @@ export class PskDialog {
         psk: [this.data.psk.passphrase, [Validators.minLength(8), Validators.maxLength(63)]],
         ssid: [this.data.psk.ssid, Validators.required],
         expire_time: [(this.data.psk.expire_time)],
-        vlan_id: [this.data.psk.vlan_id, [Validators.min(1), Validators.max(4095)]],
+        vlan_id: [this.data.psk.vlan_id, [Validators.min(0), Validators.max(4095)]],
         user_email: [this.data.psk.user_email, Validators.email],
         renewable: [false]
     });
@@ -31,7 +31,7 @@ export class PskDialog {
     psk_length = this.data.psk_length;
     duration: number = 1;
     duration_period: string = "days";
-
+    vlan_ids: number[] = [];
 
     public date: moment.Moment = moment();
     public min_date: moment.Moment = moment();
@@ -49,6 +49,22 @@ export class PskDialog {
         } else if (this.data.default_expire_time) {
             this.dateControl = new FormControl(moment().add(this.data.default_expire_time, 'h'))
         }
+        this.changeWlan();
+    }
+
+    changeWlan(){
+        this.frmPsk.controls["vlan_id"].disable();
+        if (this.frmPsk.controls["ssid"].value) {        
+            this.data.wlans.forEach(wlan => {
+                if (wlan.ssid == this.frmPsk.controls["ssid"].value) {
+                    this.vlan_ids = wlan.vlans;
+                    if (wlan.vlans.length > 1) {
+                        this.frmPsk.controls["vlan_id"].enable();
+                    }
+                }
+            })
+        }
+
     }
 
     confirm() {
