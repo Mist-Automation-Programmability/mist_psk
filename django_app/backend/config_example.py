@@ -13,5 +13,5 @@ smtp_config = {
 psk_config = {
     "salt": "$2b$12$SIGWr574/7OggDO4BBJ1D.", # Salt for "renewable" PSK generation
     "length": 12, # Size for "renewable" PSK length (must be between 8 and 63
-    "default_expire_time": 24 # Default Expire time for PSK creation (default: 24, 0 to disable)
+    "default_expire_time": 0 # Default Expire time for PSK creation, in hours. 0 to disable (default: 0) 
 }
