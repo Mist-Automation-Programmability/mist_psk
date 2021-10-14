@@ -1,9 +1,5 @@
 mat-card {
-    background-color: #0e62ad;
-}
-
-.login-form {
-    background-color: #0e62ad;
+    background-color: rgb(236 236 236);
 }
 
 .login-form-inner {
@@ -19,7 +15,7 @@ mat-card {
 
 .login-form-outer {
     width: 100%;
-    background-color: #0e62ad;
+    background-color: rgb(236 236 236);
 }
 
 .login-form-inputs {
@@ -66,12 +62,11 @@ mat-card {
 .disclaimer {
     width: 50em;
     text-align: center;
+    margin: 5em auto;
     text-transform: uppercase;
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-weight: 100;
     font-size: smaller;
-    margin: 5em auto;
-    color: #eee;
 }
 
 .source {
