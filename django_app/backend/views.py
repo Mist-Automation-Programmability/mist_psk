@@ -29,6 +29,9 @@ except:
         "docker_url": os.environ.get("APP_DOCKER_URL", None)
     }
 
+
+#############################################
+#### SMTP CONFIG
 try:
     from .config import smtp_config
     smtp_config["host"] = smtp_config.get("host", None)
@@ -73,6 +76,8 @@ finally:
     print("enable_qrcode : {0}".format(smtp_config["enable_qrcode"]))
     print("")
 
+#############################################
+#### PSK CONFIG
 try:
     from .config import psk_config
     psk_config["salt"] = psk_config.get(
@@ -95,6 +100,11 @@ finally:
     print("")
     psk_config["salt"] = str.encode(psk_config["salt"])
 
+
+
+
+#############################################
+#### VIEWS
 
 ##########
 # PSK CONFIG
