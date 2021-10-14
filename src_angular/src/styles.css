@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 
+/*@import "~leaflet/dist/leaflet.css";*/
+
+
 /*@import '@angular/material/prebuilt-themes/deeppurple-amber.css';*/
 
 .bg {
@@ -11,7 +14,7 @@
     z-index: -1;
     height: 100%;
     width: 100%;
-    background-color: #0e62ad;
+    background-color: rgb(236 236 236);
     /* 
     opacity: 0.6; 
     background-image: url(assets/img/main3.png);
@@ -23,12 +26,20 @@
     */
 }
 
+html,
+body {
+    max-height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    margin: 0;
+}
+
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.mat-card {
+.card-outer {
     box-shadow: none !important;
 }
 
