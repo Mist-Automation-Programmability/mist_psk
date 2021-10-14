@@ -6,7 +6,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-<img src="https://github.com/tmunzer/mist_psk_stateless_web_ui/blob/master/._readme/main.png?raw=true"/>
+<img src="https://github.com/tmunzer/mist_psk/blob/master/._readme/main.png?raw=true"/>
 
 ## Features
 - Retrieve and display Org and Site PPSKs 
@@ -16,8 +16,8 @@ This program is free software: you can redistribute it and/or modify it under th
 - Display Configuration QRCode for smartphone
 - Send email to user with SSID and PPSK information, and QRCode for smartphone configuration
 
-<img src="https://github.com/tmunzer/mist_psk_stateless_web_ui/blob/master/._readme/create.png" width="30%" />
-<img src="https://github.com/tmunzer/mist_psk_stateless_web_ui/blob/master/._readme/qrcode.png?" width="30%" />
+<img src="https://github.com/tmunzer/mist_psk/blob/master/._readme/create.png?raw=true" width="30%" />
+<img src="https://github.com/tmunzer/mist_psk/blob/master/._readme/qrcode.png?raw=true" width="30%" />
 
 
 ## Installation
