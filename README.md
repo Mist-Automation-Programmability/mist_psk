@@ -49,6 +49,6 @@ MIST_SMTP_LOGO_URL | String | https://cdn.mist.com/wp-content/uploads/logo.png |
 MIST_SMTP_QRCODE | Boolean | True | Whether or not add an autoconfiguration QRCode for smartphones to the email |
 MIST_PSK_SALT | String | $2b$12$SIGWr574/7OggDO4BBJ1D. | Salt for "renewable" PSK generation |
 MIST_PSK_LENGTH | Number | 12 | Size for "renewable" PSK length (must be between 8 and 63 |
-MIST_PSK_DEFAULT_EXPIRE_TIME | Number | 24 | Default Expire time for PSK creation, in hours. 0 to disable (default: 0)  |
+MIST_PSK_DEFAULT_EXPIRE_TIME | Number | 0 | Default Expire time for PSK creation, in hours. 0 to disable |
 DJANGO_DEBUG | Number | 0 | Whether or not Django starts in Debug Mode (0=Production, 1=Debug) |
 DJANGO_ALLOWED_HOSTS | String |  | FQDN on which Django is listening. Only used in Production Mode |
