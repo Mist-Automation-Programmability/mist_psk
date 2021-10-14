@@ -84,10 +84,10 @@ try:
         "salt", "$2b$12$SIGWr574/7OggDO4BBJ1D.")
     psk_config["length"] = psk_config.get("length", 12)
     psk_config["default_expire_time"] = psk_config.get(
-        "default_expire_time", 24)
+        "default_expire_time", 0)
 except:
     psk_config = {
-        "default_expire_time": int(os.environ.get("MIST_PSK_DEFAULT_EXPIRE_TIME", default=24)),
+        "default_expire_time": int(os.environ.get("MIST_PSK_DEFAULT_EXPIRE_TIME", default=0)),
         "salt": os.environ.get("MIST_PSK_SALT", default="$2b$12$SIGWr574/7OggDO4BBJ1D."),
         "length": int(os.environ.get("MIST_PSK_LENGTH", default=12))
     }
