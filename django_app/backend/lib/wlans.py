@@ -29,21 +29,25 @@ class Wlan(Common):
                 url = "https://{0}/api/v1/orgs/{1}/wlans".format(
                     extract["host"], body[scope_id_param])
             if url:
-                #try:
+                try:
                     logging.debug("REQ: {0}".format(url))
                     resp = requests.get(
                         url, headers=extract["headers"], cookies=extract["cookies"])
                     logging.debug("REQ: OK")
                     wlans = []
                     for wlan in resp.json():
+                        print(type(wlan))
                         if wlan['auth']["type"] == "psk":
-                            if "multi_psk_only" in wlan["auth"] and wlan["auth"]["multi_psk_only"] == True:
+                            if wlan["auth"].get("multi_psk_only") == True :
+                                wlans.append(
+                                    {"id": wlan["id"], "ssid": wlan["ssid"], "vlans": wlan.get("vlan_ids", [])})
+                            elif type(wlan.get("dynamic_psk", None)) == dict and wlan.get("dynamic_psk").get("enabled") == True:
                                 wlans.append(
                                     {"id": wlan["id"], "ssid": wlan["ssid"], "vlans": wlan.get("vlan_ids", [])})
                     return {"status": 200, "data": {"wlans": wlans}}
-                # except:
-                #     logging.error("REQ: _get_wlans NOK")
-                #     return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
+                except:
+                    logging.error("REQ: _get_wlans NOK")
+                    return {"status": 500, "data": {"message": "unable to retrieve the WLANs list"}}
             else:
                 logging.warn(
                     "wrong or missing scope_name parameters in the request")
