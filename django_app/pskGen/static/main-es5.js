@@ -209,7 +209,7 @@
           }
         },
         directives: [_angular_material_toolbar__WEBPACK_IMPORTED_MODULE_1__.MatToolbar, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_2__.DefaultLayoutDirective, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_2__.DefaultLayoutAlignDirective, _angular_router__WEBPACK_IMPORTED_MODULE_3__.RouterOutlet],
-        styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */", "[_nghost-%COMP%] {\n        font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n        font-size: 14px;\n        color: #333;\n        box-sizing: border-box;\n        -webkit-font-smoothing: antialiased;\n        -moz-osx-font-smoothing: grayscale;\n    }\n    \n    h1[_ngcontent-%COMP%], h2[_ngcontent-%COMP%], h3[_ngcontent-%COMP%], h4[_ngcontent-%COMP%], h5[_ngcontent-%COMP%], h6[_ngcontent-%COMP%] {\n        margin: 8px 0;\n    }\n    \n    p[_ngcontent-%COMP%] {\n        margin: 0;\n    }\n    \n    .spacer[_ngcontent-%COMP%] {\n        flex: 1;\n    }\n    \n    .toolbar[_ngcontent-%COMP%] {\n        position: absolute;\n        top: 0;\n        left: 0;\n        right: 0;\n        height: 40px;\n        display: flex;\n        align-items: center;\n        background-color: #0e62ad;\n        \n        color: white;\n        font-weight: 600;\n    }\n    \n    .toolbar[_ngcontent-%COMP%]   img[_ngcontent-%COMP%] {\n        margin: 0 16px;\n    }\n    \n    .content[_ngcontent-%COMP%] {\n        display: flex;\n        margin: 82px auto 32px;\n        padding: 0 16px;\n        max-width: 960px;\n        flex-direction: column;\n        align-items: center;\n    }\n    \n    svg.material-icons[_ngcontent-%COMP%] {\n        height: 24px;\n        width: auto;\n    }\n    \n    svg.material-icons[_ngcontent-%COMP%]:not(:last-child) {\n        margin-right: 8px;\n    }\n    \n    .card[_ngcontent-%COMP%]   svg.material-icons[_ngcontent-%COMP%]   path[_ngcontent-%COMP%] {\n        fill: #888;\n    }\n    \n    .card-container[_ngcontent-%COMP%] {\n        display: flex;\n        flex-wrap: wrap;\n        justify-content: center;\n        margin-top: 16px;\n    }\n    \n    .card[_ngcontent-%COMP%] {\n        border-radius: 4px;\n        border: 1px solid #eee;\n        background-color: #fafafa;\n        height: 40px;\n        width: 200px;\n        margin: 0 8px 16px;\n        padding: 16px;\n        display: flex;\n        flex-direction: row;\n        justify-content: center;\n        align-items: center;\n        transition: all 0.2s ease-in-out;\n        line-height: 24px;\n    }\n    \n    .card-container[_ngcontent-%COMP%]   .card[_ngcontent-%COMP%]:not(:last-child) {\n        margin-right: 0;\n    }\n    \n    .card.card-small[_ngcontent-%COMP%] {\n        height: 16px;\n        width: 168px;\n    }\n    \n    .card-container[_ngcontent-%COMP%]   .card[_ngcontent-%COMP%]:not(.highlight-card) {\n        cursor: pointer;\n    }\n    \n    .card-container[_ngcontent-%COMP%]   .card[_ngcontent-%COMP%]:not(.highlight-card):hover {\n        transform: translateY(-3px);\n        box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);\n    }\n    \n    .card-container[_ngcontent-%COMP%]   .card[_ngcontent-%COMP%]:not(.highlight-card):hover   .material-icons[_ngcontent-%COMP%]   path[_ngcontent-%COMP%] {\n        fill: rgb(105, 103, 103);\n    }\n    \n    .card.highlight-card[_ngcontent-%COMP%] {\n        background-color: #1976d2;\n        color: white;\n        font-weight: 600;\n        border: none;\n        width: auto;\n        min-width: 30%;\n        position: relative;\n    }\n    \n    .card.card.highlight-card[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n        margin-left: 60px;\n    }\n    \n    svg#rocket[_ngcontent-%COMP%] {\n        width: 80px;\n        position: absolute;\n        left: -10px;\n        top: -24px;\n    }\n    \n    svg#rocket-smoke[_ngcontent-%COMP%] {\n        height: calc(100vh - 95px);\n        position: absolute;\n        top: 10px;\n        right: 180px;\n        z-index: -10;\n    }\n    \n    a[_ngcontent-%COMP%], a[_ngcontent-%COMP%]:visited, a[_ngcontent-%COMP%]:hover {\n        color: #1976d2;\n        text-decoration: none;\n    }\n    \n    a[_ngcontent-%COMP%]:hover {\n        color: #125699;\n    }\n    \n    .terminal[_ngcontent-%COMP%] {\n        position: relative;\n        width: 80%;\n        max-width: 600px;\n        border-radius: 6px;\n        padding-top: 45px;\n        margin-top: 8px;\n        overflow: hidden;\n        background-color: rgb(15, 15, 16);\n    }\n    \n    .terminal[_ngcontent-%COMP%]::before {\n        content: \"\\2022 \\2022 \\2022\";\n        position: absolute;\n        top: 0;\n        left: 0;\n        height: 4px;\n        background: rgb(58, 58, 58);\n        color: #c2c3c4;\n        width: 100%;\n        font-size: 2rem;\n        line-height: 0;\n        padding: 14px 0;\n        text-indent: 4px;\n    }\n    \n    .terminal[_ngcontent-%COMP%]   pre[_ngcontent-%COMP%] {\n        font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;\n        color: white;\n        padding: 0 1rem 1rem;\n        margin: 0;\n    }\n    \n    .circle-link[_ngcontent-%COMP%] {\n        height: 40px;\n        width: 40px;\n        border-radius: 40px;\n        margin: 8px;\n        background-color: white;\n        border: 1px solid #eeeeee;\n        display: flex;\n        justify-content: center;\n        align-items: center;\n        cursor: pointer;\n        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);\n        transition: 1s ease-out;\n    }\n    \n    .circle-link[_ngcontent-%COMP%]:hover {\n        transform: translateY(-0.25rem);\n        box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);\n    }\n    \n    footer[_ngcontent-%COMP%] {\n        margin-top: 8px;\n        display: flex;\n        align-items: center;\n        line-height: 20px;\n    }\n    \n    footer[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n        display: flex;\n        align-items: center;\n    }\n    \n    .github-star-badge[_ngcontent-%COMP%] {\n        color: #24292e;\n        display: flex;\n        align-items: center;\n        font-size: 12px;\n        padding: 3px 10px;\n        border: 1px solid rgba(27, 31, 35, .2);\n        border-radius: 3px;\n        background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);\n        margin-left: 4px;\n        font-weight: 600;\n        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;\n    }\n    \n    .github-star-badge[_ngcontent-%COMP%]:hover {\n        background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);\n        border-color: rgba(27, 31, 35, .35);\n        background-position: -.5em;\n    }\n    \n    .github-star-badge[_ngcontent-%COMP%]   .material-icons[_ngcontent-%COMP%] {\n        height: 16px;\n        width: 16px;\n        margin-right: 4px;\n    }\n    \n    svg#clouds[_ngcontent-%COMP%] {\n        position: fixed;\n        bottom: -160px;\n        left: -230px;\n        z-index: -10;\n        width: 1920px;\n    }\n    \n    \n    @media screen and (max-width: 767px) {\n        .card-container[_ngcontent-%COMP%] > *[_ngcontent-%COMP%]:not(.circle-link), .terminal[_ngcontent-%COMP%] {\n            width: 100%;\n        }\n        .card[_ngcontent-%COMP%]:not(.highlight-card) {\n            height: 16px;\n            margin: 8px 0;\n        }\n        .card.highlight-card[_ngcontent-%COMP%]   span[_ngcontent-%COMP%] {\n            margin-left: 72px;\n        }\n        svg#rocket-smoke[_ngcontent-%COMP%] {\n            right: 120px;\n            transform: rotate(-5deg);\n        }\n    }\n    \n    @media screen and (max-width: 575px) {\n        svg#rocket-smoke[_ngcontent-%COMP%] {\n            display: none;\n            visibility: hidden;\n        }\n    }\n    \n    footer[_ngcontent-%COMP%] {\n        position: absolute;\n        bottom: 0px;\n        right: 0px\n    }"]
+        styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyJ9 */"]
       });
       /***/
     },
@@ -1652,7 +1652,7 @@
         selectors: [["dashboard-psk"]],
         decls: 51,
         vars: 13,
-        consts: [["mat-dialog-title", ""], [1, "create-form", 3, "formGroup"], ["mat-dialog-content", "", "fxLayout", "column"], ["appearance", "outline "], ["formControlName", "ssid", "required", "", 3, "selectionChange"], [3, "value", 4, "ngFor", "ngForOf"], ["appearance", "outline"], ["matInput", "", "required", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email"], ["fxLayout", "row"], ["formControlName", "renewable", 3, "ngModelChange"], ["matTooltip", "Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same", 1, "material-icons", "tooltip"], ["appearance", "outline", 2, "width", "400px"], ["matInput", "", "required", "", "formControlName", "psk", 3, "type"], ["matSuffix", "", "mat-icon-button", "", "aria-label", "show password", 3, "disabled", "click", 4, "ngIf"], ["mat-stroked-button", "", 2, "height", "50px", "margin", "5px", "color", "#0d60aa", "border", "1px solid", 3, "disabled", "click"], ["appearance", "outline", 4, "ngIf"], ["style", "border-radius: 7px;padding: 0 0.5em;height: 67px;display: flex;flex-direction: column;margin: 0 0 1em 0;color: rgba(0, 0, 0, 0.38);justify-content: space-around;border: 1px solid rgba(0,0,0,.12);", 4, "ngIf"], [2, "border", "1px solid rgba(0,0,0,.12)", "border-radius", "5px", "padding", "1em"], [2, "display", "flex", "flex-direction", "column", "font", "inherit"], [2, "margin-bottom", "1em", "color", "rgba(0,0,0,.6)"], ["aria-label", "Select an option", 2, "margin", "5px", "display", "flex", "flex-direction", "row", "justify-content", "space-evenly", 3, "ngModel", "ngModelChange"], ["value", "none"], ["value", "duration"], ["value", "date"], ["fxLayout", "row", "style", "justify-content: space-evenly;margin: 1em 1em 0;", 4, "ngIf"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click", 4, "ngIf"], [3, "value"], ["matSuffix", "", "mat-icon-button", "", "aria-label", "show password", 3, "disabled", "click"], [2, "color", "rgba(0,0,0,.6)"], ["matInput", "", "type", "number", "formControlName", "vlan_id"], ["formControlName", "vlan_id"], ["value", "0"], [2, "border-radius", "7px", "padding", "0 0.5em", "height", "67px", "display", "flex", "flex-direction", "column", "margin", "0 0 1em 0", "color", "rgba(0, 0, 0, 0.38)", "justify-content", "space-around", "border", "1px solid rgba(0,0,0,.12)"], ["fxLayout", "row", 2, "justify-content", "space-evenly", "margin", "1em 1em 0"], ["matInput", "", 3, "ngModel", "ngModelChange"], [3, "ngModel", "ngModelChange"], ["value", "hours"], ["value", "days"], ["value", "months"], ["value", "years"], ["matInput", "", "placeholder", "Choose a date", 3, "ngxMatDatetimePicker", "min", "formControl"], ["matSuffix", "", 3, "for"], ["color", "accent"], ["picker", ""], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click"]],
+        consts: [["mat-dialog-title", ""], [1, "create-form", 3, "formGroup"], ["mat-dialog-content", "", "fxLayout", "column"], ["appearance", "outline "], ["formControlName", "ssid", "required", "", 3, "selectionChange"], [3, "value", 4, "ngFor", "ngForOf"], ["appearance", "outline"], ["matInput", "", "required", "", "formControlName", "name"], ["matInput", "", "formControlName", "user_email"], ["fxLayout", "row"], ["formControlName", "renewable", 3, "ngModelChange"], ["matTooltip", "Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same", 1, "material-icons", "tooltip"], ["appearance", "outline", 2, "width", "400px"], ["matInput", "", "required", "", "formControlName", "psk", 3, "type"], ["matSuffix", "", "mat-icon-button", "", "aria-label", "show password", 3, "disabled", "click", 4, "ngIf"], ["mat-stroked-button", "", 2, "height", "41px", "margin", "5px", "color", "#0d60aa", "border", "1px solid", 3, "disabled", "click"], ["appearance", "outline", 4, "ngIf"], ["style", "border-radius: 7px;padding: 0 0.5em;height: 67px;display: flex;flex-direction: column;margin: 0 0 1em 0;color: rgba(0, 0, 0, 0.38);justify-content: space-around;border: 1px solid rgba(0,0,0,.12);", 4, "ngIf"], [2, "border", "1px solid rgba(0,0,0,.12)", "border-radius", "5px", "padding", "1em"], [2, "display", "flex", "flex-direction", "column", "font", "inherit"], [2, "margin-bottom", "1em", "color", "rgba(0,0,0,.6)"], ["aria-label", "Select an option", 2, "margin", "5px", "display", "flex", "flex-direction", "row", "justify-content", "space-evenly", 3, "ngModel", "ngModelChange"], ["value", "none"], ["value", "duration"], ["value", "date"], ["fxLayout", "row", "style", "justify-content: space-evenly;margin: 1em 1em 0;", 4, "ngIf"], ["mat-dialog-actions", "", "fxLayout", "row", 2, "justify-content", "space-around"], ["mat-button", "", 3, "click"], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click", 4, "ngIf"], [3, "value"], ["matSuffix", "", "mat-icon-button", "", "aria-label", "show password", 3, "disabled", "click"], [2, "color", "rgba(0,0,0,.6)"], ["matInput", "", "type", "number", "formControlName", "vlan_id"], ["formControlName", "vlan_id"], ["value", "0"], [2, "border-radius", "7px", "padding", "0 0.5em", "height", "67px", "display", "flex", "flex-direction", "column", "margin", "0 0 1em 0", "color", "rgba(0, 0, 0, 0.38)", "justify-content", "space-around", "border", "1px solid rgba(0,0,0,.12)"], ["fxLayout", "row", 2, "justify-content", "space-evenly", "margin", "1em 1em 0"], ["matInput", "", 3, "ngModel", "ngModelChange"], [3, "ngModel", "ngModelChange"], ["value", "hours"], ["value", "days"], ["value", "months"], ["value", "years"], ["matInput", "", "placeholder", "Choose a date", 3, "ngxMatDatetimePicker", "min", "formControl"], ["matSuffix", "", 3, "for"], ["color", "accent"], ["picker", ""], ["mat-raised-button", "", "color", "accent", "cdkFocusInitial", "", 3, "disabled", "click"]],
         template: function PskDialog_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "h1", 0);
@@ -2877,7 +2877,7 @@
         if (rf & 1) {
           var _r51 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "td", 47);
+          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "td", 52);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](1, "div", 54);
 
@@ -3049,7 +3049,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](24, DashboardComponent_div_34_th_24_Template, 1, 0, "th", 32);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](25, DashboardComponent_div_34_td_25_Template, 14, 0, "td", 33);
+          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](25, DashboardComponent_div_34_td_25_Template, 14, 0, "td", 35);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementContainerEnd"]();
 
@@ -3339,7 +3339,7 @@
         if (rf & 1) {
           var _r87 = _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "td", 47);
+          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "td", 52);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](1, "div", 54);
 
@@ -3507,7 +3507,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](24, DashboardComponent_div_35_th_24_Template, 1, 0, "th", 32);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](25, DashboardComponent_div_35_td_25_Template, 14, 0, "td", 33);
+          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵtemplate"](25, DashboardComponent_div_35_td_25_Template, 14, 0, "td", 35);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementContainerEnd"]();
 
@@ -3549,7 +3549,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](1, "div", 1);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](2, "mat-spinner");
+          _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelement"](2, "mat-spinner", 64);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementEnd"]();
 
@@ -4355,7 +4355,7 @@
         },
         decls: 37,
         vars: 16,
-        consts: [[1, "card-outer"], ["fxLayout", "column"], ["fxLayout", "column", 1, "top-bar-container"], ["fxLayout", "row", 1, "top-bar", "mat-elevation-z8"], ["appearance", "outline", "class", "list", 4, "ngIf"], ["appearance", "outline", 1, "list"], [3, "value", "disabled", "valueChange", "selectionChange"], ["value", "org", 4, "ngIf"], [3, "value", 4, "ngFor", "ngForOf"], ["value", ""], ["appearance", "outline", 1, "list", 2, "margin", "auto !important"], [3, "ngModel", "ngModelChange"], ["matTooltip", "This option will load localy all the PSKs, and allow you to search specific PSK based on filters. Depending on the number of PSKs, it can take some time...", 1, "material-icons", "tooltip", 2, "font-size", "1.5em", "margin", "5px"], ["mat-raised-button", "", "color", "accent", 1, "create", 2, "margin", "auto 20px auto auto", 3, "disabled", "click"], [1, "material-icons", 2, "margin", "auto 10px auto auto"], ["style", "width: 100%; height: 4px; background-color: rgb(111 157 43);", 4, "ngIf"], ["mode", "indeterminate", "color", "accent", 4, "ngIf"], ["style", "margin: 0.5em 1em 0; width: 100%;", 4, "ngIf"], [1, "psk-container", "mat-elevation-z8"], ["fxLayout", "column", "class", "psk-table-container", 4, "ngIf"], ["class", "loading", "fxLayout", "row", 4, "ngIf"], [3, "value", "valueChange", "selectionChange"], [3, "value"], ["value", "org"], [2, "width", "100%", "height", "4px", "background-color", "rgb(111 157 43)"], ["mode", "indeterminate", "color", "accent"], [2, "margin", "0.5em 1em 0", "width", "100%"], ["matInput", "", "placeholder", "Ex. psk name", 3, "disabled", "keyup"], ["input", ""], ["fxLayout", "column", 1, "psk-table-container"], ["mat-table", "", 3, "dataSource"], ["matColumnDef", "status"], ["mat-header-cell", "", 4, "matHeaderCellDef"], ["mat-cell", "", "fxLayout", "row", 4, "matCellDef"], ["matColumnDef", "name"], ["mat-cell", "", 4, "matCellDef"], ["matColumnDef", "user_email"], ["matColumnDef", "ssid"], ["matColumnDef", "vlan_id"], ["matColumnDef", "created_by"], ["matColumnDef", "expire_time"], ["mat-cell", "", 3, "color", 4, "matCellDef"], ["matColumnDef", "action"], ["mat-header-row", "", 4, "matHeaderRowDef"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], [3, "length", "pageSizeOptions"], ["mat-header-cell", ""], ["mat-cell", "", "fxLayout", "row"], ["class", "material-icons", "style", "font-size: 1.2em;margin: 1em 0;color: gray;", 4, "ngIf"], ["class", "material-icons", "style", "font-size: 1.2em;margin: 1em 0;", 4, "ngIf"], [1, "material-icons", 2, "font-size", "1.2em", "margin", "1em 0", "color", "gray"], [1, "material-icons", 2, "font-size", "1.2em", "margin", "1em 0"], ["mat-cell", ""], [4, "ngIf"], [1, "button-container"], ["mat-stroked-button", "", "matTooltip", "Edit", 1, "edit", 3, "click"], [1, "material-icons"], ["mat-stroked-button", "", "matTooltip", "Send by Email", 1, "edit", 3, "click"], ["mat-stroked-button", "", "matTooltip", "Show QRCode", 1, "qrcode", 3, "click"], ["mat-stroked-button", "", "matTooltip", "Delete", 1, "delete", 3, "click"], ["mat-header-row", ""], ["mat-row", ""], [3, "pageSizeOptions"], ["fxLayout", "row", 1, "loading"]],
+        consts: [[1, "card-outer"], ["fxLayout", "column"], ["fxLayout", "column", 1, "top-bar-container"], ["fxLayout", "row", 1, "top-bar", "mat-elevation-z8"], ["appearance", "outline", "class", "list", 4, "ngIf"], ["appearance", "outline", 1, "list"], [3, "value", "disabled", "valueChange", "selectionChange"], ["value", "org", 4, "ngIf"], [3, "value", 4, "ngFor", "ngForOf"], ["value", ""], ["appearance", "outline", 1, "list", 2, "margin", "auto !important"], [3, "ngModel", "ngModelChange"], ["matTooltip", "This option will load localy all the PSKs, and allow you to search specific PSK based on filters. Depending on the number of PSKs, it can take some time...", 1, "material-icons", "tooltip", 2, "font-size", "1.5em", "margin", "5px"], ["mat-raised-button", "", "color", "accent", 1, "create", 2, "margin", "auto 20px auto auto", 3, "disabled", "click"], [1, "material-icons", 2, "margin", "auto 10px auto auto"], ["style", "width: 100%; height: 4px; background-color: rgb(111 157 43);", 4, "ngIf"], ["mode", "indeterminate", "color", "accent", 4, "ngIf"], ["style", "margin: 0.5em 1em 0; width: 100%;", 4, "ngIf"], [1, "psk-container", "mat-elevation-z8"], ["fxLayout", "column", "class", "psk-table-container", 4, "ngIf"], ["class", "loading", "fxLayout", "row", 4, "ngIf"], [3, "value", "valueChange", "selectionChange"], [3, "value"], ["value", "org"], [2, "width", "100%", "height", "4px", "background-color", "rgb(111 157 43)"], ["mode", "indeterminate", "color", "accent"], [2, "margin", "0.5em 1em 0", "width", "100%"], ["matInput", "", "placeholder", "Ex. psk name", 3, "disabled", "keyup"], ["input", ""], ["fxLayout", "column", 1, "psk-table-container"], ["mat-table", "", 3, "dataSource"], ["matColumnDef", "status"], ["mat-header-cell", "", 4, "matHeaderCellDef"], ["mat-cell", "", "fxLayout", "row", 4, "matCellDef"], ["matColumnDef", "name"], ["mat-cell", "", 4, "matCellDef"], ["matColumnDef", "user_email"], ["matColumnDef", "ssid"], ["matColumnDef", "vlan_id"], ["matColumnDef", "created_by"], ["matColumnDef", "expire_time"], ["mat-cell", "", 3, "color", 4, "matCellDef"], ["matColumnDef", "action"], ["mat-header-row", "", 4, "matHeaderRowDef"], ["mat-row", "", 4, "matRowDef", "matRowDefColumns"], [3, "length", "pageSizeOptions"], ["mat-header-cell", ""], ["mat-cell", "", "fxLayout", "row"], ["class", "material-icons", "style", "user-select: none; font-size: 1.2em;margin: 1em 0;color: gray;", "matTooltip", "deactivated", 4, "ngIf"], ["class", "material-icons", "style", "user-select: none; font-size: 1.2em;margin: 1em 0;", "matTooltip", "activated", 4, "ngIf"], ["matTooltip", "deactivated", 1, "material-icons", 2, "user-select", "none", "font-size", "1.2em", "margin", "1em 0", "color", "gray"], ["matTooltip", "activated", 1, "material-icons", 2, "user-select", "none", "font-size", "1.2em", "margin", "1em 0"], ["mat-cell", ""], [4, "ngIf"], [1, "button-container"], ["mat-stroked-button", "", "matTooltip", "Edit", 1, "edit", 3, "click"], [1, "material-icons"], ["mat-stroked-button", "", "matTooltip", "Send by Email", 1, "edit", 3, "click"], ["mat-stroked-button", "", "matTooltip", "Show QRCode", 1, "qrcode", 3, "click"], ["mat-stroked-button", "", "matTooltip", "Delete", 1, "delete", 3, "click"], ["mat-header-row", ""], ["mat-row", ""], [3, "pageSizeOptions"], ["fxLayout", "row", 1, "loading"], ["strokeWidth", "3"]],
         template: function DashboardComponent_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_7__["ɵɵelementStart"](0, "mat-card", 0);
@@ -4877,7 +4877,7 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](1, "div", 28);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](2, "mat-spinner");
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](2, "mat-spinner", 29);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
 
@@ -4887,9 +4887,9 @@
 
       function LoginComponent_a_56_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "a", 29);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "a", 30);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "img", 30);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "img", 31);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
@@ -4903,9 +4903,9 @@
 
       function LoginComponent_a_57_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "a", 29);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "a", 30);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "img", 31);
+          _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelement"](1, "img", 32);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementEnd"]();
         }
@@ -4933,16 +4933,8 @@
           this.self = {};
           this.show_github_fork_me = false;
           this.hostnames_to_show_github_fork_me = ["localhost", "127.0.0.1", "psk.mist-lab.fr"];
-          this.hosts = [{
-            value: 'api.mist.com',
-            viewValue: 'US - manage.mist.com'
-          }, {
-            value: 'api.eu.mist.com',
-            viewValue: 'EU - manage.eu.mist.com'
-          }, {
-            value: 'api.gc1.mist.com',
-            viewValue: 'GCP - manage.gc1.mist.com'
-          }]; // LOGIN FORM
+          this.hosts_loading = true;
+          this.hosts = []; // LOGIN FORM
 
           this.frmStepLogin = this.formBuilder.group({
             host: [''],
@@ -4977,11 +4969,18 @@
               token: [""]
             });
 
-            this._http.get("/api/disclaimer").subscribe({
+            this._http.get("/api/disclaimer/").subscribe({
               next: function next(data) {
                 if (data.disclaimer) _this12.disclaimer = data.disclaimer;
                 if (data.github_url) _this12.github_url = data.github_url;
                 if (data.docker_url) _this12.docker_url = data.docker_url;
+              }
+            });
+
+            this._http.get("/api/hosts/").subscribe({
+              next: function next(data) {
+                _this12.hosts = data;
+                _this12.hosts_loading = false;
               }
             });
           } //// COMMON ////
@@ -5162,7 +5161,7 @@
         selectors: [["app-login"]],
         decls: 58,
         vars: 11,
-        consts: [[1, "card-outer"], [1, "login-form", 3, "formGroup"], ["fxLayout", "column", 1, "login-form-outer", 3, "formGroup"], [1, "login-form-inner"], ["fxLayout", "column", 1, "login-step"], ["appearance", "outline"], ["formControlName", "host"], [3, "value", 4, "ngFor", "ngForOf"], ["fxLayout", "row", 1, "login-form-or"], ["mat-fab", "", "color", "accent", "aria-label", "AND", 1, "disable-click"], ["fxLayout", "row", 1, "login-step"], ["formGroupName", "credentials", "fxLayout", "column", 1, "login-form-inputs"], ["matInput", "", "formControlName", "email", "type", "email"], ["matInput", "", "type", "password", "formControlName", "password", 3, "keydown.enter"], [2, "margin-bottom", "1em", "min-height", "20px"], [2, "color", "red", "font-weight", "normal"], ["mat-raised-button", "", "color", "primary", 3, "click"], ["fxLayout", "column", 1, "login-form-or"], [3, "vertical"], ["mat-fab", "", "color", "accent", "aria-label", "OR", 1, "disable-click"], ["fxLayout", "column", 1, "login-form-inputs"], ["type", "text", "matInput", "", "formControlName", "token", 3, "keydown.enter"], ["class", "loading", "fxLayout", "row", 4, "ngIf"], [1, "disclaimer"], [1, "source"], ["target", "_blank", 3, "href", 4, "ngIf"], [3, "value"], ["fxLayout", "row", 1, "loading"], ["fxLayout", "column"], ["target", "_blank", 3, "href"], ["src", "static/images/github.png"], ["src", "static/images/docker.png"]],
+        consts: [[1, "card-outer"], [1, "login-form", 3, "formGroup"], ["fxLayout", "column", 1, "login-form-outer", 3, "formGroup"], [1, "login-form-inner"], ["fxLayout", "column", 1, "login-step"], ["appearance", "outline"], ["formControlName", "host"], [3, "value", 4, "ngFor", "ngForOf"], ["fxLayout", "row", 1, "login-form-or"], ["mat-fab", "", "color", "accent", "aria-label", "AND", 1, "disable-click"], ["fxLayout", "row", 1, "login-step"], ["formGroupName", "credentials", "fxLayout", "column", 1, "login-form-inputs"], ["matInput", "", "formControlName", "email", "type", "email"], ["matInput", "", "type", "password", "formControlName", "password", 3, "keydown.enter"], [2, "margin-bottom", "1em", "min-height", "20px"], [2, "color", "red", "font-weight", "normal"], ["mat-raised-button", "", "color", "primary", 3, "click"], ["fxLayout", "column", 1, "login-form-or"], [3, "vertical"], ["mat-fab", "", "color", "accent", "aria-label", "OR", 1, "disable-click"], ["fxLayout", "column", 1, "login-form-inputs"], ["type", "text", "matInput", "", "formControlName", "token", 3, "keydown.enter"], ["class", "loading", "fxLayout", "row", 4, "ngIf"], [1, "disclaimer"], [1, "source"], ["target", "_blank", 3, "href", 4, "ngIf"], [3, "value"], ["fxLayout", "row", 1, "loading"], ["fxLayout", "column"], ["strokeWidth", "3"], ["target", "_blank", 3, "href"], ["src", "static/images/github.png"], ["src", "static/images/docker.png"]],
         template: function LoginComponent_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵelementStart"](0, "mat-card", 0);
@@ -5397,7 +5396,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", ctx.loading);
+            _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵproperty"]("ngIf", ctx.loading || ctx.hosts_loading);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵadvance"](3);
 

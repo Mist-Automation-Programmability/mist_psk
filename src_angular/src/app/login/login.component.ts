@@ -10,6 +10,10 @@ import { TwoFactorDialog } from './login-2FA';
 export interface TwoFactorData {
   twoFactor: string;
 }
+export interface HostElement {
+  value: string,
+  viewValue: string
+}
 
 @Component({
   selector: 'app-login',
@@ -34,11 +38,8 @@ export class LoginComponent implements OnInit {
   show_github_fork_me : boolean = false;
   hostnames_to_show_github_fork_me = ["localhost", "127.0.0.1", "psk.mist-lab.fr"]
   loading: boolean;
-  hosts = [
-    { value: 'api.mist.com', viewValue: 'US - manage.mist.com' },
-    { value: 'api.eu.mist.com', viewValue: 'EU - manage.eu.mist.com' },
-    { value: 'api.gc1.mist.com', viewValue: 'GCP - manage.gc1.mist.com' }
-  ];
+  hosts_loading : boolean = true;
+  hosts: HostElement[]  = [];
 
   // LOGIN FORM
   frmStepLogin = this.formBuilder.group({
@@ -68,11 +69,17 @@ export class LoginComponent implements OnInit {
       }),
       token: [""],
     });
-    this._http.get<any>("/api/disclaimer").subscribe({
+    this._http.get<any>("/api/disclaimer/").subscribe({
       next: data => {
         if (data.disclaimer) this.disclaimer = data.disclaimer;
         if (data.github_url) this.github_url = data.github_url;
         if (data.docker_url) this.docker_url = data.docker_url;
+      }
+    })
+    this._http.get<HostElement[]>("/api/hosts/").subscribe({
+      next: data =>{ 
+        this.hosts = data;
+        this.hosts_loading = false;
       }
     })
   }
