@@ -118,9 +118,7 @@ export class LoginComponent implements OnInit {
       if ("detail" in data.data) {
         this.error_message(data["method"], data.data.detail);
       } else if ("two_factor_required" in data.data && "two_factor_passed" in data.data) {
-        if (data.data["two_factor_required"] == false) {
-          this.authenticated(data)
-        } else if (data.data["two_factor_passed"] == true) {
+        if (data.data["two_factor_required"] == false || data.data["two_factor_passed"] == true) {
           this.authenticated(data)
         } else {
           this.open2FA()
