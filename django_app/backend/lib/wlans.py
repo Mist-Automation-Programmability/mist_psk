@@ -36,7 +36,6 @@ class Wlan(Common):
                     logging.debug("REQ: OK")
                     wlans = []
                     for wlan in resp.json():
-                        print(type(wlan))
                         if wlan['auth']["type"] == "psk":
                             if wlan["auth"].get("multi_psk_only") == True :
                                 wlans.append(

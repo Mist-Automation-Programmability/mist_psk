@@ -5,8 +5,7 @@ from django.http import JsonResponse, HttpResponse, Http404
 import json
 from django.views.decorators.csrf import csrf_exempt
 import json
-import time
-import logging
+import ast
 
 from .mist_smtp.mist_smtp import Mist_SMTP
 from .lib.__req import Req
@@ -28,6 +27,12 @@ except:
         "github_url": os.environ.get("APP_GITHUB_URL", None),
         "docker_url": os.environ.get("APP_DOCKER_URL", None)
     }
+
+
+try:
+    from .config import mist_hosts
+except:
+    mist_hosts = ast.literal_eval(os.environ.get("MIST_HOSTS", default='{"Global 01 - manage.mist.com": "api.mist.com", "Global 02 - manage.gc1.mist.com": "api.gc1.mist.com", "Global 03 - manage.ac2.mist.com": "api.ac2.mist.com","Global 04 - manage.gc2.mist.com": "api.gc2.mist.com", "Europe 01 - manage.eu.mist.com": "api.eu.mist.com"}'))
 
 
 #############################################
@@ -108,7 +113,6 @@ finally:
 
 ##########
 # PSK CONFIG
-@csrf_exempt
 def pskConfig(request):
     if request.method == "GET":
         response = {
@@ -252,9 +256,17 @@ def emailPsk(request):
             return JsonResponse(status=500, data={"message": "missing parametesr"})
 
 
-@csrf_exempt
 def disclaimer(request):
     if request.method == "GET":
         return JsonResponse(disclaimer_config)
     else:
         return JsonResponse(status=500, data={"message": "missing parametesr"})
+
+
+def hosts(request):
+    if request.method == "GET":
+        data = []
+        for key in mist_hosts:
+            data.append({"value": mist_hosts[key], "viewValue": key})
+        data = sorted(data, key=lambda x: x["viewValue"])
+        return HttpResponse(json.dumps(data))
