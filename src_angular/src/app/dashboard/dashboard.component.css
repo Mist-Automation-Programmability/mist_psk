@@ -11,6 +11,9 @@
 .top-bar {
     background-color: white;
     border-radius: 5px 5px 0 0;
+    max-width: 150em;
+    margin: auto;
+    width: 100%;
 }
 
 .list {
