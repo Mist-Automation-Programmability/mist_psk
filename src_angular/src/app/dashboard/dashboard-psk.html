@@ -19,9 +19,9 @@
 </style>
 <h1 mat-dialog-title>Create New PSK</h1>
 <form [formGroup]="frmPsk" class="create-form">
-    <div mat-dialog-content fxLayout="column">
+    <div mat-dialog-content class="flex column">
         <!-- SSID configuration  -->
-        <mat-form-field appearance="outline ">
+        <mat-form-field appearance="outline">
             <mat-label>SSID</mat-label>
             <mat-select formControlName="ssid" required (selectionChange)="changeWlan()">
                 <mat-option *ngFor="let wlan of data.wlans" [value]="wlan.ssid">
@@ -42,7 +42,7 @@
         </mat-form-field>
 
         <!-- PSK configuration  -->
-        <div fxLayout="row">
+        <div class="flex row">
             <mat-checkbox formControlName="renewable" (ngModelChange)="changeRenewable()">
                 Enable Renewable PSK
                 <span class="material-icons tooltip" matTooltip="Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same">
@@ -50,7 +50,7 @@
                 </span>
             </mat-checkbox>
         </div>
-        <div fxLayout="row">
+        <div class="flex row">
             <mat-form-field appearance="outline" style="width: 400px;">
                 <mat-label>PSK</mat-label>
                 <input matInput required [type]="passwordFieldType" formControlName="psk" />
@@ -93,7 +93,7 @@
             <mat-radio-button value="date">Date / Time</mat-radio-button>
         </mat-radio-group>
     </div>
-    <div fxLayout="row" *ngIf="expire_method=='duration'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+    <div class="flex row" *ngIf="expire_method=='duration'" style="justify-content: space-evenly;margin: 1em 1em 0;">
         <mat-form-field appearance="outline">
             <mat-label>Expire In </mat-label>
             <input matInput [(ngModel)]="duration" />
@@ -109,7 +109,7 @@
         </mat-form-field>
     </div>
 
-    <div fxLayout="row" *ngIf="expire_method=='date'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+    <div class="flex row" *ngIf="expire_method=='date'" style="justify-content: space-evenly;margin: 1em 1em 0;">
         <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="picker" [min]="min_date" placeholder="Choose a date" [formControl]="dateControl">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -119,7 +119,7 @@
     </div>
 
 </div>
-<div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
+<div mat-dialog-actions style="justify-content: space-around;" class="flex row">
     <button mat-button (click)="cancel()">Cancel</button>
     <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
     <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Email PSK</h1>
-<div mat-dialog-content fxLayout="column">
+<div mat-dialog-content class="flex column">
 
-    <form [formGroup]="frmEmail" class="create-form" fxLayout="column">
+    <form [formGroup]="frmEmail" class="create-form flex column">
         <mat-form-field appearance="outline">
             <mat-label>NAME</mat-label>
             <input matInput formControlName="name" />
@@ -13,7 +13,7 @@
     </form>
 
 </div>
-<div mat-dialog-actions style="justify-content: space-around;" fxLayout="row">
+<div mat-dialog-actions style="justify-content: space-around;" class="flex row">
     <button mat-button (click)="cancel()">Cancel</button>
     <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()">Send Email</button>
 </div>

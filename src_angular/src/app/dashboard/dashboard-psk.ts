@@ -8,6 +8,7 @@ const moment = _moment;
 @Component({
     selector: 'dashboard-psk',
     templateUrl: 'dashboard-psk.html',
+    styleUrls: ['./dashboard.component.scss']
 })
 
 export class PskDialog {

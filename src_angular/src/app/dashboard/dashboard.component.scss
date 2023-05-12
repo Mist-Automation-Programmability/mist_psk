@@ -1,0 +1,178 @@
+.card-outer {
+    background-color: unset;
+    max-width: 1900px;
+    margin: auto;
+    padding: 0 1em;
+}
+
+.top-bar-container {
+    margin: 0 0 1em 0;
+}
+
+.top-bar {
+    background-color: white;
+    border-radius: 5px 5px 0 0;
+    max-width: 150em;
+    margin: auto;
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid #80808042;
+}
+
+.list {
+    margin: 1.34375em 1em 0;
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff9c;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.loading div {
+    margin: auto;
+    align-self: center;
+}
+
+.button-container {
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+}
+
+.end {
+    justify-content: space-around !important;
+}
+
+.tooltip {
+    color: gray;
+}
+
+.tooltip:hover {
+    color: black;
+}
+
+
+/* Structure */
+
+tr.mat-row,
+tr.mat-footer-row {
+    height: 2em;
+}
+
+.table-container {
+    max-height: calc(100vh - 280px);
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.psk-table-container {
+    padding-bottom: 1em;
+    background-color: white;
+}
+
+.psk-container {
+    border: none;
+    width: 100%;
+    min-width: 20em;
+    position: relative;
+    margin: auto;
+    border-radius: 0.3em;
+    max-width: 150em;
+}
+
+.psk-table-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Column Widths */
+
+.mat-column-action {
+    width: 300px !important;
+}
+
+
+
+
+/* Buttons */
+button:disabled {
+    color: rgba(0, 0, 0, 0.26);
+}
+
+.stroked-button {
+    border: 1px solid;
+    margin: 5px;
+    line-height: 25px;
+
+    mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: large;
+        margin: auto;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.edit {
+    color: #0d60aa !important;
+    transition: all 0.2s ease-in-out;
+
+}
+
+.edit:hover {
+    background-color: #0d60aa;
+    border: 1px solid #0d60aa;
+    ;
+    color: white !important;
+}
+
+.delete {
+    color: #f44336 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.delete:hover {
+    background-color: #f44336;
+    border: 1px solid #f44336;
+    ;
+    color: white !important;
+}
+
+.table-info {    padding: 4em;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    background-color: white;
+    color: #bfbfbf;}
+
+.role {
+    height: 1.5em;
+    margin-right: .5em;
+    margin-left: -1em;
+}
+.custom-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
