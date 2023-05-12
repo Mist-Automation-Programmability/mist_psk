@@ -55,3 +55,8 @@ body {
 .content {
     margin: 20px !important;
 }
+
+.mat-mdc-form-field-infix {
+    display: flex !important;
+    align-items: center !important;
+}

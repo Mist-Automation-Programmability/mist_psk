@@ -12,6 +12,7 @@ from .lib.__req import Req
 from .lib.psks import Psk
 from .lib.wlans import Wlan
 from .lib.sites import Sites
+from .lib.orgs import Orgs
 
 try:
     from .config import disclaimer_config
@@ -152,6 +153,19 @@ def deletePsk(request):
         return JsonResponse(status=response["status"], data=response["data"])
     else:
         return Http404
+
+##########
+# orgs
+
+
+@csrf_exempt
+def orgs(request):
+    if request.method == 'POST':
+        response = Orgs().pull(request.body)
+        return JsonResponse(status=response["status"], data=response["data"])
+    else:
+        return Http404
+    
 
 ##########
 # Sites

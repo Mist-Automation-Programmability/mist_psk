@@ -1,5 +1,6 @@
 django_app/backend/config.py
-src_angular/node_modules
-src_angular/dist
+node_modules/
+dist/
 *.pyc
 .DS_Store
+.angular/

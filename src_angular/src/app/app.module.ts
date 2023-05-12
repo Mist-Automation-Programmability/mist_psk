@@ -1,13 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -23,15 +21,15 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatIconModule } from '@angular/material/icon';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { QrCodeModule } from 'ng-qrcode';
 
 import {
-  NgxMatDatetimePickerModule, 
-  NgxMatNativeDateModule, 
-  NgxMatTimepickerModule 
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule
 } from '@angular-material-components/datetime-picker';
 
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
@@ -59,9 +57,9 @@ import { WarningDialog } from './dashboard/dashboard-warning';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
     HttpClientModule,
     MatButtonModule,
+    MatChipsModule,
     MatDatepickerModule,
     MatSelectModule,
     MatInputModule,

@@ -10,6 +10,7 @@ urlpatterns = [
     path('psks/email/', views.emailPsk, name='emailPsk'),
     path('wlans/', views.wlans, name='wlans'),
     path('login/', views.login, name='login'),
+    path('orgs/', views.orgs, name='orgs'),
     path('sites/', views.sites, name='sites'),
     path('vlans/', views.vlans, name='vlans'),
     path('disclaimer/', views.disclaimer, name='disclaimer'),

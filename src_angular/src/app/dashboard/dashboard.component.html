@@ -1,13 +1,27 @@
-<mat-card class="card-outer">
+<mat-card class="card-outer flex column">
 
-    <div fxLayout="column">
-        <div fxLayout="column" class="top-bar-container">
-            <div fxLayout="row" class="top-bar  mat-elevation-z8">
+        <div class="top-bar-container flex column">
+            <div class="top-bar flex row">
+                <mat-form-field appearance="outline" class="list" *ngIf="!orgsHidden && msps.length > 0">
+                    <mat-label>MSP</mat-label>
+                    <mat-select [(value)]="current_msp" (selectionChange)="changeMsp()">
+                        <mat-option value="">-- None --</mat-option>
+                        <mat-option *ngFor="let msp of msps" [value]="msp">
+                            <div class="custom-option">
+                                <mat-chip-option class="role">{{msp.role}}</mat-chip-option>
+                                {{msp.name}} 
+                            </div>
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <mat-form-field appearance="outline" class="list" *ngIf="!orgsHidden">
                     <mat-label>Organization</mat-label>
                     <mat-select [(value)]="current_org" (selectionChange)="changeOrg()">
-                        <mat-option *ngFor="let org of orgs " [value]="org">
-                            {{org.name}}
+                        <mat-option *ngFor="let org of orgs" [value]="org">
+                            <div class="custom-option">
+                            <mat-chip-option class="role">{{org.role}}</mat-chip-option>
+                            {{org.name}} 
+                            </div>
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -15,7 +29,7 @@
                     <mat-label>Site</mat-label>
                     <mat-select [(value)]="site_id" (selectionChange)="changeSite()" [disabled]="sitesDisabled">
                         <mat-option *ngIf="scope=='org'" value="org">Org PSKs</mat-option>
-                        <mat-option *ngFor="let site of sites " [value]="site.id">
+                        <mat-option *ngFor="let site of sites" [value]="site.id">
                             {{site.name}}
                         </mat-option>
                     </mat-select>
@@ -24,7 +38,7 @@
                     <mat-label>SSID</mat-label>
                     <mat-select [(value)]="ssid" (selectionChange)="changeWlan()" [disabled]="wlansDisabled">
                         <mat-option value="">Any</mat-option>
-                        <mat-option *ngFor="let wlan of wlans " [value]="wlan.ssid">
+                        <mat-option *ngFor="let wlan of wlans" [value]="wlan.ssid">
                             {{wlan.ssid}}
                         </mat-option>
                     </mat-select>
@@ -52,21 +66,19 @@
 
         </div>
 
-        <div fxLayout="row" class="top-bar  mat-elevation-z8">
-            <mat-form-field *ngIf="filters_enabled" style="margin: 0.5em 1em 0; width: 100%;">
-                <mat-label>Filter</mat-label>
-                <input matInput [disabled]="filters_enabled == false" (keyup)="applyFilter($event)" placeholder="Ex. psk name" #input>
-            </mat-form-field>
-        </div>
-
         <div class="psk-container mat-elevation-z8">
-            <div fxLayout="column" class="psk-table-container" *ngIf="filters_enabled == false">
+            <div class="psk-table-container flex column" *ngIf="filters_enabled == false">
+                <div class="flex row" style="justify-content: flex-end; background-color: white;">
+                <mat-paginator [length]="resultsLength" [pageSizeOptions]="[10, 25, 50, 100]" style="min-width: 40em;"></mat-paginator>
 
+                </div>
+
+                <div class="table-container">
                 <table mat-table [dataSource]="psks">
                     <!-- Status Column -->
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element" fxLayout="row">
+                        <td mat-cell *matCellDef="let element">
                             <span class="material-icons" *ngIf="element.expire_time > 0 && element.expire_time <= now" style="user-select: none; font-size: 1.2em;margin: 1em 0;color: gray;" matTooltip="deactivated">
                             highlight_off
                         </span>
@@ -120,18 +132,18 @@
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element">
                             <div class="button-container">
-                                <button mat-stroked-button class="edit" (click)="openEdit(element)" matTooltip="Edit">
+                                <button mat-stroked-button class="stroked-button edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-stroked-button class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
+                                <button mat-stroked-button class="stroked-button edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
 
                                 </button>
-                                <button mat-stroked-button class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
+                                <button mat-stroked-button class="stroked-button qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
 
                                 </button>
-                                <button mat-stroked-button class="delete" (click)="openDelete(element)" matTooltip="Delete">
+                                <button mat-stroked-button class="stroked-button delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
 
                                 </button>
@@ -141,17 +153,25 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <mat-paginator [length]="resultsLength" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+            </div>
             </div>
 
 
 
-            <div fxLayout="column" class="psk-table-container" *ngIf="filters_enabled == true">
+            <div class="psk-table-container flex column" *ngIf="filters_enabled == true">
+                <div class="flex row">
+                    <mat-form-field *ngIf="filters_enabled" style="margin: 0;background-color: white;width: 100%;">
+                        <mat-label>Filter</mat-label>
+                        <input matInput [disabled]="filters_enabled == false" (keyup)="applyFilter($event)" placeholder="Ex. psk name" #input>
+                    </mat-form-field>
+                    <mat-paginator [length]="resultsLength" [pageSizeOptions]="[10, 25, 50, 100]" style="min-width: 40em;"></mat-paginator>
+                </div>
+                <div class="table-container">
                 <table mat-table [dataSource]="filteredPskDatase">
                     <!-- Status Column -->
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let element" fxLayout="row">
+                        <td mat-cell *matCellDef="let element">
                             <span class="material-icons" *ngIf="element.expire_time > 0 && element.expire_time <= now" style="user-select: none; font-size: 1.2em;margin: 1em 0;color: gray;" matTooltip="deactivated">
                             highlight_off
                         </span>
@@ -205,18 +225,18 @@
                         <th mat-header-cell *matHeaderCellDef> </th>
                         <td mat-cell *matCellDef="let element">
                             <div class="button-container">
-                                <button mat-stroked-button class="edit" (click)="openEdit(element)" matTooltip="Edit">
+                                <button mat-stroked-button class="stroked-button edit" (click)="openEdit(element)" matTooltip="Edit">
                                     <mat-icon class="material-icons">create</mat-icon>
                                 </button>
-                                <button mat-stroked-button class="edit" (click)="openEmail(element)" matTooltip="Send by Email">
+                                <button mat-stroked-button class="stroked-button edit" (click)="openEmail(element)" matTooltip="Send by Email">
                                     <mat-icon class="material-icons">email</mat-icon>
 
                                 </button>
-                                <button mat-stroked-button class="qrcode" (click)="openQrcode(element)" matTooltip="Show QRCode">
+                                <button mat-stroked-button class="stroked-button edit" (click)="openQrcode(element)" matTooltip="Show QRCode">
                                     <mat-icon class="material-icons">qr_code_2</mat-icon>
 
                                 </button>
-                                <button mat-stroked-button class="delete" (click)="openDelete(element)" matTooltip="Delete">
+                                <button mat-stroked-button class="stroked-button delete" (click)="openDelete(element)" matTooltip="Delete">
                                     <mat-icon class="material-icons">delete_forever</mat-icon>
 
                                 </button>
@@ -226,17 +246,19 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-                <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
             </div>
+            </div>
+            <div *ngIf="topBarLoading || loading" class="table-info">Loading...</div>
+            <div *ngIf="!topBarLoading && !loading && !site_id" class="table-info">Please select a site</div>
+            <div *ngIf="!topBarLoading && !loading && site_id && psks.length==0" class="table-info">There is not PSK configured</div>
 
 
-            <div class="loading" fxLayout="row" *ngIf="loading">
-                <div fxLayout="column">
+            <div class="loading flex row" *ngIf="loading">
+                <div class="flex column">
                     <mat-spinner strokeWidth=3></mat-spinner>
                 </div>
             </div>
         </div>
 
 
-    </div>
 </mat-card>

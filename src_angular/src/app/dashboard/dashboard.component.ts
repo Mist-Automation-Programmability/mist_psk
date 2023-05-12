@@ -61,7 +61,7 @@ export class MistHttpDatabase {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 
 
@@ -74,10 +74,14 @@ export class DashboardComponent implements OnInit {
   self = {};
   search = "";
   current_org;
+  current_msp;
+  msps = [];
+  msp_orgs = {};
   orgs = [];
   sites = [];
   scope: string;
   wlans = [];
+  msp_id: string = "";
   org_id: string = "";
   site_id: string = "";
   sitegroups_ids: string[] = [];
@@ -121,30 +125,51 @@ export class DashboardComponent implements OnInit {
     this.me = this.self["email"] || null
     this.getConfig()
     if (!this.me) this._router.navigateByUrl("/")
-    if (this.self != {} && this.self["privileges"]) {
-      var tmp_orgs: string[] = []
-      this.self["privileges"].forEach(element => {
-        if (element["scope"] == "org") {
-          if (tmp_orgs.indexOf(element["org_id"]) < 0) {
-            this.orgs.push({ id: element["org_id"], name: element["name"], scope: "org" })
-            tmp_orgs.push(element["org_id"])
-          }
-        } else if (element["scope"] == "site") {
-          if (tmp_orgs.indexOf(element["org_id"]) < 0) {
-            this.orgs.push({ id: element["org_id"], name: element["org_name"], scope: "site" })
-            tmp_orgs.push(element["org_id"])
+    if (Object.keys(this.self).length > 0 && this.self["privileges"]) {
+      this.parsePrivileges();
+    }
+  }
+
+  parsePrivileges(): void {
+    this.msps = [];
+    this.orgs = [];
+    this.psks = [];
+    this.msp_orgs = {};
+    var tmp_orgs: string[] = [];
+    this.self["privileges"].forEach(element => {
+      if (element["scope"] == "msp") {
+        this.msps.push({ id: element["msp_id"], name: element["name"], role: element["role"] });
+      }
+      else if (element["scope"] == "org") {
+        if (element.hasOwnProperty("msp_id")) {
+          if (!this.msp_orgs.hasOwnProperty(element["org_id"])) {
+            this.msp_orgs[element["org_id"]] = { id: element["org_id"], name: element["name"], scope: "org", role: element["role"] };
           }
         }
-      });
-      console.log(this.orgs)
-      if (this.orgs.length == 1) {
-        this.current_org = this.orgs[0]
-        this.orgsHidden = true;
-        this.changeOrg();
-      } else {
-        this.orgs = this.sortList(this.orgs, "name");
-        this.orgsHidden = false;
+        else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+          this.orgs.push({ id: element["org_id"], name: element["name"], scope: "org", role: element["role"] });
+          tmp_orgs.push(element["org_id"]);
+        }
+      } else if (element["scope"] == "site") {
+        if (element.hasOwnProperty("msp_id")) {
+          if (!this.msp_orgs.hasOwnProperty(element["org_id"])) {
+            this.msp_orgs[element["org_id"]] = { id: element["org_id"], name: element["org_name"], scope: "site", role: element["role"] };
+          }
+        }
+        else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+          this.orgs.push({ id: element["org_id"], name: element["org_name"], scope: "site", role: element["role"] });
+          tmp_orgs.push(element["org_id"]);
+        }
       }
+    });
+    if (this.msps.length == 0 && this.orgs.length == 1) {
+      this.current_org = this.orgs[0]
+      this.orgsHidden = true;
+      this.changeOrg();
+    } else {
+      this.msps = this.sortList(this.msps, "name");
+      this.orgs = this.sortList(this.orgs, "name");
+      this.orgsHidden = false;
     }
   }
 
@@ -235,6 +260,7 @@ export class DashboardComponent implements OnInit {
   // WLANS
 
   changeWlan() {
+    this.psks = [];
     this.getPsks()
   }
 
@@ -258,6 +284,7 @@ export class DashboardComponent implements OnInit {
   // SITES
 
   changeSite() {
+    this.psks = [];
     this.topBarLoading = true;
     var body = null
     this.createDisabled = false;
@@ -314,12 +341,72 @@ export class DashboardComponent implements OnInit {
 
 
   //////////////////////////////////////////////////
+  // MSPS
+  parseOrgs(orgs: []): void {
+    this.psks = [];
+    this.orgs = [];
+    var tmp_orgs: string[] = [];
+    console.log(this.current_msp)
+    console.log(this.msp_orgs)
+    orgs.forEach(element => {
+      var role = undefined;
+      if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+        if (this.msp_orgs.hasOwnProperty(element["id"])) role = this.msp_orgs[element["id"]]["role"]
+        else role = this.current_msp["role"];
+        this.orgs.push({ id: element["id"], name: element["name"], scope: "org", role: role });
+        tmp_orgs.push(element["id"]);
+      }
+    });
+    if (this.orgs.length == 1) {
+      this.current_org = this.orgs[0]
+      this.changeOrg();
+    } else {
+      this.orgs = this.sortList(this.orgs, "name");
+    }
+  }
+
+  changeMsp() {
+    this.sitesDisabled = true;
+    this.createDisabled = true;
+    this.current_org = undefined;
+    this.site_id = undefined;
+    this.orgs = [];
+    this.sites = [];
+    this.wlansDisabled = true;
+    this.wlans = [];
+    this.msp_id = this.current_msp["id"]
+    this.scope = undefined
+    if (this.msp_id) {
+      this.topBarLoading = true;
+      this._http.post<any>('/api/orgs/', { host: this.host, cookies: this.cookies, headers: this.headers, msp_id: this.msp_id }).subscribe({
+        next: data => {
+          console.log(data)
+          console.log(data["orgs"])
+          if ("orgs" in data) this.parseOrgs(data["orgs"]);
+          else this.orgs = [];
+          this.topBarLoading = false;
+        },
+        error: error => {
+          var message: string = "There was an error... "
+          if ("error" in error) {
+            message += error["error"]["message"]
+          }
+          this.topBarLoading = false;
+          this.openError(message)
+        }
+      })
+    } else this.parsePrivileges();
+  }
+  //////////////////////////////////////////////////
   // ORGS
 
   changeOrg() {
+    this.psks = [];
     this.topBarLoading = true;
     this.sitesDisabled = true;
+    this.createDisabled = true;
     this.sites = [];
+    this.site_id = undefined;
     this.wlansDisabled = true;
     this.wlans = [];
     this.org_id = this.current_org["id"]
@@ -338,10 +425,10 @@ export class DashboardComponent implements OnInit {
         }
       })
     } else {
-      let data = {sites: []}
-      this.self["privileges"].forEach(privilege=>{
+      let data = { sites: [] }
+      this.self["privileges"].forEach(privilege => {
         if (privilege["org_id"] == this.org_id) {
-          data.sites.push({name: privilege["name"], id: privilege["site_id"]})
+          data.sites.push({ name: privilege["name"], id: privilege["site_id"] })
         }
       })
       this.parseSites(data)
