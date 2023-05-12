@@ -73,8 +73,8 @@ export class DashboardComponent implements OnInit {
   host = '';
   self = {};
   search = "";
-  current_org;
-  current_msp;
+  current_org = {"name": ""};
+  current_msp = {"name": ""};
   msps = [];
   msp_orgs = {};
   orgs = [];
@@ -346,8 +346,6 @@ export class DashboardComponent implements OnInit {
     this.psks = [];
     this.orgs = [];
     var tmp_orgs: string[] = [];
-    console.log(this.current_msp)
-    console.log(this.msp_orgs)
     orgs.forEach(element => {
       var role = undefined;
       if (tmp_orgs.indexOf(element["org_id"]) < 0) {
@@ -366,9 +364,10 @@ export class DashboardComponent implements OnInit {
   }
 
   changeMsp() {
+    console.log(this.current_msp)
     this.sitesDisabled = true;
     this.createDisabled = true;
-    this.current_org = undefined;
+    this.current_org = {"name": ""};
     this.site_id = undefined;
     this.orgs = [];
     this.sites = [];
@@ -380,8 +379,6 @@ export class DashboardComponent implements OnInit {
       this.topBarLoading = true;
       this._http.post<any>('/api/orgs/', { host: this.host, cookies: this.cookies, headers: this.headers, msp_id: this.msp_id }).subscribe({
         next: data => {
-          console.log(data)
-          console.log(data["orgs"])
           if ("orgs" in data) this.parseOrgs(data["orgs"]);
           else this.orgs = [];
           this.topBarLoading = false;
