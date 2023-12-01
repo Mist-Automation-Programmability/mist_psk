@@ -1,3 +1,14 @@
+'''
+-------------------------------------------------------------------------------
+
+    Written by Thomas Munzer (tmunzer@juniper.net)
+    Github repository: 
+    https://github.com/Mist-Automation-Programmability/mist_psk
+
+    This script is licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+'''
 import json
 
 

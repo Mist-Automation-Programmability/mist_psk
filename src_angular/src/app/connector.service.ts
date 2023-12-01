@@ -29,4 +29,6 @@ export class ConnectorService {
   selfSet(data: {}) {
     this.selfSource.next(data)
   }
+
+  
 }

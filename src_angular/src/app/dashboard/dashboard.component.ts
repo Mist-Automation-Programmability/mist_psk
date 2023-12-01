@@ -30,6 +30,8 @@ export interface PskElement {
   passphrase: string;
   user_email: string;
   expire_time: number;
+  max_usage: number,
+  "-max_usage": boolean
 }
 
 export interface VlanCheckElement {
@@ -541,44 +543,45 @@ export class DashboardComponent implements OnInit {
       created_by: this.me,
       created_time: null,
       modified_time: null,
-      user_email: null
+      user_email: null,
+      max_usage: 0,
+      "-max_usage": true
     };
     const dialogRef = this._dialog.open(PskDialog, {
-      data: { wlans: this.wlans, psk: newPsk, editing: false, default_expire_time: this.default_expire_time, psk_length: this.psk_length }
+      data: { 
+        wlans: this.wlans,
+        psk: newPsk,
+        editing: false,
+        default_expire_time: this.default_expire_time,
+        psk_length:this.psk_length
+      }
     })
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if (result) {
-        var body = null;
+        var body = {
+          host: this.host,
+          cookies: this.cookies,
+          headers: this.headers,
+          org_id: this.org_id,
+          user_email: result.user_email,
+          name: result.name,
+          passphrase: result.psk,
+          expire_time: result.expire_time,
+          ssid: result.ssid,
+          vlan_id: result.vlan_id,
+          created_by: this.me,
+          renewable: result.renewable
+        }
         if (this.site_id == "org") {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            org_id: this.org_id,
-            user_email: result.user_email,
-            name: result.name,
-            passphrase: result.psk,
-            expire_time: result.expire_time,
-            ssid: result.ssid,
-            vlan_id: result.vlan_id,
-            created_by: this.me,
-            renewable: result.renewable
-          }
+          body["org_id"]= this.org_id;
         } else if (this.site_id) {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            site_id: this.site_id,
-            user_email: result.user_email,
-            name: result.name,
-            passphrase: result.psk,
-            expire_time: result.expire_time,
-            ssid: result.ssid,
-            vlan_id: result.vlan_id,
-            created_by: this.me,
-            renewable: result.renewable
-          }
+          body["site_id"]= this.site_id;
+        }
+        if (result.max_usage > 0 && result["-max_usage"]==false){
+          body["max_usage"] = result.max_usage;
+        } else {
+          body["-max_usage"] = true;
         }
         this._http.post<any>('/api/psks/create/', body).subscribe({
           next: data => {
@@ -598,43 +601,40 @@ export class DashboardComponent implements OnInit {
   // EDIT PSK
   openEdit(psk: PskElement): void {
     const dialogRef = this._dialog.open(PskDialog, {
-      data: { wlans: this.wlans, psk: psk, editing: true, default_expire_time: this.default_expire_time, psk_length: this.psk_length }
+      data: {
+        wlans: this.wlans,
+        psk: psk,
+        editing: true,
+        default_expire_time: this.default_expire_time,
+        psk_length: this.psk_length
+      }
     })
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var body = null;
+        var body = {
+          host: this.host,
+          cookies: this.cookies,
+          headers: this.headers,
+          org_id: this.org_id,
+          id: result.id,
+          user_email: result.user_email,
+          name: result.name,
+          passphrase: result.psk,
+          expire_time: result.expire_time,
+          ssid: result.ssid,
+          vlan_id: result.vlan_id,
+          created_by: this.me,
+          renewable: result.renewable
+        }
         if (this.site_id == "org") {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            org_id: this.org_id,
-            id: result.id,
-            user_email: result.user_email,
-            name: result.name,
-            passphrase: result.psk,
-            expire_time: result.expire_time,
-            ssid: result.ssid,
-            vlan_id: result.vlan_id,
-            created_by: this.me,
-            renewable: result.renewable
-          }
+          body["org_id"]= this.org_id;
         } else if (this.site_id) {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            site_id: this.site_id,
-            id: result.id,
-            user_email: result.user_email,
-            name: result.name,
-            passphrase: result.psk,
-            expire_time: result.expire_time,
-            ssid: result.ssid,
-            vlan_id: result.vlan_id,
-            created_by: this.me,
-            renewable: result.renewable
-          }
+          body["site_id"]= this.site_id;
+        }
+        if (result.max_usage > 0 && result["-max_usage"]==false){
+          body["max_usage"] = result.max_usage;
+        } else {
+          body["-max_usage"] = true;
         }
         this._http.post<any>('/api/psks/create/', body).subscribe({
           next: data => {
@@ -659,23 +659,16 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        var body = null;
+        var body = {
+          host: this.host,
+          cookies: this.cookies,
+          headers: this.headers,
+          psk_id: psk.id
+        };
         if (this.site_id == "org") {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            org_id: this.org_id,
-            psk_id: psk.id
-          }
+          body["org_id"]= this.org_id;
         } else if (this.site_id) {
-          body = {
-            host: this.host,
-            cookies: this.cookies,
-            headers: this.headers,
-            site_id: this.site_id,
-            psk_id: psk.id
-          }
+          body["site_id"]= this.site_id;
         }
         this._http.post<any>('/api/psks/delete/', body).subscribe({
           next: data => {

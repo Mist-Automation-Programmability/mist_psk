@@ -23,7 +23,9 @@ export class PskDialog {
         expire_time: [(this.data.psk.expire_time)],
         vlan_id: [this.data.psk.vlan_id, [Validators.min(0), Validators.max(4095)]],
         user_email: [this.data.psk.user_email, Validators.email],
-        renewable: [false]
+        renewable: [false],
+        max_usage: new FormControl(1),
+        "-max_usage": new FormControl(false)
     });
     renewable = false;
     editing = this.data.editing;
@@ -32,11 +34,15 @@ export class PskDialog {
     psk_length = this.data.psk_length;
     duration: number = 1;
     duration_period: string = "days";
+    max_usage_disabled: boolean = true;
+    max_usage_required: string = "false";
+    max_usage_value: number;
     vlan_ids: number[] = [];
 
     public date: moment.Moment = moment();
     public min_date: moment.Moment = moment();
     dateControl = new FormControl(moment());
+    maxUsageControl = new FormControl(1, [Validators.min(1), Validators.max(100)]);
 
     constructor(public dialogRef: MatDialogRef<PskDialog>, @Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
 
@@ -50,6 +56,13 @@ export class PskDialog {
         } else if (this.data.default_expire_time) {
             this.dateControl = new FormControl(moment().add(this.data.default_expire_time, 'h'))
         }
+
+        if (this.data.psk.max_usage){
+            this.max_usage_required = "true";
+            this.maxUsageControl.setValue(this.data.psk.max_usage);
+        } else {
+            this.max_usage_required = "false";
+        }
         this.changeWlan();
     }
 
@@ -59,6 +72,11 @@ export class PskDialog {
             this.data.wlans.forEach(wlan => {
                 if (wlan.ssid == this.frmPsk.controls["ssid"].value) {
                     this.vlan_ids = wlan.vlans;
+                    if (wlan.source == "cloud_psks") {
+                        this.max_usage_disabled = false;
+                    } else {
+                        this.max_usage_disabled = true;
+                    }
                     if (wlan.vlans.length > 1) {
                         this.frmPsk.controls["vlan_id"].enable();
                     }
@@ -78,6 +96,14 @@ export class PskDialog {
             let expire = this.dateControl.value.unix() 
             this.frmPsk.controls["expire_time"].setValue(expire)
         }
+
+        if (!this.max_usage_disabled && this.max_usage_required == "true"){
+            this.frmPsk.controls["max_usage"].setValue(this.maxUsageControl.value);
+            this.frmPsk.controls["-max_usage"].setValue(false);
+        } else {
+            this.frmPsk.controls["-max_usage"].setValue(true);
+        }
+        console.log(this.frmPsk.value);
         this.dialogRef.close(this.frmPsk.value)
     }
     cancel(): void {

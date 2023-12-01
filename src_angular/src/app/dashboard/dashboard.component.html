@@ -34,7 +34,7 @@
                 <mat-form-field appearance="outline" class="list">
                     <mat-label>Site</mat-label>
                     <mat-select [(value)]="site_id" (selectionChange)="changeSite()" [disabled]="sitesDisabled">
-                        <mat-option *ngIf="scope=='org'" value="org">Org PSKs</mat-option>
+                        <mat-option *ngIf="scope=='org'" value="org">-- Org PSKs --</mat-option>
                         <mat-option *ngFor="let site of sites" [value]="site.id">
                             {{site.name}}
                         </mat-option>
@@ -59,7 +59,7 @@
                 </span>
                 </div>
 
-                <button mat-raised-button color="accent" class="create" (click)="openCreate()" style="margin: auto 20px auto auto" [disabled]="createDisabled">
+                <button mat-raised-button color="accent" class="create" (click)="openCreate()" style="margin: auto 20px auto auto" [disabled]="createDisabled || topBarLoading">
                     <mat-icon class="material-icons" style="margin: auto 10px auto auto;">add</mat-icon>
                     <span>Create PSK</span>
                 </button>

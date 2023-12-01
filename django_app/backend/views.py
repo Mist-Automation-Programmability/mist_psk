@@ -1,11 +1,19 @@
-from django.shortcuts import render
-import requests
-import json
-from django.http import JsonResponse, HttpResponse, Http404
-import json
-from django.views.decorators.csrf import csrf_exempt
+'''
+-------------------------------------------------------------------------------
+
+    Written by Thomas Munzer (tmunzer@juniper.net)
+    Github repository: 
+    https://github.com/Mist-Automation-Programmability/mist_psk
+
+    This script is licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+'''
 import json
 import ast
+import requests
+from django.http import JsonResponse, HttpResponse, Http404
+from django.views.decorators.csrf import csrf_exempt
 
 from .mist_smtp.mist_smtp import Mist_SMTP
 from .lib.__req import Req
@@ -72,14 +80,14 @@ finally:
     print("".ljust(80, "-"))
     print(" SMTP CONFIG ".center(80))
     print("")
-    print("host          : {0}".format(smtp_config["host"]))
-    print("port          : {0}".format(smtp_config["port"]))
-    print("use_ssl       : {0}".format(smtp_config["use_ssl"]))
-    print("username      : {0}".format(smtp_config["username"]))
-    print("from_name     : {0}".format(smtp_config["from_name"]))
-    print("from_email    : {0}".format(smtp_config["from_email"]))
-    print("logo_url      : {0}".format(smtp_config["logo_url"]))
-    print("enable_qrcode : {0}".format(smtp_config["enable_qrcode"]))
+    print(f"host          : {smtp_config['host']}")
+    print(f"port          : {smtp_config['port']}")
+    print(f"use_ssl       : {smtp_config['use_ssl']}")
+    print(f"username      : {smtp_config['username']}")
+    print(f"from_name     : {smtp_config['from_name']}")
+    print(f"from_email    : {smtp_config['from_email']}")
+    print(f"logo_url      : {smtp_config['logo_url']}")
+    print(f"enable_qrcode : {smtp_config['enable_qrcode']}")
     print("")
 
 #############################################
@@ -101,8 +109,8 @@ finally:
     print("".ljust(80, "-"))
     print(" PSK CONFIG ".center(80))
     print("")
-    print("default expire time: {0}".format(psk_config["default_expire_time"]))
-    print("length             : {0}".format(psk_config["length"]))
+    print(f"default expire time: {psk_config['default_expire_time']}")
+    print(f"length             : {psk_config['length']}")
     print("")
     psk_config["salt"] = str.encode(psk_config["salt"])
 

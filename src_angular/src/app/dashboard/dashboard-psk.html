@@ -42,13 +42,13 @@
         </mat-form-field>
 
         <!-- PSK configuration  -->
-        <div class="flex row">
+        <div class="flex row" style="align-items: center;">
             <mat-checkbox formControlName="renewable" (ngModelChange)="changeRenewable()">
                 Enable Renewable PSK
-                <span class="material-icons tooltip" matTooltip="Renewable PSK will automatically generate a PSK for you. Every time you are genereting a PSK for a same Name on the same SSID, the PSK will be the same">
-                    help
-                </span>
             </mat-checkbox>
+            <span class="material-icons tooltip" matTooltip="The same PSK will be generated every time for the same PSK Name and the same SSID" style="cursor: default; font-size: medium; margin-left: .5em;">
+                help
+            </span>
         </div>
         <div class="flex row">
             <mat-form-field appearance="outline" style="width: 400px;">
@@ -82,45 +82,66 @@
         </div>
     </div>
 </form>
-<!-- Duration configuration  -->
+    <!-- Duration configuration  -->
 
-<div style="border: 1px solid rgba(0,0,0,.12);border-radius: 5px;padding: 1em;">
-    <div style="display: flex;flex-direction: column;font: inherit;">
-        <label style="margin-bottom: 1em;color: rgba(0,0,0,.6);">EXPIRE TIME</label>
-        <mat-radio-group aria-label="Select an option" [(ngModel)]="expire_method" style="margin: 5px;display: flex;flex-direction: row;justify-content: space-evenly;">
-            <mat-radio-button value="none">None</mat-radio-button>
-            <mat-radio-button value="duration">Duration</mat-radio-button>
-            <mat-radio-button value="date">Date / Time</mat-radio-button>
-        </mat-radio-group>
-    </div>
-    <div class="flex row" *ngIf="expire_method=='duration'" style="justify-content: space-evenly;margin: 1em 1em 0;">
-        <mat-form-field appearance="outline">
-            <mat-label>Expire In </mat-label>
-            <input matInput [(ngModel)]="duration" />
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-select [(ngModel)]="duration_period">
-                <mat-option value="hours">Hours</mat-option>
-                <mat-option value="days">Days</mat-option>
-                <mat-option value="days">Weeks</mat-option>
-                <mat-option value="months">Months</mat-option>
-                <mat-option value="years">Years</mat-option>
-            </mat-select>
-        </mat-form-field>
+    <div style="border: 1px solid rgba(0,0,0,.12);border-radius: 5px;padding: 1em;">
+        <div style="display: flex;flex-direction: column;font: inherit;">
+            <label style="margin-bottom: 1em;color: rgba(0,0,0,.6);">EXPIRE TIME</label>
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="expire_method" style="margin: 5px;display: flex;flex-direction: row;justify-content: space-evenly;">
+                <mat-radio-button value="none">None</mat-radio-button>
+                <mat-radio-button value="duration">Duration</mat-radio-button>
+                <mat-radio-button value="date">Date / Time</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="flex row" *ngIf="expire_method=='duration'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+            <mat-form-field appearance="outline">
+                <mat-label>Expire In </mat-label>
+                <input matInput [(ngModel)]="duration" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-select [(ngModel)]="duration_period">
+                    <mat-option value="hours">Hours</mat-option>
+                    <mat-option value="days">Days</mat-option>
+                    <mat-option value="days">Weeks</mat-option>
+                    <mat-option value="months">Months</mat-option>
+                    <mat-option value="years">Years</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="flex row" *ngIf="expire_method=='date'" style="justify-content: space-evenly;margin: 1em 1em 0;">
+            <mat-form-field>
+                <input matInput [ngxMatDatetimePicker]="picker" [min]="min_date" placeholder="Choose a date" [formControl]="dateControl">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker color="accent">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+        </div>
     </div>
 
-    <div class="flex row" *ngIf="expire_method=='date'" style="justify-content: space-evenly;margin: 1em 1em 0;">
-        <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker" [min]="min_date" placeholder="Choose a date" [formControl]="dateControl">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker color="accent">
-            </ngx-mat-datetime-picker>
-        </mat-form-field>
+    <!-- Max Usage configuration  -->
+    <div *ngIf="!max_usage_disabled" style="border: 1px solid rgba(0,0,0,.12);border-radius: 5px;padding: 1em;">
+        <div style="display: flex;flex-direction: column;font: inherit;">
+            <label style="margin-bottom: 1em;color: rgba(0,0,0,.6);">MAX USAGE</label>
+            <div class="flex row" style="align-items: center;">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="max_usage_required">
+                    <mat-radio-button value="false">Unlimited Devices</mat-radio-button>
+                    <mat-radio-button value="true">Set number of devices</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <form *ngIf="max_usage_required=='true'" class="flex column">
+            <mat-form-field appearance="outline">
+                <mat-label>Max concurrent connections</mat-label>
+                <input matInput type="number" [(formControl)]="maxUsageControl" min="1" max="100"/>
+            </mat-form-field>
+        </form>
     </div>
 
-</div>
+
+
 <div mat-dialog-actions style="justify-content: space-around;" class="flex row">
     <button mat-button (click)="cancel()">Cancel</button>
-    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid">Update</button>
-    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid">Create</button>
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==true" [disabled]="frmPsk.invalid || maxUsageControl.invalid">Update</button>
+    <button mat-raised-button color="accent" cdkFocusInitial (click)="confirm()" *ngIf="editing==false" [disabled]="frmPsk.invalid || maxUsageControl.invalid">Create</button>
 </div>

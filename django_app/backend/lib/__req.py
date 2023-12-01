@@ -1,7 +1,17 @@
+'''
+-------------------------------------------------------------------------------
+
+    Written by Thomas Munzer (tmunzer@juniper.net)
+    Github repository: 
+    https://github.com/Mist-Automation-Programmability/mist_psk
+
+    This script is licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+'''
 import requests
 from requests.exceptions import HTTPError
 import logging
-import json
 
 class Req:    
 

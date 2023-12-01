@@ -1,3 +1,14 @@
+'''
+-------------------------------------------------------------------------------
+
+    Written by Thomas Munzer (tmunzer@juniper.net)
+    Github repository: 
+    https://github.com/Mist-Automation-Programmability/mist_psk
+
+    This script is licensed under the MIT License.
+
+-------------------------------------------------------------------------------
+'''
 def red(text): return '\033[0;31m' + text + '\033[0m'
 def green(text): return '\033[0;32m' + text + '\033[0m'
 def yellow(text): return '\033[0;33m' + text + '\033[0m'
