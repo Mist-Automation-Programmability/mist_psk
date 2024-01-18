@@ -74,20 +74,20 @@ except:
             "enable_qrcode": os.environ.get("MIST_SMTP_QRCODE", default=True)
         }
     else:
-        smtp_config = None
+        smtp_config = {}
 finally:
     mist_smtp = Mist_SMTP(smtp_config)
     print("".ljust(80, "-"))
     print(" SMTP CONFIG ".center(80))
     print("")
-    print(f"host          : {smtp_config['host']}")
-    print(f"port          : {smtp_config['port']}")
-    print(f"use_ssl       : {smtp_config['use_ssl']}")
-    print(f"username      : {smtp_config['username']}")
-    print(f"from_name     : {smtp_config['from_name']}")
-    print(f"from_email    : {smtp_config['from_email']}")
-    print(f"logo_url      : {smtp_config['logo_url']}")
-    print(f"enable_qrcode : {smtp_config['enable_qrcode']}")
+    print(f"host          : {smtp_config.get('host')}")
+    print(f"port          : {smtp_config.get('port')}")
+    print(f"use_ssl       : {smtp_config.get('use_ssl')}")
+    print(f"username      : {smtp_config.get('username')}")
+    print(f"from_name     : {smtp_config.get('from_name')}")
+    print(f"from_email    : {smtp_config.get('from_email')}")
+    print(f"logo_url      : {smtp_config.get('logo_url')}")
+    print(f"enable_qrcode : {smtp_config.get('enable_qrcode')}")
     print("")
 
 #############################################
@@ -109,8 +109,8 @@ finally:
     print("".ljust(80, "-"))
     print(" PSK CONFIG ".center(80))
     print("")
-    print(f"default expire time: {psk_config['default_expire_time']}")
-    print(f"length             : {psk_config['length']}")
+    print(f"default expire time: {psk_config.get('default_expire_time')}")
+    print(f"length             : {psk_config.get('length')}")
     print("")
     psk_config["salt"] = str.encode(psk_config["salt"])
 
