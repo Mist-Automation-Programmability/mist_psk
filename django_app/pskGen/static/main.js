@@ -2083,7 +2083,13 @@ class DashboardComponent {
     this._appService.cookies.subscribe(cookies => this.cookies = cookies);
     this._appService.host.subscribe(host => this.host = host);
     this._appService.self.subscribe(self => this.self = self || {});
-    this.me = this.self["email"] || null;
+    if (this.self["email"]) {
+      this.me = this.self["email"];
+    } else if (this.self["name"]) {
+      this.me = this.self["name"];
+    } else {
+      this.me = null;
+    }
     this.getConfig();
     if (!this.me) this._router.navigateByUrl("/");
     if (Object.keys(this.self).length > 0 && this.self["privileges"]) {
@@ -2097,23 +2103,30 @@ class DashboardComponent {
     this.msp_orgs = {};
     var tmp_orgs = [];
     this.self["privileges"].forEach(element => {
+      // process MSP privilege
       if (element["scope"] == "msp") {
         this.msps.push({
           id: element["msp_id"],
           name: element["name"],
           role: element["role"]
         });
-      } else if (element["scope"] == "org") {
+      }
+      // process ORG privilege
+      else if (element["scope"] == "org") {
+        // if the ORG belong to an MSP, store is in the msp_orgs dict (if not already in it)
         if (element.hasOwnProperty("msp_id")) {
           if (!this.msp_orgs.hasOwnProperty(element["org_id"])) {
             this.msp_orgs[element["org_id"]] = {
+              msp_id: element["msp_id"],
               id: element["org_id"],
               name: element["name"],
               scope: "org",
               role: element["role"]
             };
           }
-        } else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+        }
+        // if the ORG doesn't belong to an MSP, store it in the orgs array (if not already in it)
+        else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
           this.orgs.push({
             id: element["org_id"],
             name: element["name"],
@@ -2122,7 +2135,10 @@ class DashboardComponent {
           });
           tmp_orgs.push(element["org_id"]);
         }
-      } else if (element["scope"] == "site") {
+      }
+      // process SITE privilege
+      else if (element["scope"] == "site") {
+        // if the SITE belong to an MSP, store is in the msp_orgs dict (if not already in it)
         if (element.hasOwnProperty("msp_id")) {
           if (!this.msp_orgs.hasOwnProperty(element["org_id"])) {
             this.msp_orgs[element["org_id"]] = {
@@ -2132,7 +2148,9 @@ class DashboardComponent {
               role: element["role"]
             };
           }
-        } else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
+        }
+        // if the SITE doesn't belong to an MSP, store it in the orgs array (if not already in it)
+        else if (tmp_orgs.indexOf(element["org_id"]) < 0) {
           this.orgs.push({
             id: element["org_id"],
             name: element["org_name"],
@@ -2143,6 +2161,16 @@ class DashboardComponent {
         }
       }
     });
+    // find the orphan MSP ORGs (orgs belonging to an MSP, but MSP not in the list)
+    // put back the org in the org array
+    for (var org_id in this.msp_orgs) {
+      var org = this.msp_orgs[org_id];
+      var org_msp_id = org["msp_id"];
+      var msp = this.msps.find(msp => msp["id"] == org_msp_id);
+      if (!msp) {
+        this.orgs.push(org);
+      }
+    }
     if (this.msps.length == 0 && this.orgs.length == 1) {
       this.current_org = this.orgs[0];
       this.orgsHidden = true;
@@ -3369,6 +3397,8 @@ var map = {
 	"./ar-ly.js": 8630,
 	"./ar-ma": 8674,
 	"./ar-ma.js": 8674,
+	"./ar-ps": 6235,
+	"./ar-ps.js": 6235,
 	"./ar-sa": 9032,
 	"./ar-sa.js": 9032,
 	"./ar-tn": 4730,
@@ -3503,6 +3533,8 @@ var map = {
 	"./ko": 234,
 	"./ko.js": 234,
 	"./ku": 6003,
+	"./ku-kmr": 9619,
+	"./ku-kmr.js": 9619,
 	"./ku.js": 6003,
 	"./ky": 5061,
 	"./ky.js": 5061,
