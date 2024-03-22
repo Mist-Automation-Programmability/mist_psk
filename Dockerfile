@@ -1,4 +1,4 @@
-FROM python:3.13.0a2-slim
+FROM python:3.13.0a4-slim
 
 LABEL maintainer="tmunzer@juniper.net"
 LABEL one.stag.mpswi.version="1.1.0"
